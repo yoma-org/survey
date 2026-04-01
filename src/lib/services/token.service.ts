@@ -109,3 +109,12 @@ export async function markTokenUsed(token: string, surveyId: string): Promise<vo
   );
   await writeRows(filename, updated);
 }
+
+/**
+ * Count total issued tokens for a survey (all statuses).
+ * Used as the denominator for response rate calculation.
+ */
+export async function countSurveyTokens(surveyId: string): Promise<number> {
+  const rows = await readRows<Record<string, string>>(tokenFile(surveyId));
+  return rows.length;
+}
