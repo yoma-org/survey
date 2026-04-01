@@ -29,12 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. CSV read/write operations work in both local dev (filesystem) and Vercel production (Blob storage with ETag retry)
   4. The GPTW question-to-dimension constants are defined in lib/constants.ts covering all 46 questions mapped to their 5 dimensions and sub-pillars
   5. The application is deployable to Vercel preview with all routes returning non-500 responses
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Project scaffolding, types, constants, and storage adapter
-- [ ] 01-02: Admin authentication and protected routing
-- [ ] 01-03: i18n routing, translation stubs, and Myanmar font
+- [ ] 01-01-PLAN.md — Project scaffolding, TypeScript types, GPTW constants, and StorageAdapter with CSV service
+- [ ] 01-02-PLAN.md — Admin authentication (iron-session + jose JWT), middleware guard, login page, admin shell
+- [ ] 01-03-PLAN.md — next-intl i18n routing, English/Burmese translation files, Noto Sans Myanmar font, LanguageSwitcher
 
 ### Phase 2: Survey Creation and Distribution
 **Goal**: Admin can create surveys with bilingual questions, configure SMTP with a working test-send, and deliver unique personalized invitation emails to a list of employee email addresses
@@ -90,7 +90,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 0/3 | Ready to execute | - |
 | 2. Survey Creation and Distribution | 0/2 | Not started | - |
 | 3. Employee Survey Form | 0/2 | Not started | - |
 | 4. Analytics Dashboard | 0/2 | Not started | - |
