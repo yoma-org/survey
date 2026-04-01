@@ -1,28 +1,8 @@
 // src/app/[locale]/(admin)/admin/surveys/[id]/page.tsx
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
 import { getSurvey, getQuestions, getResponseCount } from '@/lib/services/survey.service';
 import { generateToken } from '@/lib/services/token.service';
-import { Badge } from '@/components/ui/badge';
-import { Eye } from 'lucide-react';
-import type { Survey, Question } from '@/lib/types';
-
-function StatusBadge({ status, t }: { status: Survey['status']; t: (key: string) => string }) {
-  if (status === 'active') {
-    return <Badge className="bg-blue-50 text-blue-700 border-0">{t('statusActive')}</Badge>;
-  }
-  if (status === 'closed') {
-    return <Badge variant="outline">{t('statusClosed')}</Badge>;
-  }
-  return <Badge variant="secondary">{t('statusDraft')}</Badge>;
-}
-
-function TypeBadge({ type }: { type: Question['type'] }) {
-  if (type === 'likert') return <Badge className="bg-blue-50 text-blue-700 border-0">Likert</Badge>;
-  if (type === 'open_ended') return <Badge variant="secondary">Open-ended</Badge>;
-  return <Badge variant="outline">Demographic</Badge>;
-}
+import { SurveyDetailClient } from '@/components/admin/SurveyDetailClient';
 
 export default async function SurveyDetailPage({
   params,
@@ -30,96 +10,22 @@ export default async function SurveyDetailPage({
   params: Promise<{ id: string; locale: string }>;
 }) {
   const { id, locale } = await params;
-  const t = await getTranslations('surveys');
 
   const survey = await getSurvey(id);
   if (!survey) notFound();
 
-  const [questions, responseCount] = await Promise.all([
+  const [questions, responseCount, previewToken] = await Promise.all([
     getQuestions(id),
     getResponseCount(id),
+    generateToken(id, 'admin-preview@surey-yoma.local'),
   ]);
 
-  // Generate a preview token so admin can test the survey form
-  const previewToken = await generateToken(id, 'admin-preview@surey-yoma.local');
-
   return (
-    <div className="p-6">
-      {/* Back link */}
-      <Link
-        href="../surveys"
-        className="text-sm text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-1"
-      >
-        ← {t('backToSurveys')}
-      </Link>
-
-      {/* Survey header */}
-      <div className="mt-4 mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-[20px] font-semibold text-gray-900">{survey.name}</h1>
-          <StatusBadge status={survey.status} t={t} />
-        </div>
-        {survey.description && (
-          <p className="text-sm text-muted-foreground">{survey.description}</p>
-        )}
-        <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-          <span>{t('questionCount', { count: questions.length })}</span>
-          <span>{t('responseCount', { count: responseCount })}</span>
-          <span>{new Date(survey.createdAt).toLocaleDateString()}</span>
-        </div>
-      </div>
-
-      {/* Action buttons */}
-      <div className="flex gap-3 mb-8">
-        <Link
-          href={`/${locale}/survey/${previewToken}`}
-          target="_blank"
-          className="inline-flex items-center justify-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted min-h-[44px]"
-        >
-          <Eye className="w-4 h-4" />
-          {t('previewSurvey')}
-        </Link>
-        <Link
-          href={`../surveys/${id}/invite`}
-          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 min-h-[44px]"
-        >
-          {t('sendInvitations')}
-        </Link>
-      </div>
-
-      {/* Question table */}
-      {questions.length > 0 ? (
-        <div className="overflow-x-auto border rounded-lg">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
-              <tr>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground">{t('questionId')}</th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground">{t('questionEnglish')}</th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground">{t('questionBurmese')}</th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground">{t('questionType')}</th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground">{t('questionSection')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {questions.map((q) => (
-                <tr key={q.id} className="border-b last:border-0 hover:bg-gray-50">
-                  <td className="px-3 py-2 font-mono text-xs">{q.id}</td>
-                  <td className="px-3 py-2 max-w-[240px]">{q.en}</td>
-                  <td className="px-3 py-2 max-w-[240px]">{q.my}</td>
-                  <td className="px-3 py-2">
-                    <TypeBadge type={q.type} />
-                  </td>
-                  <td className="px-3 py-2 text-muted-foreground text-xs">{q.dimension ?? ''}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="py-10 text-center text-muted-foreground text-sm">
-          No questions imported yet.
-        </div>
-      )}
-    </div>
+    <SurveyDetailClient
+      survey={survey}
+      questions={questions}
+      responseCount={responseCount}
+      previewToken={previewToken}
+    />
   );
 }
