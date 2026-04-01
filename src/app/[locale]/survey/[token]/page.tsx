@@ -6,6 +6,16 @@ import { getSurvey, getQuestions } from '@/lib/services/survey.service';
 import { SurveyForm } from '@/components/survey/SurveyForm';
 import { AlertCircle } from 'lucide-react';
 
+// Load both locales' survey translations for the client-side language switcher
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+function getSurveyTranslations() {
+  const en = JSON.parse(readFileSync(join(process.cwd(), 'messages/en.json'), 'utf-8'));
+  const my = JSON.parse(readFileSync(join(process.cwd(), 'messages/my.json'), 'utf-8'));
+  return { en: en.survey, my: my.survey };
+}
+
 export default async function SurveyPage({
   params,
 }: {
@@ -38,8 +48,11 @@ export default async function SurveyPage({
     );
   }
 
-  const survey = await getSurvey(tokenRow.surveyId);
-  const questions = await getQuestions(tokenRow.surveyId);
+  const [survey, questions, surveyTranslations] = await Promise.all([
+    getSurvey(tokenRow.surveyId),
+    getQuestions(tokenRow.surveyId),
+    getSurveyTranslations(),
+  ]);
 
   if (!survey) {
     notFound();
@@ -51,6 +64,7 @@ export default async function SurveyPage({
       questions={questions}
       tokenRow={tokenRow}
       locale={locale as 'en' | 'my'}
+      translations={surveyTranslations}
     />
   );
 }

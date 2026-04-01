@@ -29,11 +29,29 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
+interface SurveyTranslations {
+  respondingAs: string;
+  submitButton: string;
+  optionalHelper: string;
+  characterCount: string;
+  demographicAnonymityNote: string;
+  nameLabel: string;
+  departmentLabel: string;
+  optionalTag: string;
+  namePlaceholder: string;
+  departmentPlaceholder: string;
+  selectPlaceholder: string;
+  required: string;
+  questionsNeedAnswer: string;
+  validationErrorCount: string;
+}
+
 interface SurveyFormProps {
   survey: Survey;
   questions: Question[];
   tokenRow: Token;
   locale: 'en' | 'my';
+  translations: Record<'en' | 'my', SurveyTranslations>;
 }
 
 const SECTION_ORDER: Array<'camaraderie' | 'credibility' | 'fairness' | 'pride' | 'respect' | 'uncategorized' | 'open_ended' | 'demographic'> = [
@@ -69,7 +87,7 @@ const SECTION_ICONS: Record<string, React.ReactNode> = {
   demographic: <User className="w-5 h-5" />,
 };
 
-export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormProps) {
+export function SurveyForm({ survey, questions, tokenRow, locale, translations }: SurveyFormProps) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Set<string>>(new Set());
   const [hasSubmitAttempted, setHasSubmitAttempted] = useState(false);
@@ -87,6 +105,9 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
   // Helper to get text in current display locale
   const q = (question: Question) =>
     displayLocale === 'en' ? question.en : question.my;
+
+  // Get translation for current display locale
+  const t = translations[displayLocale];
 
   const handleAnswer = (questionId: string, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -229,7 +250,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
 
               {/* Email — subtle inline, not a form field */}
               <div className="flex items-center gap-2 text-xs text-muted-foreground/60">
-                <span>Responding as</span>
+                <span>{t.respondingAs}</span>
                 <span className="text-foreground/50">{tokenRow.email}</span>
               </div>
               <div className="divider-dot mt-6" />
@@ -249,30 +270,30 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                 {sectionKey === 'demographic' && (
                   <div className="py-4 space-y-5">
                     <p className="text-xs text-muted-foreground/60">
-                      Your demographic information helps us analyze results by group. Individual responses remain anonymous.
+                      {t.demographicAnonymityNote}
                     </p>
                     <div>
                       <label className="text-[13px] text-muted-foreground block mb-1.5">
-                        Name <span className="text-muted-foreground/40">(Optional)</span>
+                        {t.nameLabel} <span className="text-muted-foreground/40">({t.optionalTag})</span>
                       </label>
                       <input
                         type="text"
                         value={answers['__name__'] ?? ''}
                         onChange={e => handleAnswer('__name__', e.target.value)}
                         className="block w-full rounded-lg border border-border bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                        placeholder="Your name"
+                        placeholder={t.namePlaceholder}
                       />
                     </div>
                     <div>
                       <label className="text-[13px] text-muted-foreground block mb-1.5">
-                        Department <span className="text-muted-foreground/40">(Optional)</span>
+                        {t.departmentLabel} <span className="text-muted-foreground/40">({t.optionalTag})</span>
                       </label>
                       <input
                         type="text"
                         value={answers['__department__'] ?? ''}
                         onChange={e => handleAnswer('__department__', e.target.value)}
                         className="block w-full rounded-lg border border-border bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                        placeholder="Your department"
+                        placeholder={t.departmentPlaceholder}
                       />
                     </div>
                   </div>
@@ -306,7 +327,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                           {q(question)}
                         </p>
                         <p className="text-xs text-muted-foreground/50 mb-2">
-                          Optional — share as much or as little as you would like
+                          {t.optionalHelper}
                         </p>
                         <Textarea
                           rows={4}
@@ -323,7 +344,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                           placeholder=""
                         />
                         <p className="text-xs text-gray-400 mt-1">
-                          {charCounts[question.id] ?? 0} characters
+                          {t.characterCount.replace('{count}', String(charCounts[question.id] ?? 0))}
                         </p>
                       </div>
                     );
@@ -341,7 +362,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                           >
                             {q(question)}
                             {errors.has(question.id) && (
-                              <span className="ml-2 text-xs text-red-500">Required</span>
+                              <span className="ml-2 text-xs text-red-500">{t.required}</span>
                             )}
                           </label>
                           <RadioGroup
@@ -383,7 +404,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                         >
                           {q(question)}
                           {errors.has(question.id) && (
-                            <span className="ml-2 text-xs text-red-500">Required</span>
+                            <span className="ml-2 text-xs text-red-500">{t.required}</span>
                           )}
                         </label>
                         <Select
@@ -391,7 +412,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                           onValueChange={value => { if (value) handleAnswer(question.id, value); }}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select an option" />
+                            <SelectValue placeholder={t.selectPlaceholder} />
                           </SelectTrigger>
                           <SelectContent>
                             {question.options?.map(opt => {
@@ -417,7 +438,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
             {hasSubmitAttempted && errors.size > 0 && (
               <div className="mb-6 flex items-center gap-2 text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3 border border-red-100">
                 <span className="font-medium tabular-nums">{errors.size}</span>
-                <span>question{errors.size !== 1 ? 's' : ''} need an answer</span>
+                <span>{t.questionsNeedAnswer}</span>
               </div>
             )}
 
@@ -429,7 +450,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale }: SurveyFormPr
                 onClick={handleSubmitClick}
                 className="px-8 py-3 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-colors text-sm min-h-[48px]"
               >
-                Submit Survey
+                {t.submitButton}
               </button>
             </div>
           </div>

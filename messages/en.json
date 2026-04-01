@@ -182,6 +182,16 @@
     "sectionPride": "Pride",
     "sectionCamaraderie": "Camaraderie",
     "sectionOpenEnded": "Open-Ended Questions",
-    "sectionDemographics": "About You"
+    "sectionDemographics": "About You",
+    "respondingAs": "Responding as",
+    "nameLabel": "Name",
+    "departmentLabel": "Department",
+    "optionalTag": "Optional",
+    "namePlaceholder": "Your name",
+    "departmentPlaceholder": "Your department",
+    "selectPlaceholder": "Select an option",
+    "required": "Required",
+    "questionsNeedAnswer": "question(s) need an answer",
+    "progressTitle": "Progress"
   }
 }

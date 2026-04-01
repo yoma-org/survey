@@ -182,6 +182,16 @@
     "sectionPride": "ဂုဏ်ယူမှု",
     "sectionCamaraderie": "ဖော်ရွေမှု",
     "sectionOpenEnded": "ပွင့်လင်းမေးခွန်းများ",
-    "sectionDemographics": "သင်နှင့်ပတ်သက်သောအချက်အလက်"
+    "sectionDemographics": "သင်နှင့်ပတ်သက်သောအချက်အလက်",
+    "respondingAs": "ဖြေဆိုနေသူ",
+    "nameLabel": "အမည်",
+    "departmentLabel": "ဌာန",
+    "optionalTag": "ရွေးချယ်နိုင်သည်",
+    "namePlaceholder": "သင်၏အမည်",
+    "departmentPlaceholder": "သင်၏ဌာန",
+    "selectPlaceholder": "ရွေးချယ်ပါ",
+    "required": "လိုအပ်သည်",
+    "questionsNeedAnswer": "မေးခွန်း(များ) အဖြေလိုအပ်သည်",
+    "progressTitle": "တိုးတက်မှု"
   }
 }
