@@ -65,7 +65,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DASH-04**: ENPS (Employee Net Promoter Score) visualization as gauge/infographic
 - [x] **DASH-05**: Top 10 Strengths (highest scoring statements) as horizontal bar chart
 - [x] **DASH-06**: Bottom 10 Opportunities (lowest scoring statements) as horizontal bar chart
-- [ ] **DASH-07**: Department/organization breakdown charts showing dimension scores per group
+- [x] **DASH-07**: Department/organization breakdown charts showing dimension scores per group
 - [x] **DASH-08**: Leaderboard metrics showing % Completion, % Credibility, % Respect, % Fairness, % Pride, % Camaraderie, % Overall Satisfaction, % ENPS, % Engagement, % Innovation, % Leadership
 - [x] **DASH-09**: Charts use Chart.js with proper client-side rendering (use client + dynamic import with ssr:false)
 - [x] **DASH-10**: Chart components use IntersectionObserver for lazy instantiation and proper useEffect cleanup to prevent memory leaks
@@ -75,7 +75,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### UI/UX
 
 - [x] **UIUX-01**: Clean, white, simple design with easily readable fonts
-- [ ] **UIUX-02**: Subtle background animation effects for UX enhancement
+- [x] **UIUX-02**: Subtle background animation effects for UX enhancement
 - [x] **UIUX-03**: Responsive layout working on desktop and mobile browsers
 - [x] **UIUX-04**: All user-facing text available in both English and Burmese
 
@@ -172,14 +172,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-04 | Phase 4 | Complete |
 | DASH-05 | Phase 4 | Complete |
 | DASH-06 | Phase 4 | Complete |
-| DASH-07 | Phase 4 | Pending |
+| DASH-07 | Phase 4 | Complete |
 | DASH-08 | Phase 4 | Complete |
 | DASH-09 | Phase 4 | Complete |
 | DASH-10 | Phase 4 | Complete |
 | DASH-11 | Phase 4 | Complete |
 | DASH-12 | Phase 4 | Complete |
 | UIUX-01 | Phase 1 | Complete |
-| UIUX-02 | Phase 4 | Pending |
+| UIUX-02 | Phase 4 | Complete |
 | UIUX-03 | Phase 1 | Complete |
 | UIUX-04 | Phase 1 | Complete |
 | DATA-01 | Phase 2 | Complete |
