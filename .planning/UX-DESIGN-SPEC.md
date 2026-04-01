@@ -4,9 +4,78 @@
 > **Admin Panel** (HR administrators) and **Survey Form** (employees).
 > Covers Phase 3 (Survey Form) and Phase 4 (Analytics Dashboard).
 
-**Version:** 1.0.0
+**Version:** 2.0.0
 **Date:** 2026-04-01
 **Extends:** Phase 2 UI-SPEC.md (established design contract)
+**Visual Reference:** [Optimus Platform](https://v0-optimus-delta.vercel.app/) — clean minimal, noise texture, large metrics, staggered reveals
+
+---
+
+## Implemented Design System (v2.0)
+
+### Visual Language — Optimus-Inspired
+The redesign follows the Optimus Platform aesthetic: **white-dominant, noise-textured, editorial typography, staggered motion reveals**.
+
+#### Key Patterns Implemented
+| Pattern | Implementation | File |
+|---------|---------------|------|
+| Noise overlay | SVG fractalNoise texture at 2.5% opacity, fixed position | `globals.css` `.noise-overlay` |
+| Dot grid background | Radial gradient 0.5px dots, 24px spacing, 4% opacity | `globals.css` `.bg-dots` |
+| Divider with dot | 1px border-top + 5px black circle at left:24px | `globals.css` `.divider-dot` |
+| Large metric numbers | `clamp(2rem, 5vw, 3.5rem)`, weight 300, letter-spacing -0.03em | `globals.css` `.metric-display` |
+| Metric labels | 11px, uppercase, tracking 0.05em, gray-500 | `globals.css` `.metric-label` |
+| Staggered reveal | Parent orchestrates children with 80ms stagger | `StaggerChildren.tsx` |
+| Fade-in up | 24px translateY, 500ms cubic-bezier(0.16,1,0.3,1) | `FadeIn.tsx` |
+| Count-up numbers | Motion value animation with 1.2s ease | `CountUp.tsx` |
+| Active nav indicator | `layoutId` spring animation (350ms, bounce 0.15) | `AdminSidebar.tsx` |
+| Mobile drawer | AnimatePresence slide + backdrop blur | `AdminSidebar.tsx` |
+
+#### Typography
+| Property | Value |
+|----------|-------|
+| Primary font | Inter Variable (via @fontsource-variable/inter) |
+| Font features | `cv11`, `ss01` enabled |
+| Rendering | Antialiased (`-webkit-font-smoothing`, `-moz-osx-font-smoothing`) |
+| Brand mark | "Surey" (font-light) + "Yoma" (font-semibold) — split weight |
+| Headings | font-light, tracking-tight (editorial feel) |
+| Labels | 11px, uppercase, tracking-wider, gray-500 |
+| Nav text | 13px, font-medium when active |
+
+#### Color System (Optimus adaptation)
+| Role | Value | Usage |
+|------|-------|-------|
+| Background | `#ffffff` (white) | Page bg, card surfaces — NOT gray-50 |
+| Text primary | `#171717` (gray-900) | Headlines, metric numbers, active nav |
+| Text secondary | `#737373` (gray-500) | Labels, descriptions |
+| Text muted | `#a3a3a3` (gray-400) | Placeholders, subtitle text |
+| Primary button | `bg-gray-900` | Login CTA (NOT blue — follows Optimus dark button) |
+| Accent | `#2563eb` (blue-600) | Chart bars, progress indicators (data only) |
+| Input bg | `bg-gray-50` | Form inputs — subtle fill |
+| Card border | `border-gray-100` | Subtle card borders |
+| Divider | `border-gray-100` | Section separators |
+| Noise texture | SVG at 2.5% opacity | Global overlay |
+
+#### Motion Library
+- Package: `motion` (framer-motion v12+)
+- Import: `from 'motion/react'`
+- Easing: `[0.16, 1, 0.3, 1]` (cubic-bezier) — consistent across all animations
+- Duration: 500ms default, 350ms for nav, 1200ms for count-up
+
+#### Dashboard Layout Hierarchy (Optimus pattern)
+1. **Hero metrics** — 4 large numbers in grid (CountUp animated)
+2. **Divider-dot** — visual section break
+3. **Leaderboard** — 6-column grid with colored indicator lines
+4. **Editorial section header** — "Performance you can measure." with description
+5. **Chart grid** — 2:1 ratio (dimensions + donut)
+6. **ENPS + Rankings** — 1:2 ratio with tabbed content
+
+#### File Structure (motion components)
+```
+src/components/motion/
+  FadeIn.tsx          — directional fade (up/down/left/right)
+  StaggerChildren.tsx — parent/child stagger orchestration
+  CountUp.tsx         — animated number counting
+```
 
 ---
 
