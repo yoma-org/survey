@@ -59,18 +59,18 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Analytics Dashboard
 
-- [ ] **DASH-01**: Admin dashboard page showing overall Employee Engagement Score (EES) as percentage favorable
-- [ ] **DASH-02**: Pie/donut chart showing Positive/Neutral/Negative response distribution
-- [ ] **DASH-03**: Bar chart showing 5 key dimension scores (Credibility, Respect, Fairness, Pride, Camaraderie) as % favorable
-- [ ] **DASH-04**: ENPS (Employee Net Promoter Score) visualization as gauge/infographic
-- [ ] **DASH-05**: Top 10 Strengths (highest scoring statements) as horizontal bar chart
-- [ ] **DASH-06**: Bottom 10 Opportunities (lowest scoring statements) as horizontal bar chart
+- [x] **DASH-01**: Admin dashboard page showing overall Employee Engagement Score (EES) as percentage favorable
+- [x] **DASH-02**: Pie/donut chart showing Positive/Neutral/Negative response distribution
+- [x] **DASH-03**: Bar chart showing 5 key dimension scores (Credibility, Respect, Fairness, Pride, Camaraderie) as % favorable
+- [x] **DASH-04**: ENPS (Employee Net Promoter Score) visualization as gauge/infographic
+- [x] **DASH-05**: Top 10 Strengths (highest scoring statements) as horizontal bar chart
+- [x] **DASH-06**: Bottom 10 Opportunities (lowest scoring statements) as horizontal bar chart
 - [ ] **DASH-07**: Department/organization breakdown charts showing dimension scores per group
-- [ ] **DASH-08**: Leaderboard metrics showing % Completion, % Credibility, % Respect, % Fairness, % Pride, % Camaraderie, % Overall Satisfaction, % ENPS, % Engagement, % Innovation, % Leadership
-- [ ] **DASH-09**: Charts use Chart.js with proper client-side rendering (use client + dynamic import with ssr:false)
-- [ ] **DASH-10**: Chart components use IntersectionObserver for lazy instantiation and proper useEffect cleanup to prevent memory leaks
-- [ ] **DASH-11**: Analytics data aggregated server-side and passed as props to client chart components
-- [ ] **DASH-12**: Admin can filter/view charts by survey selection
+- [x] **DASH-08**: Leaderboard metrics showing % Completion, % Credibility, % Respect, % Fairness, % Pride, % Camaraderie, % Overall Satisfaction, % ENPS, % Engagement, % Innovation, % Leadership
+- [x] **DASH-09**: Charts use Chart.js with proper client-side rendering (use client + dynamic import with ssr:false)
+- [x] **DASH-10**: Chart components use IntersectionObserver for lazy instantiation and proper useEffect cleanup to prevent memory leaks
+- [x] **DASH-11**: Analytics data aggregated server-side and passed as props to client chart components
+- [x] **DASH-12**: Admin can filter/view charts by survey selection
 
 ### UI/UX
 
@@ -84,7 +84,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DATA-01**: All survey responses persisted to CSV files
 - [x] **DATA-02**: CSV files stored via Vercel Blob in production with local filesystem fallback for development
 - [x] **DATA-03**: Survey configuration, tokens, SMTP settings, and responses each stored in separate CSV files
-- [ ] **DATA-04**: Anonymity threshold enforced — segment breakdowns hidden when response count < 5
+- [x] **DATA-04**: Anonymity threshold enforced — segment breakdowns hidden when response count < 5
 
 ## v2 Requirements
 
@@ -166,18 +166,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-10 | Phase 3 | Complete |
 | FORM-11 | Phase 3 | Complete |
 | FORM-12 | Phase 3 | Complete |
-| DASH-01 | Phase 4 | Pending |
-| DASH-02 | Phase 4 | Pending |
-| DASH-03 | Phase 4 | Pending |
-| DASH-04 | Phase 4 | Pending |
-| DASH-05 | Phase 4 | Pending |
-| DASH-06 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Complete |
+| DASH-02 | Phase 4 | Complete |
+| DASH-03 | Phase 4 | Complete |
+| DASH-04 | Phase 4 | Complete |
+| DASH-05 | Phase 4 | Complete |
+| DASH-06 | Phase 4 | Complete |
 | DASH-07 | Phase 4 | Pending |
-| DASH-08 | Phase 4 | Pending |
-| DASH-09 | Phase 4 | Pending |
-| DASH-10 | Phase 4 | Pending |
-| DASH-11 | Phase 4 | Pending |
-| DASH-12 | Phase 4 | Pending |
+| DASH-08 | Phase 4 | Complete |
+| DASH-09 | Phase 4 | Complete |
+| DASH-10 | Phase 4 | Complete |
+| DASH-11 | Phase 4 | Complete |
+| DASH-12 | Phase 4 | Complete |
 | UIUX-01 | Phase 1 | Complete |
 | UIUX-02 | Phase 4 | Pending |
 | UIUX-03 | Phase 1 | Complete |
@@ -185,7 +185,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-01 | Phase 2 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 2 | Complete |
-| DATA-04 | Phase 4 | Pending |
+| DATA-04 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 55 total
