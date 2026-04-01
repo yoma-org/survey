@@ -27,34 +27,38 @@ function SentimentBadge({
     frustrated: {
       label: 'Frustrated',
       icon: AlertTriangle,
-      bgClass: 'bg-red-50 dark:bg-red-950/60',
-      badgeClass: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
-      barClass: 'bg-red-400',
-      textClass: 'text-red-800 dark:text-red-200',
+      bg: 'hsl(0 55% 96%)',
+      text: 'hsl(0 55% 40%)',
+      bar: 'hsl(0 55% 58%)',
+      badge: 'hsl(0 55% 92%)',
+      border: 'hsl(0 40% 85%)',
     },
     constructive: {
       label: 'Constructive',
       icon: Lightbulb,
-      bgClass: 'bg-amber-50 dark:bg-amber-950/60',
-      badgeClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
-      barClass: 'bg-amber-400',
-      textClass: 'text-amber-800 dark:text-amber-200',
+      bg: 'hsl(35 80% 96%)',
+      text: 'hsl(35 70% 35%)',
+      bar: 'hsl(35 80% 55%)',
+      badge: 'hsl(35 80% 90%)',
+      border: 'hsl(35 60% 80%)',
     },
     positive: {
       label: 'Positive',
       icon: Heart,
-      bgClass: 'bg-green-50 dark:bg-green-950/60',
-      badgeClass: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
-      barClass: 'bg-green-400',
-      textClass: 'text-green-800 dark:text-green-200',
+      bg: 'hsl(155 50% 96%)',
+      text: 'hsl(155 50% 30%)',
+      bar: 'hsl(155 50% 48%)',
+      badge: 'hsl(155 50% 90%)',
+      border: 'hsl(155 40% 80%)',
     },
     unclassified: {
       label: 'Neutral / Mixed',
       icon: MessageSquare,
-      bgClass: 'bg-muted/40',
-      badgeClass: 'bg-muted text-muted-foreground',
-      barClass: 'bg-muted-foreground/40',
-      textClass: 'text-muted-foreground',
+      bg: 'hsl(220 10% 96%)',
+      text: 'hsl(220 10% 45%)',
+      bar: 'hsl(220 10% 72%)',
+      badge: 'hsl(220 10% 90%)',
+      border: 'hsl(220 10% 85%)',
     },
   };
 
@@ -62,21 +66,24 @@ function SentimentBadge({
   const Icon = c.icon;
 
   return (
-    <div className={cn('rounded-lg p-3 space-y-2', c.bgClass)}>
+    <div className="rounded-lg p-3 space-y-2" style={{ backgroundColor: c.bg }}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <Icon className={cn('w-3.5 h-3.5', c.textClass)} />
-          <span className={cn('text-xs font-medium', c.textClass)}>{c.label}</span>
+          <Icon className="w-3.5 h-3.5" style={{ color: c.text }} />
+          <span className="text-xs font-medium" style={{ color: c.text }}>{c.label}</span>
         </div>
-        <span className={cn('text-xs font-semibold tabular-nums px-2 py-0.5 rounded-full', c.badgeClass)}>
+        <span
+          className="text-xs font-semibold tabular-nums px-2 py-0.5 rounded-full"
+          style={{ color: c.text, backgroundColor: c.badge }}
+        >
           {count} ({percentage}%)
         </span>
       </div>
       {/* Mini progress bar */}
-      <div className="h-1 bg-black/10 rounded-full overflow-hidden">
+      <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: `${c.bar}33` }}>
         <div
-          className={cn('h-full rounded-full transition-all duration-700', c.barClass)}
-          style={{ width: `${percentage}%` }}
+          className="h-full rounded-full transition-all duration-700"
+          style={{ width: `${percentage}%`, backgroundColor: c.bar }}
         />
       </div>
       {/* Themes */}
@@ -85,13 +92,8 @@ function SentimentBadge({
           {themes.map(theme => (
             <span
               key={theme}
-              className={cn(
-                'inline-block text-[10px] px-1.5 py-0.5 rounded border',
-                type === 'frustrated' && 'border-red-200 text-red-600 dark:border-red-800 dark:text-red-400',
-                type === 'constructive' && 'border-amber-200 text-amber-600 dark:border-amber-800 dark:text-amber-400',
-                type === 'positive' && 'border-green-200 text-green-600 dark:border-green-800 dark:text-green-400',
-                type === 'unclassified' && 'border-border text-muted-foreground'
-              )}
+              className="inline-block text-[10px] px-1.5 py-0.5 rounded border"
+              style={{ borderColor: c.border, color: c.text }}
             >
               {theme}
             </span>
@@ -122,34 +124,34 @@ function OpenEndedCard({ sentiment }: SentimentCardProps) {
           {sentiment.totalResponses} responses
         </span>
       </div>
-      {/* Stacked visual indicator */}
-      <div className="flex h-2 rounded-full overflow-hidden gap-px">
-        {sentiment.frustrated.percentage > 0 && (
+      {/* Stacked bar — ordered: positive → constructive → neutral → frustrated */}
+      <div className="flex h-2 rounded-full overflow-hidden">
+        {sentiment.positive.percentage > 0 && (
           <div
-            className="bg-red-400 h-full transition-all"
-            style={{ width: `${sentiment.frustrated.percentage}%` }}
-            title={`Frustrated: ${sentiment.frustrated.percentage}%`}
+            style={{ width: `${sentiment.positive.percentage}%`, backgroundColor: 'hsl(155 50% 48%)' }}
+            className="h-full transition-all"
+            title={`Positive: ${sentiment.positive.percentage}%`}
           />
         )}
         {sentiment.constructive.percentage > 0 && (
           <div
-            className="bg-amber-400 h-full transition-all"
-            style={{ width: `${sentiment.constructive.percentage}%` }}
+            style={{ width: `${sentiment.constructive.percentage}%`, backgroundColor: 'hsl(35 80% 55%)' }}
+            className="h-full transition-all"
             title={`Constructive: ${sentiment.constructive.percentage}%`}
-          />
-        )}
-        {sentiment.positive.percentage > 0 && (
-          <div
-            className="bg-green-400 h-full transition-all"
-            style={{ width: `${sentiment.positive.percentage}%` }}
-            title={`Positive: ${sentiment.positive.percentage}%`}
           />
         )}
         {sentiment.unclassified.percentage > 0 && (
           <div
-            className="bg-gray-300 h-full transition-all"
-            style={{ width: `${sentiment.unclassified.percentage}%` }}
-            title={`Unclassified: ${sentiment.unclassified.percentage}%`}
+            style={{ width: `${sentiment.unclassified.percentage}%`, backgroundColor: 'hsl(220 10% 82%)' }}
+            className="h-full transition-all"
+            title={`Neutral: ${sentiment.unclassified.percentage}%`}
+          />
+        )}
+        {sentiment.frustrated.percentage > 0 && (
+          <div
+            style={{ width: `${sentiment.frustrated.percentage}%`, backgroundColor: 'hsl(0 55% 58%)' }}
+            className="h-full transition-all"
+            title={`Frustrated: ${sentiment.frustrated.percentage}%`}
           />
         )}
       </div>
