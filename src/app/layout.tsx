@@ -1,5 +1,11 @@
 // src/app/layout.tsx
-// Root layout — locale layout handles <html> and <body>
+import '@fontsource-variable/noto-sans-myanmar';
+import './globals.css';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <html suppressHydrationWarning>
+      <body className="font-sans">{children}</body>
+    </html>
+  );
 }

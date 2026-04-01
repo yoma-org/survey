@@ -1,4 +1,4 @@
-// src/middleware.ts
+// src/proxy.ts (Next.js 16: renamed from middleware.ts)
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { jwtVerify } from 'jose';
@@ -8,7 +8,7 @@ import { sessionOptions } from './lib/auth';
 
 const intlMiddleware = createMiddleware(routing);
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Auth guard: protect all /[locale]/admin/* routes
