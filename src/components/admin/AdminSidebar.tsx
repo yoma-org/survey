@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   LayoutDashboard,
   ClipboardList,
@@ -16,18 +16,19 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const navItems = [
-  { label: 'Dashboard', icon: LayoutDashboard, href: 'admin' },
-  { label: 'Surveys', icon: ClipboardList, href: 'admin/surveys' },
-  { label: 'Settings', icon: Settings, href: 'admin/settings' },
-];
-
 export function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations('nav');
+
+  const navItems = [
+    { key: 'dashboard', icon: LayoutDashboard, href: 'admin' },
+    { key: 'surveys', icon: ClipboardList, href: 'admin/surveys' },
+    { key: 'settings', icon: Settings, href: 'admin/settings' },
+  ] as const;
 
   async function handleLogout() {
     await fetch('/api/auth', { method: 'DELETE' });
@@ -43,11 +44,11 @@ export function AdminSidebar() {
     >
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-100">
-        {!collapsed && <span className="font-semibold text-blue-600 text-sm">Surey Yoma</span>}
+        {!collapsed && <span className="font-semibold text-blue-600 text-sm">{t('brand')}</span>}
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="p-1 rounded hover:bg-gray-100 hidden md:block"
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-label={collapsed ? t('toggleExpand') : t('toggleCollapse')}
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </button>
@@ -70,7 +71,7 @@ export function AdminSidebar() {
               )}
             >
               <item.icon className="h-4 w-4 flex-shrink-0" />
-              {!collapsed && <span>{item.label}</span>}
+              {!collapsed && <span>{t(item.key)}</span>}
             </Link>
           );
         })}
@@ -85,7 +86,7 @@ export function AdminSidebar() {
           )}
         >
           <LogOut className="h-4 w-4 flex-shrink-0" />
-          {!collapsed && <span>Sign out</span>}
+          {!collapsed && <span>{t('signOut')}</span>}
         </button>
       </div>
     </div>
@@ -97,7 +98,7 @@ export function AdminSidebar() {
       <button
         className="md:hidden fixed top-3 left-3 z-50 p-2 bg-white rounded-md shadow border border-gray-100"
         onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label="Toggle menu"
+        aria-label={t('toggleMenu')}
       >
         <Menu className="h-4 w-4" />
       </button>
