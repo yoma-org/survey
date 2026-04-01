@@ -2,8 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { GPTW_QUESTIONS, ALL_QUESTIONS } from '@/lib/constants';
 
 describe('GPTW_QUESTIONS', () => {
-  it('exports exactly 46 Likert questions', () => {
-    expect(GPTW_QUESTIONS).toHaveLength(46);
+  it('exports exactly 47 Likert questions', () => {
+    // PDF has 46 numbered statements (CAM-01 to RES-46) plus UNC-47 = 47 total
+    // Plan said 46 but PDF is authoritative — CONTEXT.md also says RES-36 through RES-46 + UNC-47
+    expect(GPTW_QUESTIONS).toHaveLength(47);
   });
 
   it('starts with CAM-01', () => {
