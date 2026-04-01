@@ -25,12 +25,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Survey Management
 
-- [ ] **SURV-01**: Admin can create a new survey with name and description
-- [ ] **SURV-02**: Admin can upload bilingual question list from Excel file (exceljs parser)
-- [ ] **SURV-03**: Survey questions support Likert scale (5-point), open-ended text, and demographic select types
-- [ ] **SURV-04**: Survey questions stored with both English and Burmese text
-- [ ] **SURV-05**: Survey organized into sections matching GPTW dimensions (Camaraderie, Credibility, Fairness, Pride, Respect) plus demographics and open-ended
-- [ ] **SURV-06**: Admin can view list of all surveys with status
+- [x] **SURV-01**: Admin can create a new survey with name and description
+- [x] **SURV-02**: Admin can upload bilingual question list from Excel file (exceljs parser)
+- [x] **SURV-03**: Survey questions support Likert scale (5-point), open-ended text, and demographic select types
+- [x] **SURV-04**: Survey questions stored with both English and Burmese text
+- [x] **SURV-05**: Survey organized into sections matching GPTW dimensions (Camaraderie, Credibility, Fairness, Pride, Respect) plus demographics and open-ended
+- [x] **SURV-06**: Admin can view list of all surveys with status
 
 ### Email Distribution
 
@@ -81,9 +81,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data & Storage
 
-- [ ] **DATA-01**: All survey responses persisted to CSV files
+- [x] **DATA-01**: All survey responses persisted to CSV files
 - [x] **DATA-02**: CSV files stored via Vercel Blob in production with local filesystem fallback for development
-- [ ] **DATA-03**: Survey configuration, tokens, SMTP settings, and responses each stored in separate CSV files
+- [x] **DATA-03**: Survey configuration, tokens, SMTP settings, and responses each stored in separate CSV files
 - [ ] **DATA-04**: Anonymity threshold enforced — segment breakdowns hidden when response count < 5
 
 ## v2 Requirements
@@ -141,12 +141,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| SURV-01 | Phase 2 | Pending |
-| SURV-02 | Phase 2 | Pending |
-| SURV-03 | Phase 2 | Pending |
-| SURV-04 | Phase 2 | Pending |
-| SURV-05 | Phase 2 | Pending |
-| SURV-06 | Phase 2 | Pending |
+| SURV-01 | Phase 2 | Complete |
+| SURV-02 | Phase 2 | Complete |
+| SURV-03 | Phase 2 | Complete |
+| SURV-04 | Phase 2 | Complete |
+| SURV-05 | Phase 2 | Complete |
+| SURV-06 | Phase 2 | Complete |
 | EMAL-01 | Phase 2 | Pending |
 | EMAL-02 | Phase 2 | Pending |
 | EMAL-03 | Phase 2 | Pending |
@@ -182,9 +182,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UIUX-02 | Phase 4 | Pending |
 | UIUX-03 | Phase 1 | Complete |
 | UIUX-04 | Phase 1 | Complete |
-| DATA-01 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Complete |
 | DATA-02 | Phase 1 | Complete |
-| DATA-03 | Phase 2 | Pending |
+| DATA-03 | Phase 2 | Complete |
 | DATA-04 | Phase 4 | Pending |
 
 **Coverage:**
