@@ -68,7 +68,7 @@ Plans:
 - [ ] 03-02-PLAN.md — Survey page route, all form components (Likert, TOC, mobile bar, confirmation dialog, thank-you screen)
 
 ### Phase 4: Analytics Dashboard
-**Goal**: Admin can select a survey and view a full Chart.js dashboard with GPTW dimension scores, ENPS gauge, Top 10/Bottom 10 statement rankings, department breakdowns, and leaderboard metrics — all computed server-side from collected CSV responses
+**Goal**: Admin can select a survey and view a full recharts dashboard with GPTW dimension scores, ENPS gauge, Top 10/Bottom 10 statement rankings, department breakdowns, and leaderboard metrics — all computed server-side from collected CSV responses
 **Depends on**: Phase 3
 **Requirements**: DASH-01, DASH-02, DASH-03, DASH-04, DASH-05, DASH-06, DASH-07, DASH-08, DASH-09, DASH-10, DASH-11, DASH-12, UIUX-02, DATA-04
 **Success Criteria** (what must be TRUE):
@@ -77,11 +77,11 @@ Plans:
   3. Department/organization breakdown charts show dimension scores segmented by demographic group; segments with fewer than 5 responses are hidden
   4. Leaderboard metrics table shows % Completion, all 5 dimension scores, % Overall Satisfaction, % ENPS, % Engagement, % Innovation, and % Leadership at a glance
   5. All charts render without errors or memory leaks across a full dashboard page load; background animation is present without degrading chart performance
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: Analytics service, server-side aggregation, and chart infrastructure
-- [ ] 04-02: Dashboard page with all chart components and leaderboard
+- [ ] 04-01-PLAN.md — Analytics types, computeAnalytics service, countSurveyTokens, and SurveySelector component
+- [ ] 04-02-PLAN.md — DepartmentBreakdownChart, DashboardCharts wiring, admin page rewrite with real data
 
 ## Progress
 
