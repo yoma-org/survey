@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getSurvey, getQuestions, getResponseCount } from '@/lib/services/survey.service';
+import { generateToken } from '@/lib/services/token.service';
 import { Badge } from '@/components/ui/badge';
+import { Eye } from 'lucide-react';
 import type { Survey, Question } from '@/lib/types';
 
 function StatusBadge({ status, t }: { status: Survey['status']; t: (key: string) => string }) {
@@ -27,7 +29,7 @@ export default async function SurveyDetailPage({
 }: {
   params: Promise<{ id: string; locale: string }>;
 }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   const t = await getTranslations('surveys');
 
   const survey = await getSurvey(id);
@@ -37,6 +39,9 @@ export default async function SurveyDetailPage({
     getQuestions(id),
     getResponseCount(id),
   ]);
+
+  // Generate a preview token so admin can test the survey form
+  const previewToken = await generateToken(id, 'admin-preview@surey-yoma.local');
 
   return (
     <div className="p-6">
@@ -67,8 +72,16 @@ export default async function SurveyDetailPage({
       {/* Action buttons */}
       <div className="flex gap-3 mb-8">
         <Link
+          href={`/${locale}/survey/${previewToken}`}
+          target="_blank"
+          className="inline-flex items-center justify-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted min-h-[44px]"
+        >
+          <Eye className="w-4 h-4" />
+          {t('previewSurvey')}
+        </Link>
+        <Link
           href={`../surveys/${id}/invite`}
-          className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 min-h-[44px]"
         >
           {t('sendInvitations')}
         </Link>

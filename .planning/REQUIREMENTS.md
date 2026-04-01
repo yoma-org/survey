@@ -45,17 +45,17 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Survey Form
 
 - [x] **FORM-01**: Employee accesses survey via unique URL with token; email pre-filled from token lookup
-- [ ] **FORM-02**: Survey form displays in multi-section layout with floating TOC on left side
-- [ ] **FORM-03**: Floating TOC tracks progress showing completed/remaining sections
-- [ ] **FORM-04**: Survey renders in selected language (English or Burmese) with language switcher
-- [ ] **FORM-05**: Likert scale questions display 5 options (Strongly Disagree to Strongly Agree) in selected language
-- [ ] **FORM-06**: Open-ended questions provide text area input
-- [ ] **FORM-07**: Demographic section collects Organization, Service Year, and Role Type with predefined options in both languages
+- [x] **FORM-02**: Survey form displays in multi-section layout with floating TOC on left side
+- [x] **FORM-03**: Floating TOC tracks progress showing completed/remaining sections
+- [x] **FORM-04**: Survey renders in selected language (English or Burmese) with language switcher
+- [x] **FORM-05**: Likert scale questions display 5 options (Strongly Disagree to Strongly Agree) in selected language
+- [x] **FORM-06**: Open-ended questions provide text area input
+- [x] **FORM-07**: Demographic section collects Organization, Service Year, and Role Type with predefined options in both languages
 - [x] **FORM-08**: Form validation with inline error messages, guidelines, and tooltips
 - [x] **FORM-09**: Confirmation dialog shown before final submission
 - [x] **FORM-10**: Token marked as used server-side upon submission (prevents resubmission)
 - [x] **FORM-11**: Responses persisted to CSV file partitioned by survey ID
-- [ ] **FORM-12**: Basic information fields (name, department) available as optional inputs
+- [x] **FORM-12**: Basic information fields (name, department) available as optional inputs
 
 ### Analytics Dashboard
 
@@ -155,17 +155,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EMAL-06 | Phase 2 | Complete |
 | EMAL-07 | Phase 2 | Complete |
 | FORM-01 | Phase 3 | Complete |
-| FORM-02 | Phase 3 | Pending |
-| FORM-03 | Phase 3 | Pending |
-| FORM-04 | Phase 3 | Pending |
-| FORM-05 | Phase 3 | Pending |
-| FORM-06 | Phase 3 | Pending |
-| FORM-07 | Phase 3 | Pending |
+| FORM-02 | Phase 3 | Complete |
+| FORM-03 | Phase 3 | Complete |
+| FORM-04 | Phase 3 | Complete |
+| FORM-05 | Phase 3 | Complete |
+| FORM-06 | Phase 3 | Complete |
+| FORM-07 | Phase 3 | Complete |
 | FORM-08 | Phase 3 | Complete |
 | FORM-09 | Phase 3 | Complete |
 | FORM-10 | Phase 3 | Complete |
 | FORM-11 | Phase 3 | Complete |
-| FORM-12 | Phase 3 | Pending |
+| FORM-12 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
 | DASH-03 | Phase 4 | Pending |

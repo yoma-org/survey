@@ -64,6 +64,7 @@
     "viewButton": "View",
     "backToSurveys": "Back to Surveys",
     "sendInvitations": "Send Invitations",
+    "previewSurvey": "Preview Survey",
     "deleteButton": "Delete",
     "deleteConfirmHeading": "Delete this survey?",
     "deleteConfirmBody": "All associated questions and invitation links will be removed permanently.",
