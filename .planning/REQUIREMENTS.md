@@ -188,10 +188,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 52 total
-- Mapped to phases: 52
+- v1 requirements: 55 total
+- Mapped to phases: 55
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-01*
-*Last updated: 2026-04-01 after initial definition*
+*Last updated: 2026-04-01 after roadmap creation*
