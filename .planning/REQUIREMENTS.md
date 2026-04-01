@@ -13,15 +13,15 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **FOUN-02**: Vercel Blob StorageAdapter with ETag-based concurrent write protection and local fs fallback for dev
 - [x] **FOUN-03**: CSV schema defined with explicit questionId columns and header-based read/write (not index-based)
 - [x] **FOUN-04**: GPTW dimension constants mapping all 46 questions to dimensions and sub-pillars in lib/constants.ts
-- [ ] **FOUN-05**: URL-based i18n routing with next-intl (/en/... and /my/...) with Noto Sans Myanmar font loaded via Fontsource
-- [ ] **FOUN-06**: English and Burmese translation message files (messages/en.json and messages/mm.json) with all UI strings
+- [x] **FOUN-05**: URL-based i18n routing with next-intl (/en/... and /my/...) with Noto Sans Myanmar font loaded via Fontsource
+- [x] **FOUN-06**: English and Burmese translation message files (messages/en.json and messages/mm.json) with all UI strings
 
 ### Authentication
 
-- [ ] **AUTH-01**: Admin can log in with static username/password credentials
-- [ ] **AUTH-02**: Admin session persists via iron-session encrypted cookies
-- [ ] **AUTH-03**: All /admin routes protected by middleware using jose JWT verification
-- [ ] **AUTH-04**: Admin can log out and session is destroyed
+- [x] **AUTH-01**: Admin can log in with static username/password credentials
+- [x] **AUTH-02**: Admin session persists via iron-session encrypted cookies
+- [x] **AUTH-03**: All /admin routes protected by middleware using jose JWT verification
+- [x] **AUTH-04**: Admin can log out and session is destroyed
 
 ### Survey Management
 
@@ -74,10 +74,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### UI/UX
 
-- [ ] **UIUX-01**: Clean, white, simple design with easily readable fonts
+- [x] **UIUX-01**: Clean, white, simple design with easily readable fonts
 - [ ] **UIUX-02**: Subtle background animation effects for UX enhancement
-- [ ] **UIUX-03**: Responsive layout working on desktop and mobile browsers
-- [ ] **UIUX-04**: All user-facing text available in both English and Burmese
+- [x] **UIUX-03**: Responsive layout working on desktop and mobile browsers
+- [x] **UIUX-04**: All user-facing text available in both English and Burmese
 
 ### Data & Storage
 
@@ -135,12 +135,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUN-02 | Phase 1 | Complete |
 | FOUN-03 | Phase 1 | Complete |
 | FOUN-04 | Phase 1 | Complete |
-| FOUN-05 | Phase 1 | Pending |
-| FOUN-06 | Phase 1 | Pending |
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| FOUN-05 | Phase 1 | Complete |
+| FOUN-06 | Phase 1 | Complete |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | SURV-01 | Phase 2 | Pending |
 | SURV-02 | Phase 2 | Pending |
 | SURV-03 | Phase 2 | Pending |
@@ -178,10 +178,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-10 | Phase 4 | Pending |
 | DASH-11 | Phase 4 | Pending |
 | DASH-12 | Phase 4 | Pending |
-| UIUX-01 | Phase 1 | Pending |
+| UIUX-01 | Phase 1 | Complete |
 | UIUX-02 | Phase 4 | Pending |
-| UIUX-03 | Phase 1 | Pending |
-| UIUX-04 | Phase 1 | Pending |
+| UIUX-03 | Phase 1 | Complete |
+| UIUX-04 | Phase 1 | Complete |
 | DATA-01 | Phase 2 | Pending |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 2 | Pending |

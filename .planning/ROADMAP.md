@@ -12,7 +12,7 @@ Four phases that deliver the complete survey-to-insight pipeline. Phase 1 establ
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Data model, storage adapter, auth, i18n routing — the non-retroactive infrastructure everything else depends on
+- [x] **Phase 1: Foundation** - Data model, storage adapter, auth, i18n routing — the non-retroactive infrastructure everything else depends on (completed 2026-04-01)
 - [ ] **Phase 2: Survey Creation and Distribution** - Admin creates surveys, imports bilingual questions, configures SMTP, and sends unique invitation emails to employees
 - [ ] **Phase 3: Employee Survey Form** - Employees access surveys via unique links, complete the bilingual multi-section form, and responses are persisted to CSV
 - [ ] **Phase 4: Analytics Dashboard** - Admin views multi-dimensional Chart.js dashboards with GPTW scoring, ENPS, leaderboard, and department breakdowns derived from collected responses
@@ -90,7 +90,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/3 | In Progress|  |
+| 1. Foundation | 3/3 | Complete   | 2026-04-01 |
 | 2. Survey Creation and Distribution | 0/2 | Not started | - |
 | 3. Employee Survey Form | 0/2 | Not started | - |
 | 4. Analytics Dashboard | 0/2 | Not started | - |
