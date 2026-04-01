@@ -224,9 +224,25 @@ export function EmailDistributionForm({ survey, surveys, priorInvitations }: Pro
 
       {/* Invitation History Table — always visible */}
       <div className="mt-8">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">
-          {t('inviteHistoryHeading')}
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold text-gray-900">
+            {t('inviteHistoryHeading')}
+          </h2>
+          {priorInvitations.length > 0 && (
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <span>Total: <strong className="text-foreground">{priorInvitations.length}</strong></span>
+              <span>Submitted: <strong className="text-green-600">{priorInvitations.filter(i => i.status === 'submitted').length}</strong></span>
+              <span>Pending: <strong className="text-amber-600">{priorInvitations.filter(i => i.status === 'pending').length}</strong></span>
+              <span>
+                Rate: <strong className="text-foreground">
+                  {priorInvitations.length > 0
+                    ? Math.round((priorInvitations.filter(i => i.status === 'submitted').length / priorInvitations.length) * 100)
+                    : 0}%
+                </strong>
+              </span>
+            </div>
+          )}
+        </div>
 
         {priorInvitations.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t('inviteHistoryEmpty')}</p>
