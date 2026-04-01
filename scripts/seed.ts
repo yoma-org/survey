@@ -1,5 +1,5 @@
 /**
- * Database seeding script for Surey-Yoma
+ * Database seeding script for Survey-Yoma
  * Populates Supabase PostgreSQL with realistic GPTW survey data.
  *
  * Run: npx tsx scripts/seed.ts

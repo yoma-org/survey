@@ -150,7 +150,7 @@ completed: 2026-04-01
 
 ## Issues Encountered
 
-- `create-next-app` refused to run in the project directory because `.planning/` and `assets/` folders existed. Resolved by scaffolding into a temp directory (`surey-yoma-temp`) then rsync-ing into the project directory, excluding `.git`, `.planning`, and `assets`.
+- `create-next-app` refused to run in the project directory because `.planning/` and `assets/` folders existed. Resolved by scaffolding into a temp directory (`survey-yoma-temp`) then rsync-ing into the project directory, excluding `.git`, `.planning`, and `assets`.
 - `.gitignore` had `.env*` pattern blocking `.env.example`. Added `!.env.example` exception.
 
 ## User Setup Required

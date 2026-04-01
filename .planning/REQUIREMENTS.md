@@ -1,4 +1,4 @@
-# Requirements: Surey Yoma
+# Requirements: Survey Yoma
 
 **Defined:** 2026-04-01
 **Core Value:** Admins can distribute surveys to employees via unique email links and view comprehensive, multi-dimensional analytical dashboards from collected responses

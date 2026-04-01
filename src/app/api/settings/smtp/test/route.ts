@@ -38,14 +38,14 @@ export async function POST(request: Request) {
 
     // Step 2: Send a real test email to the fromAddress
     await transporter.sendMail({
-      from: `"${settings.fromName || 'Surey Yoma'}" <${settings.fromAddress}>`,
+      from: `"${settings.fromName || 'Survey Yoma'}" <${settings.fromAddress}>`,
       to: settings.fromAddress,
-      subject: 'Surey Yoma — SMTP Test Email',
+      subject: 'Survey Yoma — SMTP Test Email',
       html: `
         <div style="font-family: Arial, sans-serif; padding: 24px;">
           <h2 style="color: #111827;">SMTP Configuration Test</h2>
           <p style="color: #374151;">If you're reading this, your SMTP settings are working correctly.</p>
-          <p style="color: #6b7280; font-size: 13px;">Sent from Surey Yoma at ${new Date().toISOString()}</p>
+          <p style="color: #6b7280; font-size: 13px;">Sent from Survey Yoma at ${new Date().toISOString()}</p>
         </div>
       `,
     });

@@ -1,13 +1,13 @@
 # Project Research Summary
 
-**Project:** Surey Yoma — Bilingual Employee Culture Survey Platform
+**Project:** Survey Yoma — Bilingual Employee Culture Survey Platform
 **Domain:** Employee culture survey and analytics platform (Next.js, CSV storage, SMTP, Chart.js, i18n)
 **Researched:** 2026-04-01
 **Confidence:** HIGH (stack, architecture, pitfalls), MEDIUM-HIGH (feature classification)
 
 ## Executive Summary
 
-Surey Yoma is a purpose-built Great Place to Work Trust Index survey platform serving Burmese-speaking corporate employees at Yoma Bank and Wave Money. Unlike generic survey tools (Google Forms, SurveyMonkey), it ships with the GPTW dimension model pre-wired (Credibility, Respect, Fairness, Pride, Camaraderie), bilingual English/Burmese rendering from day one, and a full analytics dashboard that turns raw Likert responses into actionable HR insights. The entire stack is deliberate: Next.js 15 App Router for server/client separation, Chart.js 4 via react-chartjs-2 for 20+ chart types, Vercel Blob for CSV persistence, next-intl for SSR-safe i18n, and iron-session for single-admin auth without database overhead.
+Survey Yoma is a purpose-built Great Place to Work Trust Index survey platform serving Burmese-speaking corporate employees at Yoma Bank and Wave Money. Unlike generic survey tools (Google Forms, SurveyMonkey), it ships with the GPTW dimension model pre-wired (Credibility, Respect, Fairness, Pride, Camaraderie), bilingual English/Burmese rendering from day one, and a full analytics dashboard that turns raw Likert responses into actionable HR insights. The entire stack is deliberate: Next.js 15 App Router for server/client separation, Chart.js 4 via react-chartjs-2 for 20+ chart types, Vercel Blob for CSV persistence, next-intl for SSR-safe i18n, and iron-session for single-admin auth without database overhead.
 
 The recommended build approach follows a strict dependency order driven by the architecture: foundation (data model, storage abstraction, auth, i18n routing) must be fully established before any application features are built. The CSV read-mutate-write pattern is central to every data operation and must be implemented with Vercel Blob ETag-based concurrency control from the start — not retrofitted. The survey form and email distribution are Phase 2 scope; the analytics dashboard is Phase 3. This order is non-negotiable because survey data must exist before any chart has meaning.
 
@@ -138,7 +138,7 @@ The dependency graph from FEATURES.md and the build order from ARCHITECTURE.md c
 
 ### Phase 4: Polish and v1.x Differentiators
 
-**Rationale:** Once the core survey-to-insight pipeline is validated with real data, add the differentiating features that elevate Surey Yoma above generic survey tools. These are all enhancements, not blockers — they can be built and deployed independently.
+**Rationale:** Once the core survey-to-insight pipeline is validated with real data, add the differentiating features that elevate Survey Yoma above generic survey tools. These are all enhancements, not blockers — they can be built and deployed independently.
 
 **Delivers:** Enhanced analytics depth, animated dashboards, executive-facing visualizations
 **Addresses (features):** Deep-dive sub-pillar charts, radar/spider dimension chart, key relationship analysis (Employee/Job/Management), gap analysis (Manager vs IC), animated chart transitions, sentiment word cloud on open-ended responses

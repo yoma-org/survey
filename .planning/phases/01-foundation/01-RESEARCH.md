@@ -130,7 +130,7 @@ Two architectural decisions are locked and irreversible after Phase 1: URL-path 
 **Installation:**
 ```bash
 # Bootstrap (includes Next.js, React 19, TypeScript, Tailwind v4, ESLint, App Router)
-npx create-next-app@latest surey-yoma --typescript --tailwind --eslint --app --src-dir
+npx create-next-app@latest survey-yoma --typescript --tailwind --eslint --app --src-dir
 
 # i18n
 npm install next-intl

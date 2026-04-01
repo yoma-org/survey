@@ -1,4 +1,4 @@
-# Roadmap: Surey Yoma
+# Roadmap: Survey Yoma
 
 ## Overview
 

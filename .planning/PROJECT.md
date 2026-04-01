@@ -1,4 +1,4 @@
-# Surey Yoma — Employee Culture Survey Platform
+# Survey Yoma — Employee Culture Survey Platform
 
 ## What This Is
 

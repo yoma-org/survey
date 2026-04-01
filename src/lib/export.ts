@@ -33,7 +33,7 @@ export function exportDashboardSummaryCSV(data: DashboardData, surveyName = 'sur
   const timestamp = new Date().toISOString().split('T')[0];
 
   // Header
-  lines.push('# Surey Yoma Dashboard Summary Export');
+  lines.push('# Survey Yoma Dashboard Summary Export');
   lines.push(`# Generated: ${timestamp}`);
   lines.push('');
 
@@ -163,7 +163,7 @@ export function exportDashboardSummaryCSV(data: DashboardData, surveyName = 'sur
     ]));
   }
 
-  downloadCSV(lines.join('\n'), `surey-yoma-dashboard-${surveyName}-${timestamp}.csv`);
+  downloadCSV(lines.join('\n'), `survey-yoma-dashboard-${surveyName}-${timestamp}.csv`);
 }
 
 export function exportStrengthsOpportunitiesCSV(data: DashboardData, surveyName = 'survey'): void {
@@ -183,5 +183,5 @@ export function exportStrengthsOpportunitiesCSV(data: DashboardData, surveyName 
     lines.push(rowToCSV([i + 1, s.label, s.score + '%']));
   });
 
-  downloadCSV(lines.join('\n'), `surey-yoma-rankings-${surveyName}-${timestamp}.csv`);
+  downloadCSV(lines.join('\n'), `survey-yoma-rankings-${surveyName}-${timestamp}.csv`);
 }

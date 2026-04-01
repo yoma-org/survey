@@ -1,6 +1,6 @@
 {
   "login": {
-    "title": "Surey Yoma",
+    "title": "Survey Yoma",
     "subtitle": "Admin Portal",
     "heading": "Sign in",
     "description": "Enter your credentials to access the admin panel",
@@ -12,7 +12,7 @@
     "networkError": "Something went wrong. Please try again."
   },
   "nav": {
-    "brand": "Surey Yoma",
+    "brand": "Survey Yoma",
     "dashboard": "Dashboard",
     "surveys": "Surveys",
     "settings": "Settings",
@@ -22,7 +22,7 @@
     "toggleMenu": "Toggle menu"
   },
   "dashboard": {
-    "title": "Welcome to Surey Yoma",
+    "title": "Welcome to Survey Yoma",
     "subtitle": "Your employee engagement survey platform",
     "gettingStarted": "Getting Started",
     "gettingStartedDescription": "Complete these steps to run your first survey",
@@ -136,7 +136,7 @@
     "fromAddressLabel": "From Address",
     "fromAddressPlaceholder": "surveys@yourcompany.com",
     "fromNameLabel": "From Name",
-    "fromNamePlaceholder": "Surey Yoma",
+    "fromNamePlaceholder": "Survey Yoma",
     "saveButton": "Save Settings",
     "testButton": "Send Test Email",
     "testSending": "Sending...",

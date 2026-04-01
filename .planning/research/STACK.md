@@ -51,7 +51,7 @@
 
 ```bash
 # Bootstrap project (includes Next.js 15, React 19, TypeScript, Tailwind v4, ESLint)
-npx create-next-app@latest surey-yoma --typescript --tailwind --eslint --app --src-dir
+npx create-next-app@latest survey-yoma --typescript --tailwind --eslint --app --src-dir
 
 # Core charting
 npm install chart.js react-chartjs-2
@@ -175,5 +175,5 @@ npx shadcn@latest init
 - [react-hook-form 7.60.x + zod 3.25.x compatibility](https://dev.to/marufrahmanlive/react-hook-form-with-zod-complete-guide-for-2026-1em1) — MEDIUM confidence (community, corroborated by npm versions)
 
 ---
-*Stack research for: Surey Yoma — Bilingual Employee Culture Survey Platform*
+*Stack research for: Survey Yoma — Bilingual Employee Culture Survey Platform*
 *Researched: 2026-04-01*

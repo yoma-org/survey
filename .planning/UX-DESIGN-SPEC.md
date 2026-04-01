@@ -1,4 +1,4 @@
-# Surey Yoma -- Comprehensive UX Design Specification
+# Survey Yoma -- Comprehensive UX Design Specification
 
 > Complete visual and interaction design system for both UI spaces:
 > **Admin Panel** (HR administrators) and **Survey Form** (employees).
@@ -36,7 +36,7 @@ The redesign follows the Optimus Platform aesthetic: **white-dominant, noise-tex
 | Primary font | Inter Variable (via @fontsource-variable/inter) |
 | Font features | `cv11`, `ss01` enabled |
 | Rendering | Antialiased (`-webkit-font-smoothing`, `-moz-osx-font-smoothing`) |
-| Brand mark | "Surey" (font-light) + "Yoma" (font-semibold) — split weight |
+| Brand mark | "Survey" (font-light) + "Yoma" (font-semibold) — split weight |
 | Headings | font-light, tracking-tight (editorial feel) |
 | Labels | 11px, uppercase, tracking-wider, gray-500 |
 | Nav text | 13px, font-medium when active |
@@ -99,7 +99,7 @@ src/components/motion/
 
 ## 1. Design Brief
 
-Surey Yoma serves two distinct user groups through two distinct experiences. The **Admin Panel** is a data-dense operational tool where HR professionals create surveys, distribute them, and interpret results -- it must feel professional, organized, and trustworthy. The **Survey Form** is the employee-facing experience -- it must feel approachable, low-friction, and psychologically safe so that employees answer honestly.
+Survey Yoma serves two distinct user groups through two distinct experiences. The **Admin Panel** is a data-dense operational tool where HR professionals create surveys, distribute them, and interpret results -- it must feel professional, organized, and trustworthy. The **Survey Form** is the employee-facing experience -- it must feel approachable, low-friction, and psychologically safe so that employees answer honestly.
 
 The overarching design language is **clean, white, minimal, and warm-professional**. The platform should feel like a well-organized document rather than enterprise software. Myanmar script readability is a first-class constraint that shapes every typographic decision.
 

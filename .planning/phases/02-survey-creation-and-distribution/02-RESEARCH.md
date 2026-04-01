@@ -578,7 +578,7 @@ function buildInvitationHtml(surveyName: string, surveyUrl: string, recipientEma
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1f2937;">
   <div style="border-bottom: 2px solid #2563eb; padding-bottom: 16px; margin-bottom: 24px;">
-    <h1 style="color: #2563eb; font-size: 20px; margin: 0;">Surey Yoma</h1>
+    <h1 style="color: #2563eb; font-size: 20px; margin: 0;">Survey Yoma</h1>
   </div>
   <h2 style="font-size: 18px; font-weight: 600;">You're invited to share your feedback</h2>
   <p>Hello,</p>

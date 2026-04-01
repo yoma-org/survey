@@ -17,7 +17,7 @@ export default async function SurveyDetailPage({
   const [questions, responseCount, previewToken] = await Promise.all([
     getQuestions(id),
     getResponseCount(id),
-    generateToken(id, 'admin-preview@surey-yoma.local'),
+    generateToken(id, 'admin-preview@survey-yoma.local'),
   ]);
 
   return (

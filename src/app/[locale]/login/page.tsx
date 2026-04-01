@@ -68,7 +68,7 @@ export default function LoginPage() {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="text-[11px] text-muted-foreground/60 tracking-wider uppercase relative z-10"
           >
-            Surey Yoma
+            Survey Yoma
           </motion.p>
         </div>
 
