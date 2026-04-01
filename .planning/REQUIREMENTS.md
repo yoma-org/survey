@@ -1,0 +1,197 @@
+# Requirements: Surey Yoma
+
+**Defined:** 2026-04-01
+**Core Value:** Admins can distribute surveys to employees via unique email links and view comprehensive, multi-dimensional analytical dashboards from collected responses
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Foundation
+
+- [ ] **FOUN-01**: Project bootstrapped with Next.js 15 App Router, TypeScript, Tailwind CSS 4, shadcn/ui
+- [ ] **FOUN-02**: Vercel Blob StorageAdapter with ETag-based concurrent write protection and local fs fallback for dev
+- [ ] **FOUN-03**: CSV schema defined with explicit questionId columns and header-based read/write (not index-based)
+- [ ] **FOUN-04**: GPTW dimension constants mapping all 46 questions to dimensions and sub-pillars in lib/constants.ts
+- [ ] **FOUN-05**: URL-based i18n routing with next-intl (/en/... and /my/...) with Noto Sans Myanmar font loaded via Fontsource
+- [ ] **FOUN-06**: English and Burmese translation message files (messages/en.json and messages/mm.json) with all UI strings
+
+### Authentication
+
+- [ ] **AUTH-01**: Admin can log in with static username/password credentials
+- [ ] **AUTH-02**: Admin session persists via iron-session encrypted cookies
+- [ ] **AUTH-03**: All /admin routes protected by middleware using jose JWT verification
+- [ ] **AUTH-04**: Admin can log out and session is destroyed
+
+### Survey Management
+
+- [ ] **SURV-01**: Admin can create a new survey with name and description
+- [ ] **SURV-02**: Admin can upload bilingual question list from Excel file (exceljs parser)
+- [ ] **SURV-03**: Survey questions support Likert scale (5-point), open-ended text, and demographic select types
+- [ ] **SURV-04**: Survey questions stored with both English and Burmese text
+- [ ] **SURV-05**: Survey organized into sections matching GPTW dimensions (Camaraderie, Credibility, Fairness, Pride, Respect) plus demographics and open-ended
+- [ ] **SURV-06**: Admin can view list of all surveys with status
+
+### Email Distribution
+
+- [ ] **EMAL-01**: Admin can configure SMTP server settings (host, port, username, password, from address) via settings page
+- [ ] **EMAL-02**: SMTP onboarding modal prompts admin to configure email before first use
+- [ ] **EMAL-03**: Admin can send test email to verify SMTP configuration
+- [ ] **EMAL-04**: Admin can input employee email addresses and select a survey to distribute
+- [ ] **EMAL-05**: System generates cryptographically secure unique token per employee-survey pair (crypto.randomBytes)
+- [ ] **EMAL-06**: Admin can send professional, friendly invitation emails with survey name and unique link via SMTP
+- [ ] **EMAL-07**: Email template renders correctly with survey name and personalized link
+
+### Survey Form
+
+- [ ] **FORM-01**: Employee accesses survey via unique URL with token; email pre-filled from token lookup
+- [ ] **FORM-02**: Survey form displays in multi-section layout with floating TOC on left side
+- [ ] **FORM-03**: Floating TOC tracks progress showing completed/remaining sections
+- [ ] **FORM-04**: Survey renders in selected language (English or Burmese) with language switcher
+- [ ] **FORM-05**: Likert scale questions display 5 options (Strongly Disagree to Strongly Agree) in selected language
+- [ ] **FORM-06**: Open-ended questions provide text area input
+- [ ] **FORM-07**: Demographic section collects Organization, Service Year, and Role Type with predefined options in both languages
+- [ ] **FORM-08**: Form validation with inline error messages, guidelines, and tooltips
+- [ ] **FORM-09**: Confirmation dialog shown before final submission
+- [ ] **FORM-10**: Token marked as used server-side upon submission (prevents resubmission)
+- [ ] **FORM-11**: Responses persisted to CSV file partitioned by survey ID
+- [ ] **FORM-12**: Basic information fields (name, department) available as optional inputs
+
+### Analytics Dashboard
+
+- [ ] **DASH-01**: Admin dashboard page showing overall Employee Engagement Score (EES) as percentage favorable
+- [ ] **DASH-02**: Pie/donut chart showing Positive/Neutral/Negative response distribution
+- [ ] **DASH-03**: Bar chart showing 5 key dimension scores (Credibility, Respect, Fairness, Pride, Camaraderie) as % favorable
+- [ ] **DASH-04**: ENPS (Employee Net Promoter Score) visualization as gauge/infographic
+- [ ] **DASH-05**: Top 10 Strengths (highest scoring statements) as horizontal bar chart
+- [ ] **DASH-06**: Bottom 10 Opportunities (lowest scoring statements) as horizontal bar chart
+- [ ] **DASH-07**: Department/organization breakdown charts showing dimension scores per group
+- [ ] **DASH-08**: Leaderboard metrics showing % Completion, % Credibility, % Respect, % Fairness, % Pride, % Camaraderie, % Overall Satisfaction, % ENPS, % Engagement, % Innovation, % Leadership
+- [ ] **DASH-09**: Charts use Chart.js with proper client-side rendering (use client + dynamic import with ssr:false)
+- [ ] **DASH-10**: Chart components use IntersectionObserver for lazy instantiation and proper useEffect cleanup to prevent memory leaks
+- [ ] **DASH-11**: Analytics data aggregated server-side and passed as props to client chart components
+- [ ] **DASH-12**: Admin can filter/view charts by survey selection
+
+### UI/UX
+
+- [ ] **UIUX-01**: Clean, white, simple design with easily readable fonts
+- [ ] **UIUX-02**: Subtle background animation effects for UX enhancement
+- [ ] **UIUX-03**: Responsive layout working on desktop and mobile browsers
+- [ ] **UIUX-04**: All user-facing text available in both English and Burmese
+
+### Data & Storage
+
+- [ ] **DATA-01**: All survey responses persisted to CSV files
+- [ ] **DATA-02**: CSV files stored via Vercel Blob in production with local filesystem fallback for development
+- [ ] **DATA-03**: Survey configuration, tokens, SMTP settings, and responses each stored in separate CSV files
+- [ ] **DATA-04**: Anonymity threshold enforced — segment breakdowns hidden when response count < 5
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Enhanced Analytics
+
+- **EANA-01**: Deep-dive sub-pillar charts per dimension (e.g., Credibility → Communication, Competence, Integrity)
+- **EANA-02**: Radar/spider chart overlaying all 5 dimension scores
+- **EANA-03**: Key relationship analysis charts (Employee/Engagement, Job/Innovation, Management/Leadership)
+- **EANA-04**: Gap analysis chart comparing Manager vs Individual Contributor perception
+- **EANA-05**: Year-over-year comparison charts (requires multiple survey periods)
+- **EANA-06**: Internal benchmark trend lines across survey periods
+- **EANA-07**: Sentiment word cloud from open-ended question responses
+- **EANA-08**: Heat map showing statement scores by department/team
+- **EANA-09**: Distribution histogram showing response spread per statement
+
+### Enhanced UX
+
+- **EUXP-01**: Animated chart transitions using Motion library
+- **EUXP-02**: Industry/external benchmark comparison charts
+- **EUXP-03**: AI-generated focus area recommendations from survey data
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| OAuth/SSO authentication | Static credentials sufficient for single-admin MVP |
+| Database backend (PostgreSQL, etc.) | CSV storage is a deliberate constraint per requirements |
+| Real-time analytics during collection | Creates anchoring bias; show results only after survey closes |
+| Individual response identification | Destroys psychological safety; anonymity is non-negotiable |
+| Mobile native app | Responsive web design sufficient; native adds codebase overhead |
+| Multi-tenant support | Single organization deployment; use demographic field for org segmentation |
+| Recurring/scheduled survey automation | Manual distribution workflow per requirements |
+| Pulse surveys / weekly check-ins | Annual culture survey cadence, not continuous listening |
+| Real-time chat or collaboration | Not relevant to survey use case |
+| Payment processing | No paid features in scope |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| FOUN-01 | Phase 1 | Pending |
+| FOUN-02 | Phase 1 | Pending |
+| FOUN-03 | Phase 1 | Pending |
+| FOUN-04 | Phase 1 | Pending |
+| FOUN-05 | Phase 1 | Pending |
+| FOUN-06 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| SURV-01 | Phase 2 | Pending |
+| SURV-02 | Phase 2 | Pending |
+| SURV-03 | Phase 2 | Pending |
+| SURV-04 | Phase 2 | Pending |
+| SURV-05 | Phase 2 | Pending |
+| SURV-06 | Phase 2 | Pending |
+| EMAL-01 | Phase 2 | Pending |
+| EMAL-02 | Phase 2 | Pending |
+| EMAL-03 | Phase 2 | Pending |
+| EMAL-04 | Phase 2 | Pending |
+| EMAL-05 | Phase 2 | Pending |
+| EMAL-06 | Phase 2 | Pending |
+| EMAL-07 | Phase 2 | Pending |
+| FORM-01 | Phase 3 | Pending |
+| FORM-02 | Phase 3 | Pending |
+| FORM-03 | Phase 3 | Pending |
+| FORM-04 | Phase 3 | Pending |
+| FORM-05 | Phase 3 | Pending |
+| FORM-06 | Phase 3 | Pending |
+| FORM-07 | Phase 3 | Pending |
+| FORM-08 | Phase 3 | Pending |
+| FORM-09 | Phase 3 | Pending |
+| FORM-10 | Phase 3 | Pending |
+| FORM-11 | Phase 3 | Pending |
+| FORM-12 | Phase 3 | Pending |
+| DASH-01 | Phase 4 | Pending |
+| DASH-02 | Phase 4 | Pending |
+| DASH-03 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Pending |
+| DASH-05 | Phase 4 | Pending |
+| DASH-06 | Phase 4 | Pending |
+| DASH-07 | Phase 4 | Pending |
+| DASH-08 | Phase 4 | Pending |
+| DASH-09 | Phase 4 | Pending |
+| DASH-10 | Phase 4 | Pending |
+| DASH-11 | Phase 4 | Pending |
+| DASH-12 | Phase 4 | Pending |
+| UIUX-01 | Phase 1 | Pending |
+| UIUX-02 | Phase 4 | Pending |
+| UIUX-03 | Phase 1 | Pending |
+| UIUX-04 | Phase 1 | Pending |
+| DATA-01 | Phase 2 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 2 | Pending |
+| DATA-04 | Phase 4 | Pending |
+
+**Coverage:**
+- v1 requirements: 52 total
+- Mapped to phases: 52
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-04-01*
+*Last updated: 2026-04-01 after initial definition*
