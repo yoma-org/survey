@@ -45,11 +45,11 @@ Plans:
   2. Admin is prompted to configure SMTP on first use and can send a test email that confirms delivery or surfaces a readable error
   3. Admin can paste a list of employee emails, select a survey, and send invitation emails — each employee receives a unique link with their email pre-filled
   4. Survey data, tokens, and SMTP settings are each stored in separate CSV files (not one combined file)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Survey CRUD, Excel import, and question storage
-- [ ] 02-02: SMTP configuration, token generation, and email dispatch
+- [ ] 02-01-PLAN.md — Survey CRUD, exceljs import, question storage, survey list/create/detail pages
+- [ ] 02-02-PLAN.md — SMTP settings, token generation, email distribution with onboarding modal and progress feedback
 
 ### Phase 3: Employee Survey Form
 **Goal**: Employees can access their unique survey URL, complete the bilingual multi-section Likert form with open-ended and demographic questions, and submit — responses are persisted and the token is invalidated
