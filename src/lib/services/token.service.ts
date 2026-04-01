@@ -1,6 +1,6 @@
 // src/lib/services/token.service.ts
 import { randomBytes } from 'crypto';
-import { readRows, appendRow } from './csv.service';
+import { readRows, appendRow, writeRows } from './csv.service';
 import type { Token } from '@/lib/types';
 
 function tokenFile(surveyId: string) {
@@ -69,4 +69,43 @@ export async function listTokens(surveyId: string): Promise<Token[]> {
   } catch {
     return [];
   }
+}
+
+/**
+ * Find a token row by its token string value, scanning all surveys.
+ * Does NOT filter by status — returns the row as-is (used vs pending).
+ * Use validateToken() if you need to enforce pending status.
+ */
+export async function findTokenByValue(token: string): Promise<Token | null> {
+  const surveys = await readRows<Record<string, string>>('surveys.csv');
+  for (const survey of surveys) {
+    const rows = await readRows<Record<string, string>>(tokenFile(survey.id));
+    const row = rows.find(r => r.token === token);
+    if (row) {
+      return {
+        token: row.token,
+        surveyId: row.surveyId,
+        email: row.email,
+        status: row.status as Token['status'],
+        createdAt: row.createdAt,
+        submittedAt: row.submittedAt || undefined,
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * Mark a token as used (submitted). Reads the token file, mutates the target row,
+ * writes all rows back. Called AFTER appendRow succeeds (response must be persisted first).
+ */
+export async function markTokenUsed(token: string, surveyId: string): Promise<void> {
+  const filename = tokenFile(surveyId);
+  const rows = await readRows<Record<string, string>>(filename);
+  const updated = rows.map(r =>
+    r.token === token
+      ? { ...r, status: 'submitted', submittedAt: new Date().toISOString() }
+      : r
+  );
+  await writeRows(filename, updated);
 }
