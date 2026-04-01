@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { routing } from '@/i18n/routing';
 import enMessages from '../../messages/en.json';
-import mmMessages from '../../messages/mm.json';
+import mmMessages from '../../messages/my.json';
 
 describe('i18n routing', () => {
   it('defines en and my as locales', () => {
