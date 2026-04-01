@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-04-01T09:00:04.127Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-04-01T09:18:05.558Z"
 last_activity: 2026-04-01 — Plan 01-01 complete; Next.js scaffold, 47 GPTW questions, StorageAdapter, CSV service
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 8
 ---
 
@@ -53,6 +53,7 @@ Progress: [█░░░░░░░░░] 8%
 | Phase 01-foundation P02 | 5 min | 2 tasks | 13 files |
 | Phase 01-foundation P03 | 8 | 2 tasks | 14 files |
 | Phase 02-survey-creation-and-distribution P01 | 9 min | 3 tasks | 26 files |
+| Phase 02-survey-creation-and-distribution P02 | 25 min | 3 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,9 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: Plan 01-03: Translation key naming convention {section}.{key} (login.title, nav.dashboard, etc.) — all future plans must follow
 - [Phase 02-survey-creation-and-distribution]: Button asChild not available in base-ui Button — use buttonVariants+Link pattern for all link-buttons
 - [Phase 02-survey-creation-and-distribution]: ExcelJS Buffer type requires unknown cast for Node 22 Buffer<ArrayBufferLike> compatibility
+- [Phase 02-survey-creation-and-distribution]: base-ui Dialog has no onInteractOutside/onEscapeKeyDown — use disablePointerDismissal + onOpenChange reason intercept for non-dismissible modal
+- [Phase 02-survey-creation-and-distribution]: Token idempotency: generateToken checks CSV before generating — same email+surveyId always returns same token
+- [Phase 02-survey-creation-and-distribution]: Sequential for-of email send (not Promise.all) — avoids SMTP rate limiting
 
 ### Pending Todos
 
@@ -88,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-01T09:00:04.124Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-04-01T09:18:05.557Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None

@@ -34,13 +34,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Email Distribution
 
-- [ ] **EMAL-01**: Admin can configure SMTP server settings (host, port, username, password, from address) via settings page
-- [ ] **EMAL-02**: SMTP onboarding modal prompts admin to configure email before first use
-- [ ] **EMAL-03**: Admin can send test email to verify SMTP configuration
-- [ ] **EMAL-04**: Admin can input employee email addresses and select a survey to distribute
-- [ ] **EMAL-05**: System generates cryptographically secure unique token per employee-survey pair (crypto.randomBytes)
-- [ ] **EMAL-06**: Admin can send professional, friendly invitation emails with survey name and unique link via SMTP
-- [ ] **EMAL-07**: Email template renders correctly with survey name and personalized link
+- [x] **EMAL-01**: Admin can configure SMTP server settings (host, port, username, password, from address) via settings page
+- [x] **EMAL-02**: SMTP onboarding modal prompts admin to configure email before first use
+- [x] **EMAL-03**: Admin can send test email to verify SMTP configuration
+- [x] **EMAL-04**: Admin can input employee email addresses and select a survey to distribute
+- [x] **EMAL-05**: System generates cryptographically secure unique token per employee-survey pair (crypto.randomBytes)
+- [x] **EMAL-06**: Admin can send professional, friendly invitation emails with survey name and unique link via SMTP
+- [x] **EMAL-07**: Email template renders correctly with survey name and personalized link
 
 ### Survey Form
 
@@ -147,13 +147,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SURV-04 | Phase 2 | Complete |
 | SURV-05 | Phase 2 | Complete |
 | SURV-06 | Phase 2 | Complete |
-| EMAL-01 | Phase 2 | Pending |
-| EMAL-02 | Phase 2 | Pending |
-| EMAL-03 | Phase 2 | Pending |
-| EMAL-04 | Phase 2 | Pending |
-| EMAL-05 | Phase 2 | Pending |
-| EMAL-06 | Phase 2 | Pending |
-| EMAL-07 | Phase 2 | Pending |
+| EMAL-01 | Phase 2 | Complete |
+| EMAL-02 | Phase 2 | Complete |
+| EMAL-03 | Phase 2 | Complete |
+| EMAL-04 | Phase 2 | Complete |
+| EMAL-05 | Phase 2 | Complete |
+| EMAL-06 | Phase 2 | Complete |
+| EMAL-07 | Phase 2 | Complete |
 | FORM-01 | Phase 3 | Pending |
 | FORM-02 | Phase 3 | Pending |
 | FORM-03 | Phase 3 | Pending |
