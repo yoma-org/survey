@@ -112,7 +112,7 @@ Components required for this phase, grouped by surface.
 | `<Textarea>` | shadcn/ui | Survey description field |
 | File upload drop zone | custom (HTML input[type=file]) | No third-party uploader; drag-over state with blue border |
 | Upload feedback row | custom | Filename + file size + remove icon (lucide: `X`, `aria-label="Remove file"`) |
-| `<Button>` | shadcn/ui | "Create Survey" primary, "Cancel" outline |
+| `<Button>` | shadcn/ui | "Create Survey" primary, "Discard Changes" (outline) |
 | `<Label>` | shadcn/ui | All form field labels |
 
 ### Excel Import UI
@@ -203,7 +203,7 @@ Components required for this phase, grouped by surface.
 
 | Action | Trigger | Confirmation Approach | Copy |
 |--------|---------|----------------------|------|
-| Delete survey | "Delete" button in survey row actions | Inline confirmation row (not modal) — replaces row with "Are you sure? This cannot be undone." + "Delete Survey" (destructive button) + "Cancel" (ghost) | Heading: "Delete this survey?" Body: "All associated questions and invitation links will be removed permanently." |
+| Delete survey | "Delete" button in survey row actions | Inline confirmation row (not modal) — replaces row with "Are you sure? This cannot be undone." + "Delete Survey" (destructive button) + "Keep Survey" (ghost) | Heading: "Delete this survey?" Body: "All associated questions and invitation links will be removed permanently." |
 
 No other destructive actions in this phase.
 
