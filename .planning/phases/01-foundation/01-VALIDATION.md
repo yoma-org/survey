@@ -59,6 +59,8 @@ created: 2026-04-01
 - [ ] `__tests__/lib/csv.service.test.ts` — stubs for StorageAdapter tests
 - [ ] `__tests__/lib/constants.test.ts` — stubs for GPTW question mapping validation
 - [ ] `__tests__/lib/auth.test.ts` — stubs for auth flow tests
+- [ ] `__tests__/lib/storage.test.ts` — stubs for StorageAdapter / LocalAdapter tests
+- [ ] `__tests__/lib/i18n.test.ts` — stubs for i18n routing and message file validation
 
 *Wave 0 is created by the first plan's initial task.*
 
