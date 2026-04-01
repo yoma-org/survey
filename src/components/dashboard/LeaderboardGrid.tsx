@@ -1,6 +1,7 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
+import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren';
+import { CountUp } from '@/components/motion/CountUp';
 
 interface LeaderboardMetric {
   label: string;
@@ -14,29 +15,22 @@ interface LeaderboardGridProps {
 
 export function LeaderboardGrid({ metrics }: LeaderboardGridProps) {
   return (
-    <Card className="p-5 border-gray-100">
-      <h3 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-4">
-        Leaderboard
-      </h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-4">
+    <div>
+      <div className="divider-dot mb-8" />
+      <StaggerChildren className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8" staggerDelay={0.06}>
         {metrics.map((metric) => (
-          <div key={metric.label} className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">{metric.label}</span>
-              <span className="text-xs font-semibold tabular-nums" style={{ color: metric.color }}>
-                {metric.value}%
-              </span>
+          <StaggerItem key={metric.label}>
+            <div className="space-y-1">
+              <div className="text-2xl font-light tracking-tight text-gray-900 tabular-nums">
+                <CountUp value={metric.value} duration={0.8} />
+              </div>
+              <div className="metric-label">{metric.label}</div>
+              {/* Thin color indicator line */}
+              <div className="w-8 h-0.5 rounded-full mt-2" style={{ backgroundColor: metric.color }} />
             </div>
-            {/* Custom progress bar matching dimension colors */}
-            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${metric.value}%`, backgroundColor: metric.color }}
-              />
-            </div>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
-    </Card>
+      </StaggerChildren>
+    </div>
   );
 }

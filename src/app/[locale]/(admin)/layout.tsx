@@ -11,9 +11,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const hasSmtp = settings !== null;
 
   return (
-    <div className="flex min-h-screen bg-[#fafafa]">
+    <div className="flex min-h-screen bg-white relative">
+      <div className="noise-overlay" />
       <AdminSidebar />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto relative">
         <div className="max-w-[1200px] mx-auto">
           <AdminLayoutClient hasSmtp={hasSmtp}>
             {children}

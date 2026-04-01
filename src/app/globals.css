@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -123,9 +123,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
-    @apply font-sans;
+    font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
@@ -169,6 +172,18 @@
   --survey-section-pending: #a3a3a3;
 }
 
+/* Optimus-style noise overlay texture */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
 /* Subtle background animation for survey form */
 @keyframes drift {
   0%, 100% { transform: translate(0, 0); }
@@ -178,12 +193,54 @@
 }
 
 .bg-dots {
-  background-image: radial-gradient(circle, #2563eb 1px, transparent 1px);
-  background-size: 32px 32px;
-  opacity: 0.03;
-  animation: drift 60s ease-in-out infinite;
+  background-image: radial-gradient(circle, #000 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
+  opacity: 0.04;
+}
+
+/* Optimus-style large metric numbers */
+.metric-display {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-label {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #737373;
+}
+
+/* Staggered reveal animation helper */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .bg-dots { animation: none; }
+  .animate-in { animation: none; opacity: 1; }
+}
+
+/* Divider line with dot — Optimus pattern */
+.divider-dot {
+  position: relative;
+  border-top: 1px solid #e5e5e5;
+}
+.divider-dot::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 24px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #171717;
 }

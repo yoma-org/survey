@@ -1,7 +1,7 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
 import { LazyChart } from '@/components/charts/LazyChart';
+import { FadeIn } from '@/components/motion/FadeIn';
 
 interface ChartSectionProps {
   title: string;
@@ -12,18 +12,20 @@ interface ChartSectionProps {
 
 export function ChartSection({ title, description, height = 300, children }: ChartSectionProps) {
   return (
-    <Card className="border-gray-100 overflow-hidden">
-      {title && (
-        <div className="px-5 pt-5 pb-0">
-          <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
-          {description && <p className="text-xs text-gray-500 mt-0.5">{description}</p>}
+    <FadeIn>
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+        {title && (
+          <div className="px-6 pt-6 pb-0">
+            <h3 className="text-base font-medium text-gray-900">{title}</h3>
+            {description && <p className="text-xs text-gray-400 mt-1">{description}</p>}
+          </div>
+        )}
+        <div className="p-6">
+          <LazyChart height={height}>
+            {children}
+          </LazyChart>
         </div>
-      )}
-      <div className="p-5">
-        <LazyChart height={height}>
-          {children}
-        </LazyChart>
       </div>
-    </Card>
+    </FadeIn>
   );
 }

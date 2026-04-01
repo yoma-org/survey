@@ -19,33 +19,31 @@ export default async function AdminDashboardPage() {
     ];
 
     return (
-      <div className="p-6 max-w-2xl">
-        <div className="mb-6">
-          <h1 className="text-[20px] font-semibold text-gray-900">{t('title')}</h1>
-          <p className="text-sm text-gray-500 mt-1">{t('subtitle')}</p>
+      <div className="p-8 max-w-2xl">
+        <div className="mb-10">
+          <h1 className="text-2xl font-light text-gray-900 tracking-tight">
+            {t('gettingStarted')}
+          </h1>
+          <p className="text-sm text-gray-400 mt-2">{t('gettingStartedDescription')}</p>
         </div>
-        <Card className="border border-gray-100 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-base">{t('gettingStarted')}</CardTitle>
-            <CardDescription>{t('gettingStartedDescription')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ol className="space-y-3">
-              {checklist.map((item, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  {item.done ? (
-                    <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0" />
-                  ) : (
-                    <Circle className="h-5 w-5 text-gray-300 flex-shrink-0" />
-                  )}
-                  <span className={item.done ? 'text-gray-400 line-through text-sm' : 'text-gray-700 text-sm'}>
-                    {i + 1}. {item.label}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </CardContent>
-        </Card>
+        <div className="divider-dot mb-8" />
+        <ol className="space-y-6">
+          {checklist.map((item, i) => (
+            <li key={i} className="flex items-start gap-4">
+              <span className="text-[11px] font-semibold text-gray-300 mt-0.5 tabular-nums">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <span className={item.done ? 'text-gray-400 line-through text-sm' : 'text-gray-900 text-sm font-medium'}>
+                  {item.label}
+                </span>
+                {item.done && (
+                  <CheckCircle2 className="h-4 w-4 text-green-500 inline ml-2" />
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     );
   }
@@ -108,10 +106,10 @@ export default async function AdminDashboardPage() {
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-[20px] font-semibold text-gray-900">{t('title')}</h1>
-        <p className="text-sm text-gray-500 mt-1">{t('subtitle')}</p>
+    <div className="p-8">
+      <div className="mb-10">
+        <h1 className="text-2xl font-light text-gray-900 tracking-tight">{t('title')}</h1>
+        <p className="text-sm text-gray-400 mt-2">{t('subtitle')}</p>
       </div>
       <DashboardCharts data={demoData} />
     </div>
