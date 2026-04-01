@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-04-01T09:24:18.599Z"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-04-01T12:40:35.934Z"
 last_activity: 2026-04-01 — Plan 01-01 complete; Next.js scaffold, 47 GPTW questions, StorageAdapter, CSV service
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 7
+  completed_plans: 6
   percent: 8
 ---
 
@@ -54,6 +54,7 @@ Progress: [█░░░░░░░░░] 8%
 | Phase 01-foundation P03 | 8 | 2 tasks | 14 files |
 | Phase 02-survey-creation-and-distribution P01 | 9 min | 3 tasks | 26 files |
 | Phase 02-survey-creation-and-distribution P02 | 25 min | 3 tasks | 18 files |
+| Phase 03-employee-survey-form P01 | 5 min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Recent decisions affecting current work:
 - [Phase 02-survey-creation-and-distribution]: base-ui Dialog has no onInteractOutside/onEscapeKeyDown — use disablePointerDismissal + onOpenChange reason intercept for non-dismissible modal
 - [Phase 02-survey-creation-and-distribution]: Token idempotency: generateToken checks CSV before generating — same email+surveyId always returns same token
 - [Phase 02-survey-creation-and-distribution]: Sequential for-of email send (not Promise.all) — avoids SMTP rate limiting
+- [Phase 03-employee-survey-form]: findTokenByValue is status-agnostic — validateToken enforces pending-only; findTokenByValue used for survey page lookup
+- [Phase 03-employee-survey-form]: appendRow-before-markTokenUsed ordering enforced in submit route — response persisted before token invalidated (FORM-11 prerequisite)
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-01T09:18:05.557Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-04-01T12:40:35.932Z
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None

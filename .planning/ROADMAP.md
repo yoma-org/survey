@@ -92,5 +92,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete    | 2026-04-01 |
 | 2. Survey Creation and Distribution | 1/2 | Complete    | 2026-04-01 |
-| 3. Employee Survey Form | 0/2 | Not started | - |
+| 3. Employee Survey Form | 1/2 | In Progress|  |
 | 4. Analytics Dashboard | 0/2 | Not started | - |
