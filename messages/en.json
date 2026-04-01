@@ -1,0 +1,56 @@
+{
+  "login": {
+    "title": "Surey Yoma",
+    "subtitle": "Admin Portal",
+    "heading": "Sign in",
+    "description": "Enter your credentials to access the admin panel",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "error": "Invalid credentials",
+    "networkError": "Something went wrong. Please try again."
+  },
+  "nav": {
+    "brand": "Surey Yoma",
+    "dashboard": "Dashboard",
+    "surveys": "Surveys",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "toggleExpand": "Expand sidebar",
+    "toggleCollapse": "Collapse sidebar",
+    "toggleMenu": "Toggle menu"
+  },
+  "dashboard": {
+    "title": "Welcome to Surey Yoma",
+    "subtitle": "Your employee engagement survey platform",
+    "gettingStarted": "Getting Started",
+    "gettingStartedDescription": "Complete these steps to run your first survey",
+    "step1": "Configure SMTP email settings",
+    "step2": "Create your first survey",
+    "step3": "Import employee email list and send invitations"
+  },
+  "surveys": {
+    "title": "Surveys",
+    "comingSoon": "Survey management coming in Phase 2."
+  },
+  "settings": {
+    "title": "Settings",
+    "comingSoon": "SMTP configuration coming in Phase 2."
+  },
+  "common": {
+    "loading": "Loading...",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "english": "English",
+    "burmese": "မြန်မာ"
+  },
+  "errors": {
+    "invalidCredentials": "Invalid credentials",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "notFound": "Page not found",
+    "unauthorized": "You are not authorized to view this page"
+  }
+}

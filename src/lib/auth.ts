@@ -1,7 +1,5 @@
 // src/lib/auth.ts
-import type { IronSessionData } from 'iron-session';
-
-export interface SessionData extends IronSessionData {
+export interface SessionData {
   token?: string; // signed JWT — set on login, cleared on logout
 }
 

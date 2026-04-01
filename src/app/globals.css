@@ -128,3 +128,8 @@
     @apply font-sans;
   }
 }
+
+/* Noto Sans Myanmar Variable font — applied when locale is 'my' */
+.font-myanmar {
+  font-family: 'Noto Sans Myanmar Variable', 'Segoe UI', system-ui, sans-serif;
+}
