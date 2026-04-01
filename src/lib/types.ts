@@ -33,8 +33,9 @@ export interface Token {
   token: string;
   surveyId: string;
   email: string;
-  used: boolean;
-  sentAt: string;
+  status: 'pending' | 'submitted';  // NOT a boolean — CSV stores as string
+  createdAt: string;                 // sentAt equivalent
+  submittedAt?: string;              // populated when survey is completed
 }
 
 export interface SmtpSettings {
