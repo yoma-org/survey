@@ -20,7 +20,7 @@ import { DepartmentBreakdownChart } from './DepartmentBreakdownChart';
 import { ExportButtons } from './ExportButtons';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DIMENSION_COLORS } from '@/lib/chart-colors';
+// DIMENSION_COLORS no longer used directly — performance zones handle coloring
 import { ErrorBoundary } from './ErrorBoundary';
 import type { DashboardData } from '@/lib/types/analytics';
 
@@ -29,13 +29,13 @@ export function DashboardCharts({ data }: { data: DashboardData }) {
     <ChartProvider>
       <div className="space-y-10">
 
-        {/* Hero metrics */}
+        {/* Hero metrics — with benchmarks and performance zones */}
         <FadeIn>
-          <div className="flex flex-wrap gap-x-10 gap-y-6 md:gap-x-14">
-            <MetricCard label="Employee Engagement" value={data.eesScore} trend={{ value: data.eesTrend, label: 'vs last year' }} />
-            <MetricCard label="Great Place to Work" value={data.gptwScore} accent={DIMENSION_COLORS.Camaraderie} />
-            <MetricCard label="Response Rate" value={data.responseRate} accent={DIMENSION_COLORS.Fairness} />
-            <MetricCard label="Responses" value={data.totalResponses} suffix="" />
+          <div className="flex flex-wrap gap-x-8 gap-y-6 md:gap-x-12">
+            <MetricCard label="Employee Engagement" value={data.eesScore} benchmark={80} trend={{ value: data.eesTrend, label: 'vs last year' }} />
+            <MetricCard label="Great Place to Work" value={data.gptwScore} benchmark={85} />
+            <MetricCard label="Response Rate" value={data.responseRate} showZone={false} />
+            <MetricCard label="Responses" value={data.totalResponses} suffix="" showZone={false} />
           </div>
         </FadeIn>
 
@@ -66,14 +66,14 @@ export function DashboardCharts({ data }: { data: DashboardData }) {
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-3">
                   <ErrorBoundary>
-                    <ChartSection title="Key Dimensions" description="% favorable by GPTW pillar">
+                    <ChartSection title="Pillar Performance" description="% favorable vs industry benchmark — hover for zone analysis">
                       <DimensionBarChart data={data.dimensions} />
                     </ChartSection>
                   </ErrorBoundary>
                 </div>
                 <div className="lg:col-span-2">
                   <ErrorBoundary>
-                    <ChartSection title="Sentiment" description="Response distribution across all Likert questions">
+                    <ChartSection title="Overall Sentiment" description="How employees feel — positive answers (4-5) vs neutral (3) vs negative (1-2)">
                       <ResponseDonutChart {...data.sentiment} />
                     </ChartSection>
                   </ErrorBoundary>
@@ -107,10 +107,10 @@ export function DashboardCharts({ data }: { data: DashboardData }) {
                         </TabsList>
                       </div>
                       <TabsContent value="strengths" className="mt-0">
-                        <HorizontalBarRanking items={data.strengths} baseHue={155} />
+                        <HorizontalBarRanking items={data.strengths} mode="strengths" />
                       </TabsContent>
                       <TabsContent value="opportunities" className="mt-0">
-                        <HorizontalBarRanking items={data.opportunities} baseHue={0} />
+                        <HorizontalBarRanking items={data.opportunities} mode="opportunities" />
                       </TabsContent>
                     </Tabs>
                   </ErrorBoundary>
