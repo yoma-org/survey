@@ -37,7 +37,7 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
   }
 
   return (
-    <div className="flex items-center gap-3 flex-wrap">
+    <div className="flex items-center gap-2 flex-wrap">
       {/* Survey selector */}
       <Select value={activeSurveyId ?? ''} onValueChange={(v) => v && updateParam('survey', v)}>
         <SelectTrigger className="w-64">
@@ -72,23 +72,21 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
       </Select>
 
       {/* Department filter */}
-      {deptOptions.length > 0 && (
-        <Select value={activeDept || '__all__'} onValueChange={(v) => updateParam('dept', v)}>
-          <SelectTrigger className="w-48">
-            <span className="truncate">
-              {activeDept || 'All Departments'}
-            </span>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="__all__">All Departments</SelectItem>
-            {deptOptions.map(dept => (
-              <SelectItem key={dept} value={dept}>
-                {dept}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
+      <Select value={activeDept || '__all__'} onValueChange={(v) => updateParam('dept', v)}>
+        <SelectTrigger className="w-48">
+          <span className="truncate">
+            {activeDept || 'All Departments'}
+          </span>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="__all__">All Departments</SelectItem>
+          {deptOptions.map(dept => (
+            <SelectItem key={dept} value={dept}>
+              {dept}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

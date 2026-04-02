@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Eye, Send, Pencil, Check, X, Trash2, Play, Pause, ChevronDown } from 'lucide-react';
+import { Eye, Send, Pencil, Check, X, Trash2, Play, Pause, ChevronDown, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -90,8 +90,8 @@ export function SurveyDetailClient({ survey: initialSurvey, questions: initialQu
 
   return (
     <div className="p-6">
-      {/* Survey switcher dropdown */}
-      <div className="mb-6">
+      {/* Survey switcher dropdown + New survey button */}
+      <div className="mb-6 flex items-center gap-2">
         <Select value={survey.id} onValueChange={(id) => { if (id) router.push(`/${locale}/admin/surveys/${id}`); }}>
           <SelectTrigger className="w-72">
             <span className="truncate">{surveys.find(s => s.id === survey.id)?.name || survey.name}</span>
@@ -102,15 +102,12 @@ export function SurveyDetailClient({ survey: initialSurvey, questions: initialQu
             ))}
           </SelectContent>
         </Select>
+        <Link href={`/${locale}/admin/surveys/new`}>
+          <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" aria-label={t('newSurvey')}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        </Link>
       </div>
-
-      {/* Back */}
-      <Link
-        href="../surveys"
-        className="text-sm text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-1"
-      >
-        ← {t('backToSurveys')}
-      </Link>
 
       {/* Header — editable */}
       <div className="mt-4 mb-6">
