@@ -17,7 +17,7 @@ import { PillarHeatmap } from './PillarHeatmap';
 import { SentimentAnalysisCards } from './SentimentAnalysisCards';
 import { EarlyWarningAlerts } from './EarlyWarningAlerts';
 import { DepartmentBreakdownChart } from './DepartmentBreakdownChart';
-import { ExportButtons } from './ExportButtons';
+
 import { FadeIn } from '@/components/motion/FadeIn';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 // DIMENSION_COLORS no longer used directly — performance zones handle coloring
@@ -54,13 +54,6 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
 
         {/* Leaderboard */}
         <LeaderboardGrid metrics={data.leaderboard} />
-
-        {/* Export actions */}
-        <FadeIn delay={0.05} direction="none">
-          <div className="flex justify-end">
-            <ExportButtons data={data} />
-          </div>
-        </FadeIn>
 
         {/* Tabbed deep-dive content */}
         <FadeIn delay={0.1}>

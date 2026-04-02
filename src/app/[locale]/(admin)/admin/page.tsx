@@ -83,8 +83,9 @@ export default async function AdminDashboardPage({
         <h1 className="text-2xl font-light text-gray-900 tracking-tight">{t('title')}</h1>
         <p className="text-sm text-gray-400 mt-2">{t('subtitle')}</p>
       </div>
-      <div className="mb-8">
+      <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
         <DashboardFilters surveys={surveys} activeSurveyId={activeSurveyId} deptOptions={departments} />
+        {analyticsWithTrend && <ExportButtons data={analyticsWithTrend} />}
       </div>
       {analyticsWithTrend === null ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">

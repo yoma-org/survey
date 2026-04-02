@@ -13,38 +13,33 @@ interface DashboardFiltersProps {
   surveys: { id: string; name: string }[];
   activeSurveyId: string | undefined;
   orgOptions?: string[];
+  deptOptions?: string[];
 }
 
 const DEFAULT_ORG_OPTIONS = ['Wave Money', 'Yoma Bank'];
 
-function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_ORG_OPTIONS }: DashboardFiltersProps) {
+function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_ORG_OPTIONS, deptOptions = [] }: DashboardFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const activeOrg = searchParams.get('org') ?? '';
+  const activeDept = searchParams.get('dept') ?? '';
 
-  function handleSurveyChange(surveyId: string | null) {
-    if (!surveyId) return;
+  function updateParam(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('survey', surveyId);
-    router.push(`${pathname}?${params.toString()}`);
-  }
-
-  function handleOrgChange(org: string | null) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (org && org !== '__all__') {
-      params.set('org', org);
+    if (value && value !== '__all__') {
+      params.set(key, value);
     } else {
-      params.delete('org');
+      params.delete(key);
     }
     router.push(`${pathname}?${params.toString()}`);
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 flex-wrap">
       {/* Survey selector */}
-      <Select value={activeSurveyId ?? ''} onValueChange={handleSurveyChange}>
+      <Select value={activeSurveyId ?? ''} onValueChange={(v) => v && updateParam('survey', v)}>
         <SelectTrigger className="w-64">
           <span className="truncate">
             {surveys.find(s => s.id === activeSurveyId)?.name || 'Select survey'}
@@ -60,7 +55,7 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
       </Select>
 
       {/* Organization filter */}
-      <Select value={activeOrg || '__all__'} onValueChange={handleOrgChange}>
+      <Select value={activeOrg || '__all__'} onValueChange={(v) => updateParam('org', v)}>
         <SelectTrigger className="w-48">
           <span className="truncate">
             {activeOrg || 'All Organizations'}
@@ -75,6 +70,25 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
           ))}
         </SelectContent>
       </Select>
+
+      {/* Department filter */}
+      {deptOptions.length > 0 && (
+        <Select value={activeDept || '__all__'} onValueChange={(v) => updateParam('dept', v)}>
+          <SelectTrigger className="w-48">
+            <span className="truncate">
+              {activeDept || 'All Departments'}
+            </span>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="__all__">All Departments</SelectItem>
+            {deptOptions.map(dept => (
+              <SelectItem key={dept} value={dept}>
+                {dept}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
     </div>
   );
 }

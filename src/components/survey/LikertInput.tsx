@@ -1,11 +1,13 @@
 'use client';
 
-const LIKERT_OPTIONS = [
-  { value: '1', emoji: '😡', en: 'Strongly Disagree', my: 'လုံးဝမသဘောတူပါ' },
-  { value: '2', emoji: '😟', en: 'Disagree', my: 'မသဘောတူပါ' },
-  { value: '3', emoji: '😐', en: 'Neutral', my: 'ကြားနေ' },
-  { value: '4', emoji: '😊', en: 'Agree', my: 'သဘောတူပါသည်' },
-  { value: '5', emoji: '🤩', en: 'Strongly Agree', my: 'လုံးဝသဘောတူပါသည်' },
+import { Angry, Frown, Meh, Smile, Laugh, type LucideIcon } from 'lucide-react';
+
+const LIKERT_OPTIONS: { value: string; icon: LucideIcon; color: string; en: string; my: string }[] = [
+  { value: '1', icon: Angry, color: '#ef4444', en: 'Strongly Disagree', my: 'လုံးဝမသဘောတူပါ' },
+  { value: '2', icon: Frown, color: '#fb923c', en: 'Disagree', my: 'မသဘောတူပါ' },
+  { value: '3', icon: Meh, color: '#a3a3a3', en: 'Neutral', my: 'ကြားနေ' },
+  { value: '4', icon: Smile, color: '#4ade80', en: 'Agree', my: 'သဘောတူပါသည်' },
+  { value: '5', icon: Laugh, color: '#16a34a', en: 'Strongly Agree', my: 'လုံးဝသဘောတူပါသည်' },
 ];
 
 interface LikertInputProps {
@@ -65,7 +67,7 @@ export function LikertInput({
                   : 'bg-transparent text-muted-foreground border-border hover:border-foreground/20 hover:bg-muted/30'
               }`}
             >
-              <span className="mr-1">{option.emoji}</span>{label}
+              <option.icon className="inline-block w-4 h-4 mr-1 -mt-0.5" style={isSelected ? undefined : { color: option.color }} />{label}
             </button>
           );
         })}
@@ -101,7 +103,7 @@ export function LikertInput({
               }`}>
                 {isSelected && <span className="w-2 h-2 rounded-full bg-background" />}
               </span>
-              <span className="text-lg">{option.emoji}</span>
+              <option.icon className="w-5 h-5 flex-shrink-0" style={isSelected ? undefined : { color: option.color }} />
               {label}
             </button>
           );
