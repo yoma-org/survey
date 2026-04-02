@@ -176,7 +176,22 @@
     "inviteHistorySentAt": "Sent At",
     "inviteHistoryEmpty": "No invitations sent yet.",
     "statusPending": "Pending",
-    "statusSubmitted": "Submitted"
+    "statusSubmitted": "Submitted",
+    "tabManual": "Manual Entry",
+    "tabCsv": "CSV Upload",
+    "csvUploadLabel": "Upload CSV File",
+    "csvUploadHint": "CSV must have a column header named \"email\". One email per row.",
+    "csvDropzone": "Drag and drop your .csv file here, or click to browse",
+    "csvFormatError": "File must be a .csv file.",
+    "csvParseError": "Could not read emails from this file. Ensure there is an \"email\" column header.",
+    "csvNoEmails": "No valid email addresses found in the CSV file.",
+    "csvPreviewTitle": "Preview Emails from CSV",
+    "csvPreviewDescription": "{valid} valid emails found. {invalid} invalid entries skipped.",
+    "csvPreviewValid": "{count} valid emails",
+    "csvPreviewInvalid": "{count} invalid entries (will be skipped)",
+    "csvConfirmSend": "Confirm & Send",
+    "csvRemoveEmail": "Remove",
+    "csvDownloadTemplate": "Download CSV template"
   },
   "common": {
     "loading": "Loading...",

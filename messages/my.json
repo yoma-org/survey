@@ -176,7 +176,22 @@
     "inviteHistorySentAt": "ပို့သည့်ရက်",
     "inviteHistoryEmpty": "ဖိတ်ကြားချက်မပေးပို့ရသေးပါ။",
     "statusPending": "စောင့်ဆိုင်းနေသည်",
-    "statusSubmitted": "တင်သွင်းပြီး"
+    "statusSubmitted": "တင်သွင်းပြီး",
+    "tabManual": "ကိုယ်တိုင်ထည့်သွင်းရန်",
+    "tabCsv": "CSV ဖိုင်တင်သွင်းရန်",
+    "csvUploadLabel": "CSV ဖိုင်တင်သွင်းရန်",
+    "csvUploadHint": "CSV ဖိုင်တွင် \"email\" ဟုခေါင်းစီးပါရမည်။ တစ်ကြောင်းလျှင် အီးမေးလ်တစ်ခု။",
+    "csvDropzone": ".csv ဖိုင်ကို ဤနေရာတွင် ဆွဲချပါ သို့မဟုတ် ကလစ်နှိပ်ပါ",
+    "csvFormatError": "ဖိုင်သည် .csv ဖိုင်ဖြစ်ရမည်။",
+    "csvParseError": "ဤဖိုင်မှ အီးမေးလ်များဖတ်၍မရပါ။ \"email\" ကော်လံခေါင်းစီးရှိမရှိ စစ်ဆေးပါ။",
+    "csvNoEmails": "CSV ဖိုင်တွင် မှန်ကန်သောအီးမေးလ်လိပ်စာ မတွေ့ရှိပါ။",
+    "csvPreviewTitle": "CSV မှ အီးမေးလ်များ ကြိုကြည့်ရန်",
+    "csvPreviewDescription": "မှန်ကန်သောအီးမေးလ် {valid} ခု တွေ့ရှိ။ မမှန်ကန်သော {invalid} ခု ကျော်သည်။",
+    "csvPreviewValid": "မှန်ကန်သောအီးမေးလ် {count} ခု",
+    "csvPreviewInvalid": "မမှန်ကန်သော {count} ခု (ကျော်မည်)",
+    "csvConfirmSend": "အတည်ပြုပြီး ပို့ရန်",
+    "csvRemoveEmail": "ဖယ်ရှားရန်",
+    "csvDownloadTemplate": "CSV နမူနာဖိုင် ဒေါင်းလုဒ်ရန်"
   },
   "common": {
     "loading": "ဖွင့်နေသည်...",
