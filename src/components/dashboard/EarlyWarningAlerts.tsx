@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { AlertTriangle, TrendingDown } from 'lucide-react';
 import type { EarlyWarningAlert } from '@/lib/types/analytics';
 
@@ -8,15 +9,16 @@ interface EarlyWarningAlertsProps {
 }
 
 export function EarlyWarningAlerts({ alerts }: EarlyWarningAlertsProps) {
+  const t = useTranslations('dashboard');
   if (alerts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-2 text-center">
         <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-950 flex items-center justify-center">
           <span className="text-green-600 dark:text-green-400 text-base">✓</span>
         </div>
-        <p className="text-sm font-medium text-foreground/80">No early warning signals</p>
+        <p className="text-sm font-medium text-foreground/80">{t('noEarlyWarnings')}</p>
         <p className="text-xs text-muted-foreground max-w-[280px]">
-          All departments are performing at or above the overall average on both Their Job and Credibility dimensions.
+          {t('noEarlyWarningsDesc')}
         </p>
       </div>
     );
@@ -28,11 +30,10 @@ export function EarlyWarningAlerts({ alerts }: EarlyWarningAlertsProps) {
         <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
         <div>
           <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
-            {alerts.length} department{alerts.length > 1 ? 's' : ''} flagged for dual-axis risk
+            {t('dualAxisRiskCount', { count: alerts.length })}
           </p>
           <p className="text-[11px] text-amber-700/80 dark:text-amber-300/80 mt-0.5">
-            Both &quot;Their Job&quot; relationship and Credibility pillar score below the overall average.
-            These departments may be experiencing leadership and role clarity issues simultaneously.
+            {t('dualAxisRiskDesc')}
           </p>
         </div>
       </div>
@@ -46,7 +47,7 @@ export function EarlyWarningAlerts({ alerts }: EarlyWarningAlertsProps) {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">{alert.department}</span>
               <span className="text-[11px] text-muted-foreground">
-                {alert.responseCount} responses
+                {alert.responseCount} {t('responses')}
               </span>
             </div>
 
@@ -54,7 +55,7 @@ export function EarlyWarningAlerts({ alerts }: EarlyWarningAlertsProps) {
               {/* Their Job */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground">Their Job</span>
+                  <span className="text-[11px] text-muted-foreground">{t('theirJob')}</span>
                   <div className="flex items-center gap-1 text-[11px]">
                     <TrendingDown className="w-3 h-3 text-red-500" />
                     <span className="font-semibold text-red-600 dark:text-red-400 tabular-nums">
@@ -80,7 +81,7 @@ export function EarlyWarningAlerts({ alerts }: EarlyWarningAlertsProps) {
               {/* Credibility */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground">Credibility</span>
+                  <span className="text-[11px] text-muted-foreground">{t('credibility')}</span>
                   <div className="flex items-center gap-1 text-[11px]">
                     <TrendingDown className="w-3 h-3 text-red-500" />
                     <span className="font-semibold text-red-600 dark:text-red-400 tabular-nums">
@@ -102,11 +103,11 @@ export function EarlyWarningAlerts({ alerts }: EarlyWarningAlertsProps) {
 
             {/* Combined gap */}
             <div className="text-[10px] text-muted-foreground/70 border-t border-border/30 pt-2">
-              Combined gap from average:{' '}
+              {t('combinedGapLabel')}{' '}
               <span className="text-red-500 font-medium">
                 {(alert.overallJobAvg - alert.jobScore) + (alert.overallCredibilityAvg - alert.credibilityScore)}pp
               </span>{' '}
-              below across both dimensions
+              {t('belowBothDimensions')}
             </div>
           </div>
         ))}

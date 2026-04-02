@@ -1,6 +1,6 @@
 // src/app/[locale]/(admin)/admin/surveys/[id]/page.tsx
 import { notFound } from 'next/navigation';
-import { cachedGetSurvey, cachedGetQuestions, cachedGetResponseCount, cachedCountTokens } from '@/lib/cache';
+import { cachedGetSurvey, cachedGetQuestions, cachedGetResponseCount, cachedCountTokens, cachedListSurveys } from '@/lib/cache';
 import { generateToken } from '@/lib/services/token.service';
 import { SurveyDetailClient } from '@/components/admin/SurveyDetailClient';
 
@@ -9,16 +9,17 @@ export default async function SurveyDetailPage({
 }: {
   params: Promise<{ id: string; locale: string }>;
 }) {
-  const { id, locale } = await params;
+  const { id } = await params;
 
   const survey = await cachedGetSurvey(id);
   if (!survey) notFound();
 
-  const [questions, responseCount, tokenCount, previewToken] = await Promise.all([
+  const [questions, responseCount, tokenCount, previewToken, surveys] = await Promise.all([
     cachedGetQuestions(id),
     cachedGetResponseCount(id),
     cachedCountTokens(id),
     generateToken(id, 'admin-preview@survey-yoma.local'),
+    cachedListSurveys(),
   ]);
 
   return (
@@ -28,6 +29,7 @@ export default async function SurveyDetailPage({
       responseCount={responseCount}
       tokenCount={tokenCount}
       previewToken={previewToken}
+      surveys={surveys}
     />
   );
 }

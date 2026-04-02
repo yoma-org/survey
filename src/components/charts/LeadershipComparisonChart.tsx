@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import { INDUSTRY_BENCHMARKS } from '@/lib/performance-zones';
 import type { LeadershipComparisonData } from '@/lib/types/analytics';
+import { useTranslations } from 'next-intl';
 
 interface LeadershipComparisonChartProps {
   data: LeadershipComparisonData;
@@ -33,27 +34,28 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs">
-      <p className="font-medium text-foreground mb-1.5">{label}</p>
-      {payload.map((entry, i) => (
-        <div key={i} className="flex items-center gap-2 py-0.5">
-          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
-          <span className="text-muted-foreground">{entry.name}:</span>
-          <span className="font-medium">
-            {entry.value === null || entry.value === undefined
-              ? 'Insufficient data'
-              : `${entry.value}%`}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export function LeadershipComparisonChart({ data }: LeadershipComparisonChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
+    if (!active || !payload?.length) return null;
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs">
+        <p className="font-medium text-foreground mb-1.5">{label}</p>
+        {payload.map((entry, i) => (
+          <div key={i} className="flex items-center gap-2 py-0.5">
+            <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
+            <span className="text-muted-foreground">{entry.name}:</span>
+            <span className="font-medium">
+              {entry.value === null || entry.value === undefined
+                ? t('insufficientDataTooltip')
+                : `${entry.value}%`}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
   const chartData = data.pillars.map((pillar, i) => ({
     pillar,
     'People Manager': data.manager[i] ?? null,
@@ -65,7 +67,7 @@ export function LeadershipComparisonChart({ data }: LeadershipComparisonChartPro
   if (!hasData) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        Insufficient responses to display leadership comparison
+        {t('insufficientLeadershipComparison')}
       </p>
     );
   }
@@ -76,8 +78,8 @@ export function LeadershipComparisonChart({ data }: LeadershipComparisonChartPro
       aria-label={`Leadership comparison: ${data.pillars.map((p, i) => `${p} Manager ${data.manager[i]}% IC ${data.ic[i]}%`).join(', ')}`}
     >
       <div className="flex gap-4 text-[11px] text-muted-foreground mb-3">
-        <span>Managers: <strong className="text-foreground">{data.managerCount}</strong> responses</span>
-        <span>ICs: <strong className="text-foreground">{data.icCount}</strong> responses</span>
+        <span>{t('managersLabel')} <strong className="text-foreground">{data.managerCount}</strong> responses</span>
+        <span>{t('icsLabel')} <strong className="text-foreground">{data.icCount}</strong> responses</span>
       </div>
       <ResponsiveContainer width="100%" height={260}>
         <BarChart

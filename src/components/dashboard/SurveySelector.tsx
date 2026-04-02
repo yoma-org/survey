@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import {
   Select,
@@ -20,12 +21,13 @@ interface SurveySelectorProps {
  * to allow prerendering of parent components. (Next.js requirement for useSearchParams)
  */
 function SurveySelectorInner({ surveys, activeSurveyId }: SurveySelectorProps) {
+  const t = useTranslations('dashboard');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   if (surveys.length === 0) {
-    return <p className="text-sm text-muted-foreground">No surveys yet</p>;
+    return <p className="text-sm text-muted-foreground">{t('noSurveysYet')}</p>;
   }
 
   function handleChange(surveyId: string | null) {
@@ -40,7 +42,7 @@ function SurveySelectorInner({ surveys, activeSurveyId }: SurveySelectorProps) {
     <Select value={activeSurveyId ?? ''} onValueChange={handleChange}>
       <SelectTrigger className="w-64">
         <span className="truncate">
-          {surveys.find(s => s.id === activeSurveyId)?.name || 'Select survey'}
+          {surveys.find(s => s.id === activeSurveyId)?.name || t('selectSurvey')}
         </span>
       </SelectTrigger>
       <SelectContent>

@@ -219,31 +219,6 @@
   .animate-in { animation: none; opacity: 1; }
 }
 
-/* Scrolling marquee strip — Optimus metric ticker */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.marquee-strip {
-  overflow: hidden;
-  mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-}
-
-.marquee-content {
-  display: flex;
-  animation: marquee 30s linear infinite;
-  width: max-content;
-}
-
-.marquee-content:hover {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-content { animation: none; }
-}
 
 /* Divider line with dot */
 .divider-dot {

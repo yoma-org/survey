@@ -402,5 +402,5 @@ The component dependency graph suggests this build sequence:
 - [CVE-2025-29927 middleware bypass — JWT must be cryptographically verified](https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass)
 
 ---
-*Architecture research for: Survey Yoma — Employee Culture Survey Platform (Next.js + CSV + SMTP + i18n)*
+*Architecture research for: Culture Survey — Employee Culture Survey Platform (Next.js + CSV + SMTP + i18n)*
 *Researched: 2026-04-01*

@@ -22,7 +22,7 @@ export default async function InvitePage({
   }
 
   return (
-    <div className="p-6">
+    <div className="p-8">
       <EmailDistributionForm
         survey={survey}
         surveys={surveys}

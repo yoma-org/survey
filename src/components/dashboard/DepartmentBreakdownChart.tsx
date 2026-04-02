@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { DepartmentBreakdownData } from '@/lib/types/analytics';
+import { useTranslations } from 'next-intl';
 
 interface DepartmentBreakdownChartProps {
   data: DepartmentBreakdownData;
@@ -38,36 +39,38 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
-  if (!active || !payload || payload.length === 0) return null;
-
-  return (
-    <div className="rounded-lg border bg-background p-3 shadow-md text-xs">
-      <p className="font-medium text-foreground mb-2">{label}</p>
-      {payload.map((entry, i) => {
-        const isInsufficient = entry.value === null || entry.value === undefined;
-        return (
-          <div key={`${entry.name ?? ''}-${i}`} className="flex items-center gap-2 py-0.5">
-            <span
-              className="inline-block h-2 w-2 rounded-full flex-shrink-0"
-              style={{ backgroundColor: entry.color ?? '#888' }}
-            />
-            <span className="text-muted-foreground">{entry.name}:</span>
-            <span className="font-medium text-foreground">
-              {isInsufficient ? 'Insufficient data (< 5 responses)' : `${entry.value}%`}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 export function DepartmentBreakdownChart({ data }: DepartmentBreakdownChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
+    if (!active || !payload || payload.length === 0) return null;
+
+    return (
+      <div className="rounded-lg border bg-background p-3 shadow-md text-xs">
+        <p className="font-medium text-foreground mb-2">{label}</p>
+        {payload.map((entry, i) => {
+          const isInsufficient = entry.value === null || entry.value === undefined;
+          return (
+            <div key={`${entry.name ?? ''}-${i}`} className="flex items-center gap-2 py-0.5">
+              <span
+                className="inline-block h-2 w-2 rounded-full flex-shrink-0"
+                style={{ backgroundColor: entry.color ?? '#888' }}
+              />
+              <span className="text-muted-foreground">{entry.name}:</span>
+              <span className="font-medium text-foreground">
+                {isInsufficient ? t('insufficientData') : `${entry.value}%`}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   if (data.segments.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No department data available
+        {t('noDepartmentData')}
       </p>
     );
   }

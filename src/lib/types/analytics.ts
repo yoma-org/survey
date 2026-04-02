@@ -23,6 +23,11 @@ export interface DashboardData {
   earlyWarningAlerts: EarlyWarningAlert[];
   sentimentAnalysis: SentimentAnalysisData;
   pillarHeatmap: PillarHeatmapData;
+  // Phase 3 additions
+  subPillarScores: SubPillarScore[];
+  relationshipStatements: RelationshipStatementBreakdown[];
+  leadershipConfidence: LeadershipConfidenceData;
+  industryBenchmark: IndustryBenchmarkData;
 }
 
 export interface DepartmentBreakdownData {
@@ -125,3 +130,72 @@ export interface PillarHeatmapData {
   }[];
   overallAverages: Record<string, number>;  // pillar → overall %
 }
+
+// ── Phase 3 additions ────────────────────────────────────────────────────────
+
+// Sub-pillar breakdown: 15 items (3 per dimension)
+export interface SubPillarScore {
+  dimension: string;    // e.g. 'Credibility'
+  subPillar: string;    // e.g. 'Communication'
+  score: number;        // % favorable
+  negative: number;     // % responses 1-2
+  neutral: number;      // % responses 3
+  positive: number;     // % responses 4-5
+  questionCount: number;
+}
+
+// Per-statement breakdown for each relationship axis
+export interface RelationshipStatementBreakdown {
+  relationship: string;  // 'Colleagues (Horizontal Trust)', etc.
+  key: string;           // 'colleagues' | 'job' | 'management'
+  statements: {
+    id: string;
+    label: string;
+    score: number;       // % favorable
+  }[];
+  averageScore: number;
+}
+
+// Confidence in Leadership — 5 CRE statements
+export interface LeadershipConfidenceData {
+  overallScore: number;
+  statements: {
+    id: string;
+    label: string;
+    score: number;
+  }[];
+}
+
+// Industry benchmark comparison
+export interface IndustryBenchmarkData {
+  dimensions: {
+    name: string;
+    score: number;
+    benchmark: number;
+    gap: number;   // positive = above benchmark
+  }[];
+  overall: {
+    name: string;
+    score: number;
+    benchmark: number;
+    gap: number;
+  }[];
+}
+
+// Per-survey summary for multi-survey comparison
+export interface SurveySummary {
+  surveyId: string;
+  surveyName: string;
+  year: number;          // extracted from survey name or createdAt year
+  eesScore: number;
+  gptwScore: number;
+  enps: number;
+  dimensions: { dimension: string; score: number }[];
+  relationships: { key: string; score: number }[];
+}
+
+// Multi-survey analytics (for trend and internal benchmark)
+export interface MultiSurveyData {
+  surveys: SurveySummary[];
+}
+

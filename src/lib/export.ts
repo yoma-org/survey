@@ -33,7 +33,7 @@ export function exportDashboardSummaryCSV(data: DashboardData, surveyName = 'sur
   const timestamp = new Date().toISOString().split('T')[0];
 
   // Header
-  lines.push('# Survey Yoma Dashboard Summary Export');
+  lines.push('# Culture Survey Dashboard Summary Export');
   lines.push(`# Generated: ${timestamp}`);
   lines.push('');
 

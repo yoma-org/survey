@@ -17,7 +17,11 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  latestActiveSurveyId?: string;
+}
+
+export function AdminSidebar({ latestActiveSurveyId }: AdminSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -25,10 +29,13 @@ export function AdminSidebar() {
   const locale = useLocale();
   const t = useTranslations('nav');
 
+  const surveysHref = latestActiveSurveyId
+    ? `admin/surveys/${latestActiveSurveyId}`
+    : 'admin/surveys';
+
   const navItems = [
     { key: 'dashboard', icon: LayoutDashboard, href: 'admin' },
-    { key: 'surveys', icon: ClipboardList, href: 'admin/surveys' },
-    { key: 'settings', icon: Settings, href: 'admin/settings' },
+    { key: 'surveys', icon: ClipboardList, href: surveysHref },
   ] as const;
 
   async function handleLogout() {
@@ -48,7 +55,7 @@ export function AdminSidebar() {
       )}>
         {!collapsed && (
           <span className="text-sm font-light text-gray-900 tracking-tight">
-            Survey<span className="font-semibold">Yoma</span>
+            Culture<span className="font-semibold">Survey</span>
           </span>
         )}
         <button
@@ -65,10 +72,12 @@ export function AdminSidebar() {
         <div className="space-y-0.5">
           {navItems.map((item) => {
             const href = `/${locale}/${item.href}`;
-            const isActive = pathname === href || pathname.startsWith(href + '/');
+            const isActive = item.key === 'surveys'
+              ? pathname.includes('/admin/surveys')
+              : pathname === `/${locale}/admin` || pathname === href;
             return (
               <Link
-                key={item.href}
+                key={item.key}
                 href={href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
@@ -96,17 +105,30 @@ export function AdminSidebar() {
       </nav>
 
       {/* Footer */}
-      <div className={cn('border-t border-gray-100 py-3', collapsed ? 'px-1.5' : 'px-3')}>
+      <div className={cn(
+        'border-t border-gray-100 py-3 flex',
+        collapsed ? 'flex-col gap-0.5 px-1.5' : 'gap-0.5 px-3'
+      )}>
         <button
           onClick={handleLogout}
           className={cn(
-            'flex items-center gap-3 rounded-md text-[13px] text-gray-400 hover:text-gray-600 hover:bg-gray-50 w-full transition-colors',
+            'flex items-center gap-3 rounded-md text-[13px] text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors flex-1',
             collapsed ? 'justify-center p-2.5' : 'px-3 py-2'
           )}
         >
           <LogOut className={cn('flex-shrink-0', collapsed ? 'h-[18px] w-[18px]' : 'h-4 w-4')} />
           {!collapsed && <span>{t('signOut')}</span>}
         </button>
+        <Link
+          href={`/${locale}/admin/settings`}
+          className={cn(
+            'flex items-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors',
+            collapsed ? 'justify-center p-2.5' : 'p-2'
+          )}
+          aria-label={t('settings')}
+        >
+          <Settings className={cn('flex-shrink-0', collapsed ? 'h-[18px] w-[18px]' : 'h-4 w-4')} />
+        </Link>
       </div>
     </div>
   );

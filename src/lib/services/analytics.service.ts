@@ -8,9 +8,13 @@ import { GPTW_QUESTIONS } from '@/lib/constants';
 import {
   QUESTION_RELATIONSHIP_MAP,
   RELATIONSHIP_LABELS,
+  getRelationshipLabels,
   ENPS_STATEMENT_IDS,
   type Relationship,
 } from '@/lib/diagnostic-framework';
+import { listSurveys } from '@/lib/services/survey.service';
+import { PILLAR_DIMENSIONS } from '@/lib/diagnostic-framework';
+import { INDUSTRY_BENCHMARKS } from '@/lib/performance-zones';
 import type {
   DashboardData,
   DepartmentBreakdownData,
@@ -23,17 +27,38 @@ import type {
   SentimentAnalysisData,
   OpenEndedSentiment,
   PillarHeatmapData,
+  SubPillarScore,
+  RelationshipStatementBreakdown,
+  LeadershipConfidenceData,
+  IndustryBenchmarkData,
+  MultiSurveyData,
+  SurveySummary,
 } from '@/lib/types/analytics';
 
 const ANONYMITY_THRESHOLD = 5;
 
-const DIMENSION_DISPLAY: Record<string, string> = {
+const DIMENSION_DISPLAY_EN: Record<string, string> = {
   camaraderie: 'Camaraderie',
   credibility: 'Credibility',
   fairness: 'Fairness',
   pride: 'Pride',
   respect: 'Respect',
 };
+
+const DIMENSION_DISPLAY_MY: Record<string, string> = {
+  camaraderie: 'ဖော်ရွေမှု',
+  credibility: 'ယုံကြည်ကိုးစားနိုင်မှု',
+  fairness: 'တရားမျှတမှု',
+  pride: 'ဂုဏ်ယူမှု',
+  respect: 'လေးစားမှု',
+};
+
+// Active locale display map — set at start of computeAnalytics()
+let DIMENSION_DISPLAY: Record<string, string> = DIMENSION_DISPLAY_EN;
+
+function setLocaleDisplays(locale: string) {
+  DIMENSION_DISPLAY = locale === 'my' ? DIMENSION_DISPLAY_MY : DIMENSION_DISPLAY_EN;
+}
 
 const SCORED_DIMENSIONS = ['camaraderie', 'credibility', 'fairness', 'pride', 'respect'] as const;
 
@@ -142,7 +167,8 @@ function computeSegmentDimensions(
 
 function computeRelationshipScores(
   rows: Record<string, string>[],
-  questionScoreMap: Record<string, number>
+  questionScoreMap: Record<string, number>,
+  locale: string = 'en'
 ): RelationshipScoreData {
   const relationshipKeys: Relationship[] = ['colleagues', 'job', 'management'];
   const groupScores: Record<Relationship, number[]> = {
@@ -158,6 +184,7 @@ function computeRelationshipScores(
     }
   }
 
+  const relLabels = getRelationshipLabels(locale);
   return {
     scores: relationshipKeys.map(rel => {
       const arr = groupScores[rel];
@@ -165,7 +192,7 @@ function computeRelationshipScores(
         ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length)
         : 0;
       return {
-        relationship: RELATIONSHIP_LABELS[rel],
+        relationship: relLabels[rel],
         key: rel,
         score,
       };
@@ -173,7 +200,7 @@ function computeRelationshipScores(
   };
 }
 
-function computeENPSDetail(rows: Record<string, string>[]): ENPSDetailData {
+function computeENPSDetail(rows: Record<string, string>[], locale: string = 'en'): ENPSDetailData {
   function enpsBreakdown(questionId: string) {
     const values = rows.map(r => r[questionId]).filter(v => v !== undefined && v !== '');
     const total = values.length;
@@ -198,21 +225,20 @@ function computeENPSDetail(rows: Record<string, string>[]): ENPSDetailData {
   const passives = total > 0 ? Math.round((passiveCount / total) * 100) : 0;
   const detractors = total > 0 ? Math.round((detractorCount / total) * 100) : 0;
 
-  const statementLabels: Record<string, string> = {
-    'PRI-31': 'Would endorse company to friends & family',
-    'PRI-35': 'Would recommend products & services',
-  };
-
   return {
     score: promoters - detractors,
     promoters,
     passives,
     detractors,
-    statementScores: ENPS_STATEMENT_IDS.map(id => ({
-      id,
-      label: statementLabels[id] ?? id,
-      ...enpsBreakdown(id),
-    })),
+    statementScores: ENPS_STATEMENT_IDS.map(id => {
+      const q = GPTW_QUESTIONS.find(q => q.id === id);
+      const text = q ? (locale === 'my' && q.my ? q.my : q.en) : id;
+      return {
+        id,
+        label: text.length > 60 ? text.substring(0, 60) + '…' : text,
+        ...enpsBreakdown(id),
+      };
+    }),
   };
 }
 
@@ -493,7 +519,252 @@ function computePillarHeatmap(
   return { departments, pillars, cells, overallAverages };
 }
 
-export async function computeAnalytics(surveyId: string): Promise<DashboardData | null> {
+// ── Phase 3 computations ─────────────────────────────────────────────────────
+
+function computeSubPillarScores(rows: Record<string, string>[]): SubPillarScore[] {
+  const results: SubPillarScore[] = [];
+
+  for (const dim of SCORED_DIMENSIONS) {
+    const dimDisplay = DIMENSION_DISPLAY[dim];
+    const subPillarsConfig = PILLAR_DIMENSIONS[dim]?.subPillars ?? [];
+    const subPillarNames = subPillarsConfig.map(sp => sp.name);
+
+    for (const spName of subPillarNames) {
+      const qs = GPTW_QUESTIONS.filter(
+        q => q.type === 'likert' && q.dimension === dim && q.subPillar === spName
+      );
+      if (qs.length === 0) continue;
+
+      if (rows.length < ANONYMITY_THRESHOLD) {
+        results.push({ dimension: dimDisplay, subPillar: spName, score: 0, negative: 0, neutral: 0, positive: 0, questionCount: qs.length });
+        continue;
+      }
+
+      // Collect all valid answers across sub-pillar questions
+      let totalAnswers = 0;
+      let negCount = 0;
+      let neuCount = 0;
+      let posCount = 0;
+      for (const q of qs) {
+        for (const r of rows) {
+          const v = r[q.id];
+          if (v === undefined || v === '') continue;
+          totalAnswers++;
+          if (v === '1' || v === '2') negCount++;
+          else if (v === '3') neuCount++;
+          else if (v === '4' || v === '5') posCount++;
+        }
+      }
+
+      const scores = qs.map(q => favorableScore(rows, q.id));
+      const mean = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+      const negative = totalAnswers > 0 ? Math.round((negCount / totalAnswers) * 100) : 0;
+      const neutral = totalAnswers > 0 ? Math.round((neuCount / totalAnswers) * 100) : 0;
+      const positive = totalAnswers > 0 ? Math.round((posCount / totalAnswers) * 100) : 0;
+      results.push({ dimension: dimDisplay, subPillar: spName, score: mean, negative, neutral, positive, questionCount: qs.length });
+    }
+  }
+
+  return results;
+}
+
+function computeRelationshipStatements(
+  rows: Record<string, string>[],
+  questionScoreMap: Record<string, number>,
+  locale: string = 'en'
+): RelationshipStatementBreakdown[] {
+  const relationshipKeys: Relationship[] = ['colleagues', 'job', 'management'];
+  const relLabels = getRelationshipLabels(locale);
+
+  return relationshipKeys.map(rel => {
+    const matchingQuestions = GPTW_QUESTIONS.filter(
+      q => q.type === 'likert' && QUESTION_RELATIONSHIP_MAP[q.id] === rel
+    );
+
+    const statements = matchingQuestions.map(q => {
+      const text = locale === 'my' && q.my ? q.my : q.en;
+      return {
+        id: q.id,
+        label: text.length > 70 ? text.substring(0, 70) + '…' : text,
+        score: rows.length >= ANONYMITY_THRESHOLD ? (questionScoreMap[q.id] ?? 0) : 0,
+      };
+    });
+
+    const scores = statements.map(s => s.score);
+    const averageScore = scores.length > 0
+      ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+      : 0;
+
+    return {
+      relationship: relLabels[rel],
+      key: rel,
+      statements,
+      averageScore,
+    };
+  });
+}
+
+function computeLeadershipConfidence(
+  rows: Record<string, string>[],
+  questionScoreMap: Record<string, number>,
+  locale: string = 'en'
+): LeadershipConfidenceData {
+  const leadershipIds = ['CRE-09', 'CRE-10', 'CRE-12', 'CRE-13', 'CRE-15'];
+
+  const statements = leadershipIds.map(id => {
+    const q = GPTW_QUESTIONS.find(q => q.id === id);
+    const text = q ? (locale === 'my' && q.my ? q.my : q.en) : id;
+    return {
+      id,
+      label: text.length > 70 ? text.substring(0, 70) + '…' : text,
+      score: rows.length >= ANONYMITY_THRESHOLD ? (questionScoreMap[id] ?? 0) : 0,
+    };
+  });
+
+  const overallScore = statements.length > 0
+    ? Math.round(statements.reduce((a, b) => a + b.score, 0) / statements.length)
+    : 0;
+
+  return { overallScore, statements };
+}
+
+function computeIndustryBenchmark(
+  dimensionScoreMap: Record<string, number>,
+  eesScore: number,
+  gptwScore: number,
+  enpsScore: number
+): IndustryBenchmarkData {
+  const dimensions = SCORED_DIMENSIONS.map(dim => {
+    const name = DIMENSION_DISPLAY[dim];
+    const enName = DIMENSION_DISPLAY_EN[dim]; // Always use English for benchmark lookup
+    const score = dimensionScoreMap[dim] ?? 0;
+    const benchmark = INDUSTRY_BENCHMARKS[enName] ?? 78;
+    return { name, score, benchmark, gap: score - benchmark };
+  });
+
+  const overall = [
+    {
+      name: 'EES',
+      score: eesScore,
+      benchmark: INDUSTRY_BENCHMARKS['EES'] ?? 80,
+      gap: eesScore - (INDUSTRY_BENCHMARKS['EES'] ?? 80),
+    },
+    {
+      name: 'GPTW',
+      score: gptwScore,
+      benchmark: INDUSTRY_BENCHMARKS['GPTW'] ?? 85,
+      gap: gptwScore - (INDUSTRY_BENCHMARKS['GPTW'] ?? 85),
+    },
+    {
+      name: 'ENPS',
+      score: enpsScore,
+      benchmark: INDUSTRY_BENCHMARKS['ENPS'] ?? 70,
+      gap: enpsScore - (INDUSTRY_BENCHMARKS['ENPS'] ?? 70),
+    },
+  ];
+
+  return { dimensions, overall };
+}
+
+export async function computeMultiSurveyAnalytics(org?: string, locale: string = 'en'): Promise<MultiSurveyData> {
+  setLocaleDisplays(locale);
+  // Load all surveys sorted chronologically
+  const allSurveys = await listSurveys();
+  if (allSurveys.length === 0) return { surveys: [] };
+
+  const summaries: SurveySummary[] = [];
+
+  for (const survey of allSurveys) {
+    const dbResponses = await db.select().from(schema.responses)
+      .where(eq(schema.responses.surveyId, survey.id));
+
+    if (dbResponses.length === 0) continue;
+
+    const allRows: Record<string, string>[] = dbResponses.map(r => {
+      const answers = r.answers as Record<string, string>;
+      return { ...answers, email: r.email };
+    });
+
+    const rows = org ? allRows.filter(r => r['DEM-ORG'] === org) : allRows;
+    if (rows.length < ANONYMITY_THRESHOLD) continue;
+
+    const likertQuestions = GPTW_QUESTIONS.filter(q => q.type === 'likert');
+
+    const questionScoreMap: Record<string, number> = {};
+    for (const q of likertQuestions) {
+      questionScoreMap[q.id] = favorableScore(rows, q.id);
+    }
+
+    const allScores = Object.values(questionScoreMap);
+    const eesScore = allScores.length > 0
+      ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
+      : 0;
+
+    const gptwScore = questionScoreMap['UNC-47'] ?? 0;
+
+    const dimensionScores: { dimension: string; score: number }[] = SCORED_DIMENSIONS.map(dim => {
+      const dimQs = likertQuestions.filter(q => q.dimension === dim);
+      const scores = dimQs.map(q => questionScoreMap[q.id]);
+      const mean = scores.length > 0
+        ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+        : 0;
+      return { dimension: DIMENSION_DISPLAY[dim], score: mean };
+    });
+
+    // eNPS from UNC-47
+    const enpsData = computeENPS(rows);
+
+    // Relationship scores
+    const relKeys: Relationship[] = ['colleagues', 'job', 'management'];
+    const relationships = relKeys.map(rel => {
+      const qs = GPTW_QUESTIONS.filter(
+        q => q.type === 'likert' && QUESTION_RELATIONSHIP_MAP[q.id] === rel
+      );
+      const scores = qs.map(q => questionScoreMap[q.id] ?? 0);
+      const score = scores.length > 0
+        ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+        : 0;
+      return { key: rel, score };
+    });
+
+    // Extract year from survey name or fall back to createdAt year
+    const createdYear = new Date(survey.createdAt).getFullYear();
+    const nameYearMatch = survey.name.match(/\b(20\d{2})\b/);
+    const year = nameYearMatch ? parseInt(nameYearMatch[1], 10) : createdYear;
+
+    summaries.push({
+      surveyId: survey.id,
+      surveyName: survey.name,
+      year,
+      eesScore,
+      gptwScore,
+      enps: enpsData.score,
+      dimensions: dimensionScores,
+      relationships,
+    });
+  }
+
+  // Sort chronologically
+  summaries.sort((a, b) => a.year - b.year || a.surveyName.localeCompare(b.surveyName));
+
+  return { surveys: summaries };
+}
+
+export async function getDistinctDepartments(surveyId: string): Promise<string[]> {
+  const dbResponses = await db.select({ answers: schema.responses.answers })
+    .from(schema.responses)
+    .where(eq(schema.responses.surveyId, surveyId));
+
+  const depts = new Set<string>();
+  for (const r of dbResponses) {
+    const answers = r.answers as Record<string, string>;
+    const dept = answers['__department__'];
+    if (dept && dept.trim()) depts.add(dept.trim());
+  }
+  return Array.from(depts).sort();
+}
+
+export async function computeAnalytics(surveyId: string, org?: string, dept?: string, locale: string = 'en'): Promise<DashboardData | null> {
   // Load responses from PostgreSQL
   const dbResponses = await db.select().from(schema.responses)
     .where(eq(schema.responses.surveyId, surveyId));
@@ -501,10 +772,19 @@ export async function computeAnalytics(surveyId: string): Promise<DashboardData 
   if (dbResponses.length === 0) return null;
 
   // Convert DB rows to flat answer records (same shape as old CSV rows)
-  const rows: Record<string, string>[] = dbResponses.map(r => {
+  const allRows: Record<string, string>[] = dbResponses.map(r => {
     const answers = r.answers as Record<string, string>;
     return { ...answers, email: r.email };
   });
+
+  // Apply org and department filters
+  let rows = org ? allRows.filter(r => r['DEM-ORG'] === org) : allRows;
+  if (dept) rows = rows.filter(r => (r['__department__'] ?? '').trim() === dept);
+
+  if (rows.length === 0) return null;
+
+  // Set locale-aware display names for this computation
+  setLocaleDisplays(locale);
 
   const likertQuestions = GPTW_QUESTIONS.filter(q => q.type === 'likert');
 
@@ -559,10 +839,14 @@ export async function computeAnalytics(surveyId: string): Promise<DashboardData 
   const enps = computeENPS(rows);
 
   // Strengths / Opportunities
-  const scoredQuestions = likertQuestions.map(q => ({
-    label: q.en.length > 60 ? q.en.substring(0, 60) + '…' : q.en,
-    score: questionScoreMap[q.id],
-  }));
+  const qText = (q: typeof likertQuestions[number]) => locale === 'my' && q.my ? q.my : q.en;
+  const scoredQuestions = likertQuestions.map(q => {
+    const text = qText(q);
+    return {
+      label: text.length > 60 ? text.substring(0, 60) + '…' : text,
+      score: questionScoreMap[q.id],
+    };
+  });
 
   const strengths = [...scoredQuestions].sort((a, b) => b.score - a.score).slice(0, 10);
   const opportunities = [...scoredQuestions].sort((a, b) => a.score - b.score).slice(0, 10);
@@ -582,18 +866,30 @@ export async function computeAnalytics(surveyId: string): Promise<DashboardData 
     leadershipIds.map(id => questionScoreMap[id] ?? 0).reduce((a, b) => a + b, 0) / leadershipIds.length
   );
 
+  const leaderboardLabels = locale === 'my' ? {
+    completion: 'ပြီးစီးမှု', credibility: 'ယုံကြည်ကိုးစားနိုင်မှု', respect: 'လေးစားမှု',
+    fairness: 'တရားမျှတမှု', pride: 'ဂုဏ်ယူမှု', camaraderie: 'ဖော်ရွေမှု',
+    satisfaction: 'ကျေနပ်မှု', enps: 'ENPS', engagement: 'ပါဝင်မှု',
+    innovation: 'ဆန်းသစ်မှု', leadership: 'ခေါင်းဆောင်မှု',
+  } : {
+    completion: 'Completion', credibility: 'Credibility', respect: 'Respect',
+    fairness: 'Fairness', pride: 'Pride', camaraderie: 'Camaraderie',
+    satisfaction: 'Satisfaction', enps: 'ENPS', engagement: 'Engagement',
+    innovation: 'Innovation', leadership: 'Leadership',
+  };
+
   const leaderboard = [
-    { label: 'Completion',   value: responseRate,                  color: 'hsl(220 70% 55%)' },
-    { label: 'Credibility',  value: dimensionScoreMap.credibility, color: 'hsl(220 70% 55%)' },
-    { label: 'Respect',      value: dimensionScoreMap.respect,     color: 'hsl(255 55% 58%)' },
-    { label: 'Fairness',     value: dimensionScoreMap.fairness,    color: 'hsl(175 45% 45%)' },
-    { label: 'Pride',        value: dimensionScoreMap.pride,       color: 'hsl(25 75% 55%)'  },
-    { label: 'Camaraderie',  value: dimensionScoreMap.camaraderie, color: 'hsl(155 45% 45%)' },
-    { label: 'Satisfaction', value: gptwScore,                     color: 'hsl(220 70% 55%)' },
-    { label: 'ENPS',         value: enps.score,                    color: 'hsl(155 45% 45%)' },
-    { label: 'Engagement',   value: eesScore,                      color: 'hsl(255 55% 58%)' },
-    { label: 'Innovation',   value: innovationScore,               color: 'hsl(175 45% 45%)' },
-    { label: 'Leadership',   value: leadershipScore,               color: 'hsl(25 75% 55%)'  },
+    { label: leaderboardLabels.completion,   value: responseRate,                  color: 'hsl(220 70% 55%)' },
+    { label: leaderboardLabels.credibility,  value: dimensionScoreMap.credibility, color: 'hsl(220 70% 55%)' },
+    { label: leaderboardLabels.respect,      value: dimensionScoreMap.respect,     color: 'hsl(255 55% 58%)' },
+    { label: leaderboardLabels.fairness,     value: dimensionScoreMap.fairness,    color: 'hsl(175 45% 45%)' },
+    { label: leaderboardLabels.pride,        value: dimensionScoreMap.pride,       color: 'hsl(25 75% 55%)'  },
+    { label: leaderboardLabels.camaraderie,  value: dimensionScoreMap.camaraderie, color: 'hsl(155 45% 45%)' },
+    { label: leaderboardLabels.satisfaction, value: gptwScore,                     color: 'hsl(220 70% 55%)' },
+    { label: leaderboardLabels.enps,         value: enps.score,                    color: 'hsl(155 45% 45%)' },
+    { label: leaderboardLabels.engagement,   value: eesScore,                      color: 'hsl(255 55% 58%)' },
+    { label: leaderboardLabels.innovation,   value: innovationScore,               color: 'hsl(175 45% 45%)' },
+    { label: leaderboardLabels.leadership,   value: leadershipScore,               color: 'hsl(25 75% 55%)'  },
   ];
 
   // Department breakdown — group by DEM-ORG
@@ -614,14 +910,20 @@ export async function computeAnalytics(surveyId: string): Promise<DashboardData 
   };
 
   // Phase 2 computations
-  const relationshipScores = computeRelationshipScores(rows, questionScoreMap);
-  const enpsDetail = computeENPSDetail(rows);
+  const relationshipScores = computeRelationshipScores(rows, questionScoreMap, locale);
+  const enpsDetail = computeENPSDetail(rows, locale);
   const leadershipComparison = computeLeadershipComparison(rows);
   const tenureJourney = computeTenureJourney(rows);
   const tenureInsights = computeTenureInsights(rows);
   const earlyWarningAlerts = computeEarlyWarningAlerts(rows, dimensionScoreMap);
   const sentimentAnalysis = computeSentimentAnalysis(rows);
   const pillarHeatmap = computePillarHeatmap(rows, dimensionScoreMap);
+
+  // Phase 3 computations
+  const subPillarScores = computeSubPillarScores(rows);
+  const relationshipStatements = computeRelationshipStatements(rows, questionScoreMap, locale);
+  const leadershipConfidence = computeLeadershipConfidence(rows, questionScoreMap, locale);
+  const industryBenchmark = computeIndustryBenchmark(dimensionScoreMap, eesScore, gptwScore, enps.score);
 
   return {
     eesScore,
@@ -645,5 +947,10 @@ export async function computeAnalytics(surveyId: string): Promise<DashboardData 
     earlyWarningAlerts,
     sentimentAnalysis,
     pillarHeatmap,
+    // Phase 3
+    subPillarScores,
+    relationshipStatements,
+    leadershipConfidence,
+    industryBenchmark,
   };
 }

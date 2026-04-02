@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import type { PillarHeatmapData } from '@/lib/types/analytics';
 import { cn } from '@/lib/utils';
 
@@ -17,10 +18,11 @@ function getDeltaColor(delta: number | null): string {
 }
 
 export function PillarHeatmap({ data }: PillarHeatmapProps) {
+  const t = useTranslations('dashboard');
   if (data.departments.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No department data available
+        {t('noDepartmentData')}
       </p>
     );
   }
@@ -35,7 +37,7 @@ export function PillarHeatmap({ data }: PillarHeatmapProps) {
         <thead>
           <tr>
             <th className="text-left py-2 pr-4 font-medium text-muted-foreground whitespace-nowrap">
-              Department
+              {t('heatmapDepartment')}
             </th>
             {data.pillars.map(pillar => (
               <th
@@ -51,7 +53,7 @@ export function PillarHeatmap({ data }: PillarHeatmapProps) {
           {/* Overall row */}
           <tr className="border-t border-border/50">
             <td className="py-2 pr-4 font-semibold text-foreground text-[11px] whitespace-nowrap">
-              Overall Average
+              {t('overallAverage')}
             </td>
             {data.pillars.map(pillar => (
               <td key={pillar} className="py-2 px-3 text-center">
@@ -82,7 +84,7 @@ export function PillarHeatmap({ data }: PillarHeatmapProps) {
                     {cell?.score === null || cell?.score === undefined ? (
                       <span
                         className="inline-block rounded px-2 py-0.5 text-muted-foreground/40 text-[10px]"
-                        title="Insufficient responses"
+                        title={t('heatmapInsufficient')}
                       >
                         —
                       </span>
@@ -106,26 +108,26 @@ export function PillarHeatmap({ data }: PillarHeatmapProps) {
       </table>
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-4 text-[10px] text-muted-foreground">
-        <span className="font-medium">Color scale:</span>
+        <span className="font-medium">{t('heatmapColorLegend')}</span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-emerald-100 dark:bg-emerald-950" />
-          +10% above avg
+          {t('heatmapAbove10')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-green-50 dark:bg-green-950" />
-          +3–10% above
+          {t('heatmapAbove3')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-muted/30" />
-          Within ±3%
+          {t('heatmapWithin3')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-amber-50 dark:bg-amber-950" />
-          3–10% below
+          {t('heatmapBelow3')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-red-50 dark:bg-red-950" />
-          10%+ below avg
+          {t('heatmapBelow10')}
         </span>
       </div>
     </div>
