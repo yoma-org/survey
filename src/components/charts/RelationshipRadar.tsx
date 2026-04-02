@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { getPerformanceZone } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { RelationshipScoreData } from '@/lib/types/analytics';
 
 interface RelationshipRadarProps {
@@ -19,25 +20,26 @@ interface RelationshipRadarProps {
 const RADAR_COLOR = 'hsl(220 70% 55%)';
 const RADAR_FILL = 'hsl(220 70% 55% / 0.15)';
 
-function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { relationship: string; score: number } }> }) {
-  if (!active || !payload?.length) return null;
-  const { relationship, score } = payload[0].payload;
-  const zone = getPerformanceZone(score);
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1">
-      <p className="font-medium text-foreground">{relationship}</p>
-      <div className="flex items-center gap-1.5">
-        <span className="font-semibold tabular-nums">{score}%</span>
-        <span className="px-1 py-0.5 rounded text-[10px] font-medium" style={{ color: zone.color, backgroundColor: zone.bgColor }}>
-          {zone.label}
-        </span>
-      </div>
-      <p className="text-muted-foreground/70 italic max-w-[180px]">{zone.description}</p>
-    </div>
-  );
-}
-
 export function RelationshipRadar({ data }: RelationshipRadarProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { relationship: string; score: number } }> }) {
+    if (!active || !payload?.length) return null;
+    const { relationship, score } = payload[0].payload;
+    const zone = getPerformanceZone(score);
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1">
+        <p className="font-medium text-foreground">{relationship}</p>
+        <div className="flex items-center gap-1.5">
+          <span className="font-semibold tabular-nums">{score}%</span>
+          <span className="px-1 py-0.5 rounded text-[10px] font-medium" style={{ color: zone.color, backgroundColor: zone.bgColor }}>
+            {t(zone.labelKey)}
+          </span>
+        </div>
+        <p className="text-muted-foreground/70 italic max-w-[180px]">{t(zone.descriptionKey)}</p>
+      </div>
+    );
+  }
   const chartData = data.scores.map(s => ({
     relationship: s.relationship.replace(' (', '\n('),
     score: s.score,

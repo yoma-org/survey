@@ -3,6 +3,7 @@
 import { Pie, PieChart, Cell, Label } from 'recharts';
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { ENPS_COLORS } from '@/lib/chart-colors';
+import { useTranslations } from 'next-intl';
 
 const chartConfig = {
   promoters: { label: 'Promoters', color: ENPS_COLORS.promoter },
@@ -18,10 +19,12 @@ interface ENPSGaugeProps {
 }
 
 export function ENPSGauge({ score, promoters, passives, detractors }: ENPSGaugeProps) {
+  const t = useTranslations('dashboard');
+
   const data = [
-    { name: 'Promoters', value: promoters, fill: ENPS_COLORS.promoter },
-    { name: 'Passives', value: passives, fill: ENPS_COLORS.passive },
-    { name: 'Detractors', value: detractors, fill: ENPS_COLORS.detractor },
+    { name: t('promoters'), value: promoters, fill: ENPS_COLORS.promoter },
+    { name: t('passives'), value: passives, fill: ENPS_COLORS.passive },
+    { name: t('detractors'), value: detractors, fill: ENPS_COLORS.detractor },
   ];
 
   return (
@@ -52,7 +55,7 @@ export function ENPSGauge({ score, promoters, passives, detractors }: ENPSGaugeP
                         {score}
                       </tspan>
                       <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 20} className="fill-muted-foreground text-[11px]">
-                        ENPS
+                        {t('enps')}
                       </tspan>
                     </text>
                   );
@@ -74,7 +77,7 @@ export function ENPSGauge({ score, promoters, passives, detractors }: ENPSGaugeP
         ))}
       </div>
       <p className="text-center text-[10px] text-muted-foreground/50 mt-1">
-        Industry baseline: ENPS 70+
+        {t('enpsBaseline')}
       </p>
     </div>
   );

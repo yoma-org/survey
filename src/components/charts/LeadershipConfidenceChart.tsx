@@ -3,6 +3,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell, LabelList } from 'recharts';
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart';
 import { getPerformanceZone, INDUSTRY_BENCHMARKS } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { LeadershipConfidenceData } from '@/lib/types/analytics';
 
 const chartConfig = {
@@ -13,32 +14,34 @@ interface LeadershipConfidenceChartProps {
   data: LeadershipConfidenceData;
 }
 
-function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { label: string; score: number } }> }) {
-  if (!active || !payload?.length) return null;
-  const { label, score } = payload[0].payload;
-  const zone = getPerformanceZone(score);
-  const benchmark = INDUSTRY_BENCHMARKS['Credibility'] ?? 80;
-  const gap = score - benchmark;
-
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1 max-w-[260px]">
-      <p className="font-medium text-foreground leading-snug">{label}</p>
-      <div className="flex items-center gap-1.5">
-        <span className="font-semibold tabular-nums">{score}%</span>
-        <span style={{ color: zone.color }}>{zone.label}</span>
-      </div>
-      <p className="text-muted-foreground">
-        {gap >= 0 ? '+' : ''}{gap} vs Credibility benchmark ({benchmark}%)
-      </p>
-    </div>
-  );
-}
-
 export function LeadershipConfidenceChart({ data }: LeadershipConfidenceChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { label: string; score: number } }> }) {
+    if (!active || !payload?.length) return null;
+    const { label, score } = payload[0].payload;
+    const zone = getPerformanceZone(score);
+    const benchmark = INDUSTRY_BENCHMARKS['Credibility'] ?? 80;
+    const gap = score - benchmark;
+
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1 max-w-[260px]">
+        <p className="font-medium text-foreground leading-snug">{label}</p>
+        <div className="flex items-center gap-1.5">
+          <span className="font-semibold tabular-nums">{score}%</span>
+          <span style={{ color: zone.color }}>{t(zone.labelKey)}</span>
+        </div>
+        <p className="text-muted-foreground">
+          {gap >= 0 ? '+' : ''}{gap} vs Credibility benchmark ({benchmark}%)
+        </p>
+      </div>
+    );
+  }
+
   if (data.statements.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        Insufficient data for leadership confidence analysis.
+        {t('insufficientLeadership')}
       </p>
     );
   }
@@ -58,7 +61,7 @@ export function LeadershipConfidenceChart({ data }: LeadershipConfidenceChartPro
     >
       {/* Overall score badge */}
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-[11px] text-muted-foreground">Overall confidence:</span>
+        <span className="text-[11px] text-muted-foreground">{t('overallConfidence')}</span>
         <span
           className="text-xs font-semibold px-2 py-0.5 rounded"
           style={{
@@ -66,7 +69,7 @@ export function LeadershipConfidenceChart({ data }: LeadershipConfidenceChartPro
             color: getPerformanceZone(data.overallScore).color,
           }}
         >
-          {data.overallScore}% — {getPerformanceZone(data.overallScore).label}
+          {data.overallScore}% — {t(getPerformanceZone(data.overallScore).labelKey)}
         </span>
       </div>
 
@@ -117,7 +120,7 @@ export function LeadershipConfidenceChart({ data }: LeadershipConfidenceChartPro
       <div className="flex items-center gap-2 mt-1 text-[10px] text-muted-foreground/60">
         <span className="flex items-center gap-1.5">
           <span className="w-4 border-t-2 border-dashed border-muted-foreground/50" />
-          Credibility benchmark {credBenchmark}%
+          {t('credibilityBenchmark')} {credBenchmark}%
         </span>
       </div>
     </div>

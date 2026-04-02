@@ -18,6 +18,7 @@ import { SentimentAnalysisCards } from './SentimentAnalysisCards';
 import { EarlyWarningAlerts } from './EarlyWarningAlerts';
 import { DepartmentBreakdownChart } from './DepartmentBreakdownChart';
 
+import { useTranslations } from 'next-intl';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 // DIMENSION_COLORS no longer used directly — performance zones handle coloring
@@ -36,6 +37,7 @@ interface DashboardChartsProps {
 }
 
 export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
+  const t = useTranslations('dashboard');
   const emptyMultiSurvey: MultiSurveyData = { surveys: [] };
   const multiSurveyData = multiSurvey ?? emptyMultiSurvey;
   return (
@@ -45,10 +47,10 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
         {/* Hero metrics — with benchmarks and performance zones */}
         <FadeIn>
           <div className="flex flex-wrap gap-x-8 gap-y-6 md:gap-x-12">
-            <MetricCard label="Employee Engagement" value={data.eesScore} benchmark={80} trend={{ value: data.eesTrend, label: 'vs last year' }} />
-            <MetricCard label="Great Place to Work" value={data.gptwScore} benchmark={85} />
-            <MetricCard label="Response Rate" value={data.responseRate} showZone={false} />
-            <MetricCard label="Responses" value={data.totalResponses} suffix="" showZone={false} />
+            <MetricCard label={t('metricEmployeeEngagement')} value={data.eesScore} benchmark={80} trend={{ value: data.eesTrend, label: t('metricVsLastYear') }} />
+            <MetricCard label={t('metricGreatPlaceToWork')} value={data.gptwScore} benchmark={85} />
+            <MetricCard label={t('metricResponseRate')} value={data.responseRate} showZone={false} />
+            <MetricCard label={t('metricResponses')} value={data.totalResponses} suffix="" showZone={false} />
           </div>
         </FadeIn>
 
@@ -59,10 +61,10 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
         <FadeIn delay={0.1}>
           <Tabs defaultValue="overview">
             <TabsList className="h-9 bg-muted/50 mb-8">
-              <TabsTrigger value="overview" className="text-xs px-4 h-8">Overview</TabsTrigger>
-              <TabsTrigger value="deepdive" className="text-xs px-4 h-8">Deep Dive</TabsTrigger>
-              <TabsTrigger value="workforce" className="text-xs px-4 h-8">Workforce Insights</TabsTrigger>
-              <TabsTrigger value="qualitative" className="text-xs px-4 h-8">Qualitative</TabsTrigger>
+              <TabsTrigger value="overview" className="text-xs px-4 h-8">{t('tabOverview')}</TabsTrigger>
+              <TabsTrigger value="deepdive" className="text-xs px-4 h-8">{t('tabDeepDive')}</TabsTrigger>
+              <TabsTrigger value="workforce" className="text-xs px-4 h-8">{t('tabWorkforce')}</TabsTrigger>
+              <TabsTrigger value="qualitative" className="text-xs px-4 h-8">{t('tabQualitative')}</TabsTrigger>
             </TabsList>
 
             {/* ── OVERVIEW TAB ──────────────────────────────────────── */}
@@ -72,8 +74,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               {multiSurveyData.surveys.length > 0 && (
                 <ErrorBoundary>
                   <ChartSection
-                    title="Annual EES Trend"
-                    description="Employee Engagement Score and GPTW satisfaction across all survey years"
+                    title={t('sectionEESTrend')}
+                    description={t('sectionEESTrendDesc')}
                   >
                     <EESTrendChart data={multiSurveyData} />
                   </ChartSection>
@@ -84,14 +86,14 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-3">
                   <ErrorBoundary>
-                    <ChartSection title="Pillar Performance" description="% favorable vs industry benchmark — hover for zone analysis">
+                    <ChartSection title={t('sectionPillarPerformance')} description={t('sectionPillarPerformanceDesc')}>
                       <DimensionBarChart data={data.dimensions} />
                     </ChartSection>
                   </ErrorBoundary>
                 </div>
                 <div className="lg:col-span-2">
                   <ErrorBoundary>
-                    <ChartSection title="Overall Sentiment" description="How employees feel — positive answers (4-5) vs neutral (3) vs negative (1-2)">
+                    <ChartSection title={t('sectionOverallSentiment')} description={t('sectionOverallSentimentDesc')}>
                       <ResponseDonutChart {...data.sentiment} />
                     </ChartSection>
                   </ErrorBoundary>
@@ -101,8 +103,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               {/* Industry Benchmark — full width */}
               <ErrorBoundary>
                 <ChartSection
-                  title="Industry Benchmark"
-                  description="Our scores vs GPTW Best Workplaces 2024–2025 averages — gap annotations on our score bars"
+                  title={t('sectionIndustryBenchmark')}
+                  description={t('sectionIndustryBenchmarkDesc')}
                 >
                   <IndustryBenchmarkChart data={data.industryBenchmark} />
                 </ChartSection>
@@ -113,8 +115,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                 <div className="lg:col-span-2">
                   <ErrorBoundary>
                     <ChartSection
-                      title="Relationship Axes"
-                      description="3 key relationship dimensions that explain where issues originate"
+                      title={t('sectionRelationshipAxes')}
+                      description={t('sectionRelationshipAxesDesc')}
                       height={300}
                     >
                       <RelationshipRadar data={data.relationshipScores} />
@@ -126,12 +128,12 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                     <Tabs defaultValue="strengths">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-sm font-medium text-foreground">Statement Rankings</h3>
-                          <p className="text-xs text-muted-foreground mt-0.5">Highest and lowest scoring statements</p>
+                          <h3 className="text-sm font-medium text-foreground">{t('sectionStatementRankings')}</h3>
+                          <p className="text-xs text-muted-foreground mt-0.5">{t('sectionStatementRankingsDesc')}</p>
                         </div>
                         <TabsList className="h-8 bg-muted/50">
-                          <TabsTrigger value="strengths" className="text-xs px-3 h-7">Strengths</TabsTrigger>
-                          <TabsTrigger value="opportunities" className="text-xs px-3 h-7">Opportunities</TabsTrigger>
+                          <TabsTrigger value="strengths" className="text-xs px-3 h-7">{t('sectionStrengths')}</TabsTrigger>
+                          <TabsTrigger value="opportunities" className="text-xs px-3 h-7">{t('sectionOpportunities')}</TabsTrigger>
                         </TabsList>
                       </div>
                       <TabsContent value="strengths" className="mt-0">
@@ -147,7 +149,7 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
 
               {/* Department Breakdown */}
               <ErrorBoundary>
-                <ChartSection title="Department Breakdown" description="Pillar scores by organization segment">
+                <ChartSection title={t('sectionDepartmentBreakdown')} description={t('sectionDepartmentBreakdownDesc')}>
                   <DepartmentBreakdownChart data={data.departmentBreakdown} />
                 </ChartSection>
               </ErrorBoundary>
@@ -160,9 +162,9 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               <ErrorBoundary>
                 <div>
                   <div className="mb-3">
-                    <h3 className="text-sm font-medium text-foreground">Pillar Heatmap</h3>
+                    <h3 className="text-sm font-medium text-foreground">{t('sectionPillarHeatmap')}</h3>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      5 pillars × departments — cells are color-coded relative to the overall average
+                      {t('sectionPillarHeatmapDesc')}
                     </p>
                   </div>
                   <PillarHeatmap data={data.pillarHeatmap} />
@@ -172,8 +174,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               {/* Sub-Pillar Breakdown — full width, after heatmap */}
               <ErrorBoundary>
                 <ChartSection
-                  title="Sub-Pillar Deep Dive"
-                  description="15 sub-pillars grouped by dimension — click any section to expand or collapse"
+                  title={t('sectionSubPillarDeepDive')}
+                  description={t('sectionSubPillarDeepDiveDesc')}
                 >
                   <SubPillarBreakdownChart data={data.subPillarScores} />
                 </ChartSection>
@@ -182,8 +184,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               {/* Relationship Statements — full width */}
               <ErrorBoundary>
                 <ChartSection
-                  title="Relationship Statements"
-                  description="Per-statement scores grouped by the 3 relationship axes — select a tab to explore each axis"
+                  title={t('sectionRelationshipStatements')}
+                  description={t('sectionRelationshipStatementsDesc')}
                 >
                   <RelationshipStatementsChart data={data.relationshipStatements} />
                 </ChartSection>
@@ -194,8 +196,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                 <div className="lg:col-span-3">
                   <ErrorBoundary>
                     <ChartSection
-                      title="Leadership Perspective"
-                      description="Pillar scores: People Managers vs Individual Contributors"
+                      title={t('sectionLeadershipPerspective')}
+                      description={t('sectionLeadershipPerspectiveDesc')}
                       height={300}
                     >
                       <LeadershipComparisonChart data={data.leadershipComparison} />
@@ -205,8 +207,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                 <div className="lg:col-span-2">
                   <ErrorBoundary>
                     <ChartSection
-                      title="Confidence in Leadership"
-                      description="5 Credibility statements measuring trust in leadership"
+                      title={t('sectionConfidenceInLeadership')}
+                      description={t('sectionConfidenceInLeadershipDesc')}
                       height={300}
                     >
                       <LeadershipConfidenceChart data={data.leadershipConfidence} />
@@ -220,8 +222,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                 <div className="lg:col-span-3">
                   <ErrorBoundary>
                     <ChartSection
-                      title="eNPS — Loyalty Score"
-                      description="Computed from the 2 endorsement statements (PRI-31 + PRI-35)"
+                      title={t('sectionEnpsDetail')}
+                      description={t('sectionEnpsDetailDesc')}
                       height={340}
                     >
                       <ENPSDetailChart data={data.enpsDetail} />
@@ -232,7 +234,7 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                 {/* Legacy ENPS reference */}
                 <div className="lg:col-span-2">
                   <ErrorBoundary>
-                    <ChartSection title="Overall NPS (legacy)" description="Based on single statement UNC-47">
+                    <ChartSection title={t('sectionEnpsLegacy')} description={t('sectionEnpsLegacyDesc')}>
                       <ENPSGauge {...data.enps} />
                     </ChartSection>
                   </ErrorBoundary>
@@ -247,8 +249,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               {multiSurveyData.surveys.length >= 2 && (
                 <ErrorBoundary>
                   <ChartSection
-                    title="Internal Benchmark"
-                    description="Dimension scores compared across all survey years — track improvement over time"
+                    title={t('sectionInternalBenchmark')}
+                    description={t('sectionInternalBenchmarkDesc')}
                   >
                     <InternalBenchmarkChart data={multiSurveyData} />
                   </ChartSection>
@@ -258,8 +260,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               {/* Tenure Journey */}
               <ErrorBoundary>
                 <ChartSection
-                  title="Tenure Journey"
-                  description="Pillar scores across employee service year bands — tracks engagement through career lifecycle"
+                  title={t('sectionTenureJourney')}
+                  description={t('sectionTenureJourneyDesc')}
                   height={320}
                 >
                   <TenureJourneyChart data={data.tenureJourney} />
@@ -271,8 +273,8 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                 <div className="lg:col-span-3">
                   <ErrorBoundary>
                     <ChartSection
-                      title="Caring & Support by Tenure"
-                      description="Two sub-dimensions most at risk for long-tenured employees"
+                      title={t('sectionTenureInsights')}
+                      description={t('sectionTenureInsightsDesc')}
                       height={280}
                     >
                       <TenureInsightsChart data={data.tenureInsights} />
@@ -283,9 +285,9 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
                   <ErrorBoundary>
                     <div>
                       <div className="mb-3">
-                        <h3 className="text-sm font-medium text-foreground">Early Warning Signals</h3>
+                        <h3 className="text-sm font-medium text-foreground">{t('sectionEarlyWarning')}</h3>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          Departments where &ldquo;Their Job&rdquo; AND Credibility are below average
+                          {t('sectionEarlyWarningDesc')}
                         </p>
                       </div>
                       <EarlyWarningAlerts alerts={data.earlyWarningAlerts} />
@@ -300,9 +302,9 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
               <ErrorBoundary>
                 <div>
                   <div className="mb-4">
-                    <h3 className="text-sm font-medium text-foreground">Open-Ended Response Analysis</h3>
+                    <h3 className="text-sm font-medium text-foreground">{t('sectionQualitative')}</h3>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      Keyword-based sentiment classification of open-ended responses. No raw text is displayed to protect anonymity.
+                      {t('sectionQualitativeDesc')}
                     </p>
                   </div>
                   <SentimentAnalysisCards data={data.sentimentAnalysis} />

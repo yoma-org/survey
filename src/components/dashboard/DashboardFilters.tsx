@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import {
   Select,
@@ -19,6 +20,7 @@ interface DashboardFiltersProps {
 const DEFAULT_ORG_OPTIONS = ['Wave Money', 'Yoma Bank'];
 
 function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_ORG_OPTIONS, deptOptions = [] }: DashboardFiltersProps) {
+  const t = useTranslations('dashboard');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -42,7 +44,7 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
       <Select value={activeSurveyId ?? ''} onValueChange={(v) => v && updateParam('survey', v)}>
         <SelectTrigger className="w-64">
           <span className="truncate">
-            {surveys.find(s => s.id === activeSurveyId)?.name || 'Select survey'}
+            {surveys.find(s => s.id === activeSurveyId)?.name || t('selectSurvey')}
           </span>
         </SelectTrigger>
         <SelectContent>
@@ -58,11 +60,11 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
       <Select value={activeOrg || '__all__'} onValueChange={(v) => updateParam('org', v)}>
         <SelectTrigger className="w-48">
           <span className="truncate">
-            {activeOrg || 'All Organizations'}
+            {activeOrg || t('allOrganizations')}
           </span>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="__all__">All Organizations</SelectItem>
+          <SelectItem value="__all__">{t('allOrganizations')}</SelectItem>
           {orgOptions.map(org => (
             <SelectItem key={org} value={org}>
               {org}
@@ -75,11 +77,11 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
       <Select value={activeDept || '__all__'} onValueChange={(v) => updateParam('dept', v)}>
         <SelectTrigger className="w-48">
           <span className="truncate">
-            {activeDept || 'All Departments'}
+            {activeDept || t('allDepartments')}
           </span>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="__all__">All Departments</SelectItem>
+          <SelectItem value="__all__">{t('allDepartments')}</SelectItem>
           {deptOptions.map(dept => (
             <SelectItem key={dept} value={dept}>
               {dept}

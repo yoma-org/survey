@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart';
 import { getPerformanceZone } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { IndustryBenchmarkData } from '@/lib/types/analytics';
 
 const chartConfig = {
@@ -28,36 +29,6 @@ interface TooltipPayloadEntry {
   value?: number;
   color?: string;
   payload?: { name: string; score: number; benchmark: number; gap: number };
-}
-
-function CustomTooltip({ active, payload }: { active?: boolean; payload?: TooltipPayloadEntry[] }) {
-  if (!active || !payload?.length) return null;
-  const item = payload[0].payload;
-  if (!item) return null;
-  const zone = getPerformanceZone(item.score);
-  const gapLabel = item.gap >= 0
-    ? `+${item.gap} above benchmark`
-    : `${item.gap} below benchmark`;
-
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1.5">
-      <p className="font-medium text-foreground">{item.name}</p>
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: zone.color }} />
-        <span className="text-muted-foreground">Our score:</span>
-        <span className="font-semibold tabular-nums">{item.score}%</span>
-        <span style={{ color: zone.color }}>{zone.label}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-muted-foreground/40" />
-        <span className="text-muted-foreground">Benchmark:</span>
-        <span className="font-semibold tabular-nums">{item.benchmark}%</span>
-      </div>
-      <p className={`text-[10px] font-medium ${item.gap >= 0 ? 'text-green-600' : 'text-orange-600'}`}>
-        {gapLabel}
-      </p>
-    </div>
-  );
 }
 
 function GapAnnotation({ x, y, width, height, value }: { x?: number; y?: number; width?: number; height?: number; value?: number }) {
@@ -78,10 +49,42 @@ function GapAnnotation({ x, y, width, height, value }: { x?: number; y?: number;
 }
 
 export function IndustryBenchmarkChart({ data }: IndustryBenchmarkChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload }: { active?: boolean; payload?: TooltipPayloadEntry[] }) {
+    if (!active || !payload?.length) return null;
+    const item = payload[0].payload;
+    if (!item) return null;
+    const zone = getPerformanceZone(item.score);
+    const gapLabel = item.gap >= 0
+      ? `+${item.gap} ${t('aboveBenchmark')}`
+      : `${item.gap} ${t('belowBenchmark')}`;
+
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1.5">
+        <p className="font-medium text-foreground">{item.name}</p>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: zone.color }} />
+          <span className="text-muted-foreground">{t('ourScore')}:</span>
+          <span className="font-semibold tabular-nums">{item.score}%</span>
+          <span style={{ color: zone.color }}>{t(zone.labelKey)}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-muted-foreground/40" />
+          <span className="text-muted-foreground">{t('benchmark')}:</span>
+          <span className="font-semibold tabular-nums">{item.benchmark}%</span>
+        </div>
+        <p className={`text-[10px] font-medium ${item.gap >= 0 ? 'text-green-600' : 'text-orange-600'}`}>
+          {gapLabel}
+        </p>
+      </div>
+    );
+  }
+
   if (data.dimensions.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No benchmark data available.
+        {t('noBenchmarkData')}
       </p>
     );
   }
@@ -162,13 +165,13 @@ export function IndustryBenchmarkChart({ data }: IndustryBenchmarkChartProps) {
       <div className="flex items-center gap-4 mt-1 text-[10px] text-muted-foreground/60">
         <span className="flex items-center gap-1">
           <span className="w-2 h-2 rounded-full bg-green-600" />
-          Above benchmark
+          {t('aboveBenchmark')}
         </span>
         <span className="flex items-center gap-1">
           <span className="w-2 h-2 rounded-full bg-orange-500" />
-          Below benchmark
+          {t('belowBenchmark')}
         </span>
-        <span className="text-[9px]">Gap annotations shown on our score bars</span>
+        <span className="text-[9px]">{t('gapAnnotation')}</span>
       </div>
     </div>
   );

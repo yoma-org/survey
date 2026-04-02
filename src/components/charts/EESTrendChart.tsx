@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart';
 import { getPerformanceZone, INDUSTRY_BENCHMARKS } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { MultiSurveyData } from '@/lib/types/analytics';
 
 const chartConfig = {
@@ -30,32 +31,34 @@ interface TooltipEntry {
   color?: string;
 }
 
-function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1.5">
-      <p className="font-medium text-foreground">{label}</p>
-      {payload.map((entry, i) => {
-        if (entry.value === null || entry.value === undefined) return null;
-        const zone = getPerformanceZone(entry.value);
-        return (
-          <div key={i} className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
-            <span className="text-muted-foreground">{entry.name}:</span>
-            <span className="font-semibold tabular-nums">{entry.value}%</span>
-            <span style={{ color: zone.color }} className="text-[10px]">{zone.label}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 export function EESTrendChart({ data }: EESTrendChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) {
+    if (!active || !payload?.length) return null;
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1.5">
+        <p className="font-medium text-foreground">{label}</p>
+        {payload.map((entry, i) => {
+          if (entry.value === null || entry.value === undefined) return null;
+          const zone = getPerformanceZone(entry.value);
+          return (
+            <div key={i} className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
+              <span className="text-muted-foreground">{entry.name}:</span>
+              <span className="font-semibold tabular-nums">{entry.value}%</span>
+              <span style={{ color: zone.color }} className="text-[10px]">{t(zone.labelKey)}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   if (data.surveys.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No historical survey data available for trend analysis.
+        {t('noHistoricalData')}
       </p>
     );
   }
@@ -126,7 +129,7 @@ export function EESTrendChart({ data }: EESTrendChartProps) {
       <div className="flex items-center gap-4 mt-1 text-[10px] text-muted-foreground/60">
         <span className="flex items-center gap-1.5">
           <span className="w-4 border-t-2 border-dashed border-muted-foreground/50" />
-          Benchmark {eesBenchmark}%
+          {t('benchmark')} {eesBenchmark}%
         </span>
         {data.surveys.map(s => {
           const zone = getPerformanceZone(s.eesScore);

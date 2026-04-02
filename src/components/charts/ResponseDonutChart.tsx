@@ -3,6 +3,7 @@
 import { Pie, PieChart, Cell, Label } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 import { SENTIMENT_COLORS } from '@/lib/chart-colors';
+import { useTranslations } from 'next-intl';
 
 const chartConfig = {
   positive: { label: 'Positive', color: SENTIMENT_COLORS.positive },
@@ -17,10 +18,12 @@ interface ResponseDonutChartProps {
 }
 
 export function ResponseDonutChart({ positive, neutral, negative }: ResponseDonutChartProps) {
+  const t = useTranslations('dashboard');
+
   const data = [
-    { name: 'Positive', value: positive, fill: SENTIMENT_COLORS.positive },
-    { name: 'Neutral', value: neutral, fill: SENTIMENT_COLORS.neutral },
-    { name: 'Negative', value: negative, fill: SENTIMENT_COLORS.negative },
+    { name: t('positive'), value: positive, fill: SENTIMENT_COLORS.positive },
+    { name: t('neutral'), value: neutral, fill: SENTIMENT_COLORS.neutral },
+    { name: t('negative'), value: negative, fill: SENTIMENT_COLORS.negative },
   ];
 
   return (
@@ -50,7 +53,7 @@ export function ResponseDonutChart({ positive, neutral, negative }: ResponseDonu
                         {positive}%
                       </tspan>
                       <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 14} className="fill-muted-foreground text-[11px]">
-                        Positive
+                        {t('positive')}
                       </tspan>
                     </text>
                   );
@@ -72,7 +75,7 @@ export function ResponseDonutChart({ positive, neutral, negative }: ResponseDonu
         ))}
       </div>
       <p className="text-center text-[10px] text-muted-foreground/50 mt-1">
-        Industry baseline: ~80% positive
+        {t('positiveBaseline')}
       </p>
     </div>
   );

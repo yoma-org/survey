@@ -6,19 +6,21 @@ export type PerformanceZone = 'excellent' | 'strong' | 'moderate' | 'concern' | 
 export interface ZoneConfig {
   zone: PerformanceZone;
   label: string;
+  labelKey: string;      // i18n key in dashboard namespace (e.g. 'zoneExcellent')
+  descriptionKey: string; // i18n key for description
   min: number;
   max: number;
   color: string;        // for badges and indicators
   bgColor: string;      // for backgrounds
-  description: string;  // what this means for HR
+  description: string;  // what this means for HR (English fallback)
 }
 
 export const PERFORMANCE_ZONES: ZoneConfig[] = [
-  { zone: 'excellent', label: 'Excellent', min: 85, max: 100, color: 'hsl(155 50% 38%)', bgColor: 'hsl(155 50% 95%)', description: 'Top-tier culture. Maintain and celebrate.' },
-  { zone: 'strong', label: 'Strong', min: 75, max: 84, color: 'hsl(220 70% 50%)', bgColor: 'hsl(220 70% 95%)', description: 'Healthy foundation. Small improvements yield big returns.' },
-  { zone: 'moderate', label: 'Moderate', min: 65, max: 74, color: 'hsl(35 80% 50%)', bgColor: 'hsl(35 80% 95%)', description: 'Room to grow. Focus on specific sub-dimensions.' },
-  { zone: 'concern', label: 'Needs Attention', min: 50, max: 64, color: 'hsl(15 80% 50%)', bgColor: 'hsl(15 80% 95%)', description: 'Below expectations. Develop an action plan.' },
-  { zone: 'critical', label: 'Critical', min: 0, max: 49, color: 'hsl(0 60% 50%)', bgColor: 'hsl(0 60% 95%)', description: 'Urgent intervention needed. Immediate leadership attention.' },
+  { zone: 'excellent', label: 'Excellent', labelKey: 'zoneExcellent', descriptionKey: 'zoneExcellentDesc', min: 85, max: 100, color: 'hsl(155 50% 38%)', bgColor: 'hsl(155 50% 95%)', description: 'Top-tier culture. Maintain and celebrate.' },
+  { zone: 'strong', label: 'Strong', labelKey: 'zoneStrong', descriptionKey: 'zoneStrongDesc', min: 75, max: 84, color: 'hsl(220 70% 50%)', bgColor: 'hsl(220 70% 95%)', description: 'Healthy foundation. Small improvements yield big returns.' },
+  { zone: 'moderate', label: 'Moderate', labelKey: 'zoneModerate', descriptionKey: 'zoneModerateDesc', min: 65, max: 74, color: 'hsl(35 80% 50%)', bgColor: 'hsl(35 80% 95%)', description: 'Room to grow. Focus on specific sub-dimensions.' },
+  { zone: 'concern', label: 'Needs Attention', labelKey: 'zoneConcern', descriptionKey: 'zoneConcernDesc', min: 50, max: 64, color: 'hsl(15 80% 50%)', bgColor: 'hsl(15 80% 95%)', description: 'Below expectations. Develop an action plan.' },
+  { zone: 'critical', label: 'Critical', labelKey: 'zoneCritical', descriptionKey: 'zoneCriticalDesc', min: 0, max: 49, color: 'hsl(0 60% 50%)', bgColor: 'hsl(0 60% 95%)', description: 'Urgent intervention needed. Immediate leadership attention.' },
 ];
 
 export function getPerformanceZone(score: number): ZoneConfig {

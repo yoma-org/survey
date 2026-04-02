@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart';
 import { INDUSTRY_BENCHMARKS } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { MultiSurveyData } from '@/lib/types/analytics';
 
 interface InternalBenchmarkChartProps {
@@ -51,10 +52,12 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 }
 
 export function InternalBenchmarkChart({ data }: InternalBenchmarkChartProps) {
+  const t = useTranslations('dashboard');
+
   if (data.surveys.length < 2) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        At least 2 surveys are required for internal benchmark comparison.
+        {t('internalBenchmarkMin')}
       </p>
     );
   }
@@ -142,7 +145,7 @@ export function InternalBenchmarkChart({ data }: InternalBenchmarkChartProps) {
       <div className="flex items-center gap-4 mt-1 text-[10px] text-muted-foreground/60">
         <span className="flex items-center gap-1.5">
           <span className="w-4 border-t-2 border-dashed border-muted-foreground/50" />
-          Industry benchmark {avgBenchmark}%
+          {t('industryBenchmark')} {avgBenchmark}%
         </span>
       </div>
     </div>

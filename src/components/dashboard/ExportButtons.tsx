@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Download, FileText } from 'lucide-react';
 import { exportDashboardSummaryCSV, exportStrengthsOpportunitiesCSV } from '@/lib/export';
 import type { DashboardData } from '@/lib/types/analytics';
@@ -11,6 +12,7 @@ interface ExportButtonsProps {
 }
 
 export function ExportButtons({ data, surveyName = 'survey' }: ExportButtonsProps) {
+  const t = useTranslations('dashboard');
   const [exportingDashboard, setExportingDashboard] = useState(false);
   const [exportingRaw, setExportingRaw] = useState(false);
 
@@ -38,19 +40,19 @@ export function ExportButtons({ data, surveyName = 'survey' }: ExportButtonsProp
         onClick={handleExportDashboard}
         disabled={exportingDashboard}
         className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md border border-border/60 hover:border-border hover:bg-muted/30 disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label="Export dashboard summary as CSV"
+        aria-label={t('exportDashboardAria')}
       >
         <Download className="w-3.5 h-3.5" />
-        {exportingDashboard ? 'Exporting...' : 'Export Dashboard'}
+        {exportingDashboard ? t('exporting') : t('exportDashboard')}
       </button>
       <button
         onClick={handleExportRaw}
         disabled={exportingRaw}
         className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md border border-border/60 hover:border-border hover:bg-muted/30 disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label="Export statement rankings as CSV"
+        aria-label={t('exportRankingsAria')}
       >
         <FileText className="w-3.5 h-3.5" />
-        {exportingRaw ? 'Exporting...' : 'Export Rankings'}
+        {exportingRaw ? t('exporting') : t('exportRankings')}
       </button>
     </div>
   );

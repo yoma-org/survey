@@ -1,5 +1,5 @@
 // src/app/[locale]/(admin)/admin/page.tsx
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { CheckCircle2 } from 'lucide-react';
 import { cachedListSurveys, cachedComputeAnalytics, cachedMultiSurveyAnalytics, cachedGetDistinctDepartments } from '@/lib/cache';
 import { DashboardCharts } from '@/components/dashboard/DashboardCharts';
@@ -11,9 +11,10 @@ export default async function AdminDashboardPage({
 }: {
   searchParams: Promise<{ survey?: string; org?: string; dept?: string }>;
 }) {
-  const [t, { survey: surveyId, org, dept }] = await Promise.all([
+  const [t, { survey: surveyId, org, dept }, locale] = await Promise.all([
     getTranslations('dashboard'),
     searchParams,
+    getLocale(),
   ]);
 
   const surveys = await cachedListSurveys();
@@ -62,8 +63,8 @@ export default async function AdminDashboardPage({
 
   // Load analytics + multi-survey data + departments in parallel
   const [analyticsData, multiSurveyData, departments] = await Promise.all([
-    activeSurveyId ? cachedComputeAnalytics(activeSurveyId, org, dept) : Promise.resolve(null),
-    cachedMultiSurveyAnalytics(org),
+    activeSurveyId ? cachedComputeAnalytics(activeSurveyId, org, dept, locale) : Promise.resolve(null),
+    cachedMultiSurveyAnalytics(org, locale),
     activeSurveyId ? cachedGetDistinctDepartments(activeSurveyId) : Promise.resolve([]),
   ]);
 
@@ -89,9 +90,9 @@ export default async function AdminDashboardPage({
       </div>
       {analyticsWithTrend === null ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="text-lg font-light text-gray-900">No responses yet</p>
+          <p className="text-lg font-light text-gray-900">{t('noResponsesTitle')}</p>
           <p className="text-sm text-gray-400 mt-2">
-            Send survey invitations and responses will appear here.
+            {t('noResponsesBody')}
           </p>
         </div>
       ) : (

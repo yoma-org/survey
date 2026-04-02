@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList } from 'recharts'
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart';
 import { DIMENSION_COLORS, type DimensionName } from '@/lib/chart-colors';
 import { getPerformanceZone } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { SubPillarScore } from '@/lib/types/analytics';
 
 const SENTIMENT_COLORS = {
@@ -23,46 +24,47 @@ interface SubPillarBreakdownChartProps {
   data: SubPillarScore[];
 }
 
-function SubPillarTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: SubPillarScore }> }) {
-  if (!active || !payload?.length) return null;
-  const item = payload[0].payload;
-  const zone = getPerformanceZone(item.score);
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1.5">
-      <p className="font-medium text-foreground">{item.subPillar}</p>
-      <p className="text-muted-foreground text-[10px]">{item.dimension}</p>
-      <div className="flex items-center gap-1.5">
-        <span className="font-semibold tabular-nums">{item.score}%</span>
-        <span style={{ color: zone.color }}>{zone.label}</span>
-      </div>
-      <div className="flex gap-3 pt-0.5">
-        <span className="flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS.positive }} />
-          <span className="tabular-nums">{item.positive}%</span>
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS.neutral }} />
-          <span className="tabular-nums">{item.neutral}%</span>
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS.negative }} />
-          <span className="tabular-nums">{item.negative}%</span>
-        </span>
-      </div>
-      <p className="text-muted-foreground">{item.questionCount} statement{item.questionCount !== 1 ? 's' : ''}</p>
-    </div>
-  );
-}
-
 const DIMENSION_ORDER = ['Camaraderie', 'Credibility', 'Fairness', 'Pride', 'Respect'];
 
 export function SubPillarBreakdownChart({ data }: SubPillarBreakdownChartProps) {
+  const t = useTranslations('dashboard');
+
+  function SubPillarTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: SubPillarScore }> }) {
+    if (!active || !payload?.length) return null;
+    const item = payload[0].payload;
+    const zone = getPerformanceZone(item.score);
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1.5">
+        <p className="font-medium text-foreground">{item.subPillar}</p>
+        <p className="text-muted-foreground text-[10px]">{item.dimension}</p>
+        <div className="flex items-center gap-1.5">
+          <span className="font-semibold tabular-nums">{item.score}%</span>
+          <span style={{ color: zone.color }}>{t(zone.labelKey)}</span>
+        </div>
+        <div className="flex gap-3 pt-0.5">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS.positive }} />
+            <span className="tabular-nums">{item.positive}%</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS.neutral }} />
+            <span className="tabular-nums">{item.neutral}%</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS.negative }} />
+            <span className="tabular-nums">{item.negative}%</span>
+          </span>
+        </div>
+        <p className="text-muted-foreground">{item.questionCount} statement{item.questionCount !== 1 ? 's' : ''}</p>
+      </div>
+    );
+  }
   const [openDimensions, setOpenDimensions] = useState<Set<string>>(new Set(DIMENSION_ORDER));
 
   if (data.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No sub-pillar data available.
+        {t('noSubPillarData')}
       </p>
     );
   }
@@ -93,15 +95,15 @@ export function SubPillarBreakdownChart({ data }: SubPillarBreakdownChartProps) 
       <div className="flex items-center gap-4 text-[11px] text-gray-500">
         <span className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SENTIMENT_COLORS.positive }} />
-          Positive (4-5)
+          {t('positive45')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SENTIMENT_COLORS.neutral }} />
-          Neutral (3)
+          {t('neutral3')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SENTIMENT_COLORS.negative }} />
-          Negative (1-2)
+          {t('negative12')}
         </span>
       </div>
 

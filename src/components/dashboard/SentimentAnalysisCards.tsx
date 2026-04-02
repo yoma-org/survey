@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { MessageSquare, AlertTriangle, Lightbulb, Heart } from 'lucide-react';
 import type { SentimentAnalysisData, OpenEndedSentiment } from '@/lib/types/analytics';
 import { cn } from '@/lib/utils';
@@ -23,9 +24,10 @@ function SentimentBadge({
   percentage: number;
   themes?: string[];
 }) {
+  const t = useTranslations('dashboard');
   const config = {
     frustrated: {
-      label: 'Frustrated',
+      label: t('sentimentFrustrated'),
       icon: AlertTriangle,
       bg: 'hsl(0 55% 96%)',
       text: 'hsl(0 55% 40%)',
@@ -34,7 +36,7 @@ function SentimentBadge({
       border: 'hsl(0 40% 85%)',
     },
     constructive: {
-      label: 'Constructive',
+      label: t('sentimentConstructive'),
       icon: Lightbulb,
       bg: 'hsl(35 80% 96%)',
       text: 'hsl(35 70% 35%)',
@@ -43,7 +45,7 @@ function SentimentBadge({
       border: 'hsl(35 60% 80%)',
     },
     positive: {
-      label: 'Positive',
+      label: t('sentimentPositive'),
       icon: Heart,
       bg: 'hsl(155 50% 96%)',
       text: 'hsl(155 50% 30%)',
@@ -52,7 +54,7 @@ function SentimentBadge({
       border: 'hsl(155 40% 80%)',
     },
     unclassified: {
-      label: 'Neutral / Mixed',
+      label: t('sentimentNeutralMixed'),
       icon: MessageSquare,
       bg: 'hsl(220 10% 96%)',
       text: 'hsl(220 10% 45%)',
@@ -105,11 +107,12 @@ function SentimentBadge({
 }
 
 function OpenEndedCard({ sentiment }: SentimentCardProps) {
+  const t = useTranslations('dashboard');
   if (sentiment.totalResponses === 0) {
     return (
       <div className="space-y-2">
         <p className="text-xs font-medium text-foreground">{sentiment.questionLabel}</p>
-        <p className="text-xs text-muted-foreground italic">No open-ended responses</p>
+        <p className="text-xs text-muted-foreground italic">{t('noOpenEndedResponses')}</p>
       </div>
     );
   }
@@ -121,7 +124,7 @@ function OpenEndedCard({ sentiment }: SentimentCardProps) {
           {sentiment.questionLabel}
         </p>
         <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
-          {sentiment.totalResponses} responses
+          {sentiment.totalResponses} {t('responses')}
         </span>
       </div>
       {/* Stacked bar — ordered: positive → constructive → neutral → frustrated */}
@@ -193,23 +196,23 @@ function OpenEndedCard({ sentiment }: SentimentCardProps) {
 }
 
 export function SentimentAnalysisCards({ data }: SentimentAnalysisCardsProps) {
+  const t = useTranslations('dashboard');
   return (
     <div className="space-y-8">
       <div>
         <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">
-          Q1 — What makes this a great place to work?
+          {t('sentimentQ1')}
         </h4>
         <OpenEndedCard sentiment={data.oe01} />
       </div>
       <div>
         <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">
-          Q2 — What would you change to improve the workplace?
+          {t('sentimentQ2')}
         </h4>
         <OpenEndedCard sentiment={data.oe02} />
       </div>
       <p className="text-[10px] text-muted-foreground/60 leading-relaxed">
-        Sentiment is classified using keyword matching. &quot;Frustrated&quot; responses contain language about negative experiences.
-        &quot;Constructive&quot; responses contain suggestions or improvement requests. &quot;Positive&quot; responses express satisfaction or appreciation.
+        {t('sentimentMethodology')}
       </p>
     </div>
   );

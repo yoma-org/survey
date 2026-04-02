@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import type { TenureJourneyData } from '@/lib/types/analytics';
 import { DIMENSION_COLORS } from '@/lib/chart-colors';
+import { useTranslations } from 'next-intl';
 
 interface TenureJourneyChartProps {
   data: TenureJourneyData;
@@ -48,31 +49,33 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs">
-      <p className="font-medium text-foreground mb-1.5">{label}</p>
-      {payload.map((entry, i) => (
-        <div key={i} className="flex items-center gap-2 py-0.5">
-          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
-          <span className="text-muted-foreground">{entry.name}:</span>
-          <span className="font-medium">
-            {entry.value === null || entry.value === undefined
-              ? 'Insufficient data'
-              : `${entry.value}%`}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export function TenureJourneyChart({ data }: TenureJourneyChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
+    if (!active || !payload?.length) return null;
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs">
+        <p className="font-medium text-foreground mb-1.5">{label}</p>
+        {payload.map((entry, i) => (
+          <div key={i} className="flex items-center gap-2 py-0.5">
+            <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
+            <span className="text-muted-foreground">{entry.name}:</span>
+            <span className="font-medium">
+              {entry.value === null || entry.value === undefined
+                ? t('insufficientDataTooltip')
+                : `${entry.value}%`}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (data.bands.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No tenure data available
+        {t('noTenureData')}
       </p>
     );
   }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell, LabelList } from 'recharts';
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart';
 import { getPerformanceZone } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 import type { RelationshipStatementBreakdown } from '@/lib/types/analytics';
 
 const chartConfig = {
@@ -26,28 +27,29 @@ const TAB_LABELS: Record<string, string> = {
   management: 'Management',
 };
 
-function StatementTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { label: string; score: number } }> }) {
-  if (!active || !payload?.length) return null;
-  const { label, score } = payload[0].payload;
-  const zone = getPerformanceZone(score);
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1 max-w-[280px]">
-      <p className="font-medium text-foreground leading-snug">{label}</p>
-      <div className="flex items-center gap-1.5">
-        <span className="font-semibold tabular-nums">{score}%</span>
-        <span style={{ color: zone.color }}>{zone.label}</span>
-      </div>
-    </div>
-  );
-}
-
 export function RelationshipStatementsChart({ data }: RelationshipStatementsChartProps) {
+  const t = useTranslations('dashboard');
+
+  function StatementTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { label: string; score: number } }> }) {
+    if (!active || !payload?.length) return null;
+    const { label, score } = payload[0].payload;
+    const zone = getPerformanceZone(score);
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs space-y-1 max-w-[280px]">
+        <p className="font-medium text-foreground leading-snug">{label}</p>
+        <div className="flex items-center gap-1.5">
+          <span className="font-semibold tabular-nums">{score}%</span>
+          <span style={{ color: zone.color }}>{t(zone.labelKey)}</span>
+        </div>
+      </div>
+    );
+  }
   const [activeTab, setActiveTab] = useState(data[0]?.key ?? 'colleagues');
 
   if (data.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No relationship statement data available.
+        {t('noRelationshipData')}
       </p>
     );
   }
@@ -83,12 +85,12 @@ export function RelationshipStatementsChart({ data }: RelationshipStatementsChar
                 : 'bg-muted/50 text-muted-foreground hover:bg-muted'
             }`}
           >
-            {TAB_LABELS[group.key] ?? group.key}
+            {t(group.key === 'colleagues' ? 'colleagues' : group.key === 'job' ? 'theirJob' : 'management')}
           </button>
         ))}
 
         <span className="ml-auto text-[11px] text-muted-foreground">
-          Avg:&nbsp;
+          {t('avg')}:&nbsp;
           <span
             className="font-semibold px-1.5 py-0.5 rounded"
             style={{ backgroundColor: zone.bgColor, color: zone.color }}
@@ -143,7 +145,7 @@ export function RelationshipStatementsChart({ data }: RelationshipStatementsChar
 
       {/* Description */}
       <p className="text-[11px] text-muted-foreground mt-2">
-        {activeGroup.statements.length} statements · {activeGroup.relationship}
+        {activeGroup.statements.length} {t('statements')} · {activeGroup.relationship}
       </p>
     </div>
   );

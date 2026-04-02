@@ -10,6 +10,16 @@ export const RELATIONSHIP_LABELS: Record<Relationship, string> = {
   management: 'Their Management (Vertical Trust)',
 };
 
+export const RELATIONSHIP_LABELS_MY: Record<Relationship, string> = {
+  colleagues: 'လုပ်ဖော်ကိုင်ဖက်များ (အလျားလိုက်ယုံကြည်မှု)',
+  job: '၎င်းတို့၏အလုပ် (လုပ်ငန်းတကယ်)',
+  management: '၎င်းတို့၏စီမံခန့်ခွဲမှု (ဒေါင်လိုက်ယုံကြည်မှု)',
+};
+
+export function getRelationshipLabels(locale: string): Record<Relationship, string> {
+  return locale === 'my' ? RELATIONSHIP_LABELS_MY : RELATIONSHIP_LABELS;
+}
+
 export const RELATIONSHIP_DESCRIPTIONS: Record<Relationship, string> = {
   colleagues: 'Measures peer survival. Does the employee feel a sense of belonging and mutual support with their peers?',
   job: 'Measures the daily grind. Does the work have meaning, is the workload sane, and do they have the tools to actually do it?',

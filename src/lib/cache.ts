@@ -46,10 +46,10 @@ export const cachedGetResponseCount = (surveyId: string) =>
   )();
 
 // Analytics — heavy computation, cache for 60s
-export const cachedComputeAnalytics = (surveyId: string, org?: string, dept?: string) =>
+export const cachedComputeAnalytics = (surveyId: string, org?: string, dept?: string, locale: string = 'en') =>
   unstable_cache(
-    async () => computeAnalytics(surveyId, org, dept),
-    [`analytics-${surveyId}-${org ?? 'all'}-${dept ?? 'all'}`],
+    async () => computeAnalytics(surveyId, org, dept, locale),
+    [`analytics-${surveyId}-${org ?? 'all'}-${dept ?? 'all'}-${locale}`],
     { revalidate: 60, tags: [CACHE_TAGS.analytics(surveyId)] }
   )();
 
@@ -85,9 +85,9 @@ export const cachedCountTokens = (surveyId: string) =>
   )();
 
 // Multi-survey analytics — cross-survey trend, 120s TTL
-export const cachedMultiSurveyAnalytics = (org?: string) =>
+export const cachedMultiSurveyAnalytics = (org?: string, locale: string = 'en') =>
   unstable_cache(
-    async () => computeMultiSurveyAnalytics(org),
-    [`multi-survey-analytics-${org ?? 'all'}`],
+    async () => computeMultiSurveyAnalytics(org, locale),
+    [`multi-survey-analytics-${org ?? 'all'}-${locale}`],
     { revalidate: 120, tags: [CACHE_TAGS.surveys] }
   )();

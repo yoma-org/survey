@@ -1,6 +1,7 @@
 'use client';
 
 import { getPerformanceZone } from '@/lib/performance-zones';
+import { useTranslations } from 'next-intl';
 
 interface RankingItem {
   label: string;
@@ -14,6 +15,7 @@ interface HorizontalBarRankingProps {
 }
 
 export function HorizontalBarRanking({ items, baseHue = 155, mode = 'strengths' }: HorizontalBarRankingProps) {
+  const t = useTranslations('dashboard');
   const max = Math.max(...items.map((i) => i.score), 100);
 
   return (
@@ -50,7 +52,7 @@ export function HorizontalBarRanking({ items, baseHue = 155, mode = 'strengths' 
                       className="text-[9px] font-medium px-1 py-0.5 rounded"
                       style={{ color: zone.color, backgroundColor: zone.bgColor }}
                     >
-                      {zone.label}
+                      {t(zone.labelKey)}
                     </span>
                   )}
                 </div>

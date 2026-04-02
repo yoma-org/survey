@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { TenureInsightsData } from '@/lib/types/analytics';
+import { useTranslations } from 'next-intl';
 
 interface TenureInsightsChartProps {
   data: TenureInsightsData;
@@ -41,31 +42,33 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs">
-      <p className="font-medium text-foreground mb-1.5">{label}</p>
-      {payload.map((entry, i) => (
-        <div key={i} className="flex items-center gap-2 py-0.5">
-          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
-          <span className="text-muted-foreground">{entry.name}:</span>
-          <span className="font-medium">
-            {entry.value === null || entry.value === undefined
-              ? 'Insufficient data (< 5 responses)'
-              : `${entry.value}%`}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export function TenureInsightsChart({ data }: TenureInsightsChartProps) {
+  const t = useTranslations('dashboard');
+
+  function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
+    if (!active || !payload?.length) return null;
+    return (
+      <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md text-xs">
+        <p className="font-medium text-foreground mb-1.5">{label}</p>
+        {payload.map((entry, i) => (
+          <div key={i} className="flex items-center gap-2 py-0.5">
+            <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
+            <span className="text-muted-foreground">{entry.name}:</span>
+            <span className="font-medium">
+              {entry.value === null || entry.value === undefined
+                ? t('insufficientData')
+                : `${entry.value}%`}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (data.bands.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No tenure data available
+        {t('noTenureData')}
       </p>
     );
   }
@@ -84,7 +87,7 @@ export function TenureInsightsChart({ data }: TenureInsightsChartProps) {
       aria-label="Tenure insights chart: Caring and Support sub-dimensions by service year band"
     >
       <p className="text-[11px] text-muted-foreground mb-3">
-        Caring (work-life balance, recognition, psychological safety) and Support (training, development) by tenure
+        {t('tenureInsightsInfo')}
       </p>
       <ResponsiveContainer width="100%" height={240}>
         <BarChart

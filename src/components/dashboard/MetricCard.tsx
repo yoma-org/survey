@@ -1,6 +1,7 @@
 'use client';
 
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { CountUp } from '@/components/motion/CountUp';
 import { getPerformanceZone } from '@/lib/performance-zones';
 
@@ -14,6 +15,7 @@ interface MetricCardProps {
 }
 
 export function MetricCard({ label, value, suffix = '%', trend, benchmark, showZone = true }: MetricCardProps) {
+  const t = useTranslations('dashboard');
   const zone = showZone && suffix === '%' ? getPerformanceZone(value) : null;
   const gap = benchmark != null ? value - benchmark : null;
 
@@ -33,7 +35,7 @@ export function MetricCard({ label, value, suffix = '%', trend, benchmark, showZ
         <div className="flex items-center gap-2 text-[10px]">
           {zone && (
             <span style={{ color: zone.color }}>
-              {zone.label}
+              {t(zone.labelKey)}
             </span>
           )}
           {gap != null && (

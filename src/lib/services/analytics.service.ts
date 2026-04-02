@@ -8,6 +8,7 @@ import { GPTW_QUESTIONS } from '@/lib/constants';
 import {
   QUESTION_RELATIONSHIP_MAP,
   RELATIONSHIP_LABELS,
+  getRelationshipLabels,
   ENPS_STATEMENT_IDS,
   type Relationship,
 } from '@/lib/diagnostic-framework';
@@ -36,13 +37,28 @@ import type {
 
 const ANONYMITY_THRESHOLD = 5;
 
-const DIMENSION_DISPLAY: Record<string, string> = {
+const DIMENSION_DISPLAY_EN: Record<string, string> = {
   camaraderie: 'Camaraderie',
   credibility: 'Credibility',
   fairness: 'Fairness',
   pride: 'Pride',
   respect: 'Respect',
 };
+
+const DIMENSION_DISPLAY_MY: Record<string, string> = {
+  camaraderie: 'ဖော်ရွေမှု',
+  credibility: 'ယုံကြည်ကိုးစားနိုင်မှု',
+  fairness: 'တရားမျှတမှု',
+  pride: 'ဂုဏ်ယူမှု',
+  respect: 'လေးစားမှု',
+};
+
+// Active locale display map — set at start of computeAnalytics()
+let DIMENSION_DISPLAY: Record<string, string> = DIMENSION_DISPLAY_EN;
+
+function setLocaleDisplays(locale: string) {
+  DIMENSION_DISPLAY = locale === 'my' ? DIMENSION_DISPLAY_MY : DIMENSION_DISPLAY_EN;
+}
 
 const SCORED_DIMENSIONS = ['camaraderie', 'credibility', 'fairness', 'pride', 'respect'] as const;
 
@@ -151,7 +167,8 @@ function computeSegmentDimensions(
 
 function computeRelationshipScores(
   rows: Record<string, string>[],
-  questionScoreMap: Record<string, number>
+  questionScoreMap: Record<string, number>,
+  locale: string = 'en'
 ): RelationshipScoreData {
   const relationshipKeys: Relationship[] = ['colleagues', 'job', 'management'];
   const groupScores: Record<Relationship, number[]> = {
@@ -167,6 +184,7 @@ function computeRelationshipScores(
     }
   }
 
+  const relLabels = getRelationshipLabels(locale);
   return {
     scores: relationshipKeys.map(rel => {
       const arr = groupScores[rel];
@@ -174,7 +192,7 @@ function computeRelationshipScores(
         ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length)
         : 0;
       return {
-        relationship: RELATIONSHIP_LABELS[rel],
+        relationship: relLabels[rel],
         key: rel,
         score,
       };
@@ -182,7 +200,7 @@ function computeRelationshipScores(
   };
 }
 
-function computeENPSDetail(rows: Record<string, string>[]): ENPSDetailData {
+function computeENPSDetail(rows: Record<string, string>[], locale: string = 'en'): ENPSDetailData {
   function enpsBreakdown(questionId: string) {
     const values = rows.map(r => r[questionId]).filter(v => v !== undefined && v !== '');
     const total = values.length;
@@ -207,21 +225,20 @@ function computeENPSDetail(rows: Record<string, string>[]): ENPSDetailData {
   const passives = total > 0 ? Math.round((passiveCount / total) * 100) : 0;
   const detractors = total > 0 ? Math.round((detractorCount / total) * 100) : 0;
 
-  const statementLabels: Record<string, string> = {
-    'PRI-31': 'Would endorse company to friends & family',
-    'PRI-35': 'Would recommend products & services',
-  };
-
   return {
     score: promoters - detractors,
     promoters,
     passives,
     detractors,
-    statementScores: ENPS_STATEMENT_IDS.map(id => ({
-      id,
-      label: statementLabels[id] ?? id,
-      ...enpsBreakdown(id),
-    })),
+    statementScores: ENPS_STATEMENT_IDS.map(id => {
+      const q = GPTW_QUESTIONS.find(q => q.id === id);
+      const text = q ? (locale === 'my' && q.my ? q.my : q.en) : id;
+      return {
+        id,
+        label: text.length > 60 ? text.substring(0, 60) + '…' : text,
+        ...enpsBreakdown(id),
+      };
+    }),
   };
 }
 
@@ -553,20 +570,25 @@ function computeSubPillarScores(rows: Record<string, string>[]): SubPillarScore[
 
 function computeRelationshipStatements(
   rows: Record<string, string>[],
-  questionScoreMap: Record<string, number>
+  questionScoreMap: Record<string, number>,
+  locale: string = 'en'
 ): RelationshipStatementBreakdown[] {
   const relationshipKeys: Relationship[] = ['colleagues', 'job', 'management'];
+  const relLabels = getRelationshipLabels(locale);
 
   return relationshipKeys.map(rel => {
     const matchingQuestions = GPTW_QUESTIONS.filter(
       q => q.type === 'likert' && QUESTION_RELATIONSHIP_MAP[q.id] === rel
     );
 
-    const statements = matchingQuestions.map(q => ({
-      id: q.id,
-      label: q.en.length > 70 ? q.en.substring(0, 70) + '…' : q.en,
-      score: rows.length >= ANONYMITY_THRESHOLD ? (questionScoreMap[q.id] ?? 0) : 0,
-    }));
+    const statements = matchingQuestions.map(q => {
+      const text = locale === 'my' && q.my ? q.my : q.en;
+      return {
+        id: q.id,
+        label: text.length > 70 ? text.substring(0, 70) + '…' : text,
+        score: rows.length >= ANONYMITY_THRESHOLD ? (questionScoreMap[q.id] ?? 0) : 0,
+      };
+    });
 
     const scores = statements.map(s => s.score);
     const averageScore = scores.length > 0
@@ -574,7 +596,7 @@ function computeRelationshipStatements(
       : 0;
 
     return {
-      relationship: RELATIONSHIP_LABELS[rel],
+      relationship: relLabels[rel],
       key: rel,
       statements,
       averageScore,
@@ -584,23 +606,20 @@ function computeRelationshipStatements(
 
 function computeLeadershipConfidence(
   rows: Record<string, string>[],
-  questionScoreMap: Record<string, number>
+  questionScoreMap: Record<string, number>,
+  locale: string = 'en'
 ): LeadershipConfidenceData {
   const leadershipIds = ['CRE-09', 'CRE-10', 'CRE-12', 'CRE-13', 'CRE-15'];
 
-  const statementLabels: Record<string, string> = {
-    'CRE-09': 'Leaders embody the best characteristics of our company',
-    'CRE-10': 'Led by people who operate with integrity and keep promises',
-    'CRE-12': 'Kept in the loop on important changes; safe to ask tough questions',
-    'CRE-13': 'Clear on company vision; confident in how the business is run',
-    'CRE-15': 'Confident in the talent and character of people hired',
-  };
-
-  const statements = leadershipIds.map(id => ({
-    id,
-    label: statementLabels[id] ?? id,
-    score: rows.length >= ANONYMITY_THRESHOLD ? (questionScoreMap[id] ?? 0) : 0,
-  }));
+  const statements = leadershipIds.map(id => {
+    const q = GPTW_QUESTIONS.find(q => q.id === id);
+    const text = q ? (locale === 'my' && q.my ? q.my : q.en) : id;
+    return {
+      id,
+      label: text.length > 70 ? text.substring(0, 70) + '…' : text,
+      score: rows.length >= ANONYMITY_THRESHOLD ? (questionScoreMap[id] ?? 0) : 0,
+    };
+  });
 
   const overallScore = statements.length > 0
     ? Math.round(statements.reduce((a, b) => a + b.score, 0) / statements.length)
@@ -617,8 +636,9 @@ function computeIndustryBenchmark(
 ): IndustryBenchmarkData {
   const dimensions = SCORED_DIMENSIONS.map(dim => {
     const name = DIMENSION_DISPLAY[dim];
+    const enName = DIMENSION_DISPLAY_EN[dim]; // Always use English for benchmark lookup
     const score = dimensionScoreMap[dim] ?? 0;
-    const benchmark = INDUSTRY_BENCHMARKS[name] ?? 78;
+    const benchmark = INDUSTRY_BENCHMARKS[enName] ?? 78;
     return { name, score, benchmark, gap: score - benchmark };
   });
 
@@ -646,7 +666,8 @@ function computeIndustryBenchmark(
   return { dimensions, overall };
 }
 
-export async function computeMultiSurveyAnalytics(org?: string): Promise<MultiSurveyData> {
+export async function computeMultiSurveyAnalytics(org?: string, locale: string = 'en'): Promise<MultiSurveyData> {
+  setLocaleDisplays(locale);
   // Load all surveys sorted chronologically
   const allSurveys = await listSurveys();
   if (allSurveys.length === 0) return { surveys: [] };
@@ -743,7 +764,7 @@ export async function getDistinctDepartments(surveyId: string): Promise<string[]
   return Array.from(depts).sort();
 }
 
-export async function computeAnalytics(surveyId: string, org?: string, dept?: string): Promise<DashboardData | null> {
+export async function computeAnalytics(surveyId: string, org?: string, dept?: string, locale: string = 'en'): Promise<DashboardData | null> {
   // Load responses from PostgreSQL
   const dbResponses = await db.select().from(schema.responses)
     .where(eq(schema.responses.surveyId, surveyId));
@@ -761,6 +782,9 @@ export async function computeAnalytics(surveyId: string, org?: string, dept?: st
   if (dept) rows = rows.filter(r => (r['__department__'] ?? '').trim() === dept);
 
   if (rows.length === 0) return null;
+
+  // Set locale-aware display names for this computation
+  setLocaleDisplays(locale);
 
   const likertQuestions = GPTW_QUESTIONS.filter(q => q.type === 'likert');
 
@@ -815,10 +839,14 @@ export async function computeAnalytics(surveyId: string, org?: string, dept?: st
   const enps = computeENPS(rows);
 
   // Strengths / Opportunities
-  const scoredQuestions = likertQuestions.map(q => ({
-    label: q.en.length > 60 ? q.en.substring(0, 60) + '…' : q.en,
-    score: questionScoreMap[q.id],
-  }));
+  const qText = (q: typeof likertQuestions[number]) => locale === 'my' && q.my ? q.my : q.en;
+  const scoredQuestions = likertQuestions.map(q => {
+    const text = qText(q);
+    return {
+      label: text.length > 60 ? text.substring(0, 60) + '…' : text,
+      score: questionScoreMap[q.id],
+    };
+  });
 
   const strengths = [...scoredQuestions].sort((a, b) => b.score - a.score).slice(0, 10);
   const opportunities = [...scoredQuestions].sort((a, b) => a.score - b.score).slice(0, 10);
@@ -838,18 +866,30 @@ export async function computeAnalytics(surveyId: string, org?: string, dept?: st
     leadershipIds.map(id => questionScoreMap[id] ?? 0).reduce((a, b) => a + b, 0) / leadershipIds.length
   );
 
+  const leaderboardLabels = locale === 'my' ? {
+    completion: 'ပြီးစီးမှု', credibility: 'ယုံကြည်ကိုးစားနိုင်မှု', respect: 'လေးစားမှု',
+    fairness: 'တရားမျှတမှု', pride: 'ဂုဏ်ယူမှု', camaraderie: 'ဖော်ရွေမှု',
+    satisfaction: 'ကျေနပ်မှု', enps: 'ENPS', engagement: 'ပါဝင်မှု',
+    innovation: 'ဆန်းသစ်မှု', leadership: 'ခေါင်းဆောင်မှု',
+  } : {
+    completion: 'Completion', credibility: 'Credibility', respect: 'Respect',
+    fairness: 'Fairness', pride: 'Pride', camaraderie: 'Camaraderie',
+    satisfaction: 'Satisfaction', enps: 'ENPS', engagement: 'Engagement',
+    innovation: 'Innovation', leadership: 'Leadership',
+  };
+
   const leaderboard = [
-    { label: 'Completion',   value: responseRate,                  color: 'hsl(220 70% 55%)' },
-    { label: 'Credibility',  value: dimensionScoreMap.credibility, color: 'hsl(220 70% 55%)' },
-    { label: 'Respect',      value: dimensionScoreMap.respect,     color: 'hsl(255 55% 58%)' },
-    { label: 'Fairness',     value: dimensionScoreMap.fairness,    color: 'hsl(175 45% 45%)' },
-    { label: 'Pride',        value: dimensionScoreMap.pride,       color: 'hsl(25 75% 55%)'  },
-    { label: 'Camaraderie',  value: dimensionScoreMap.camaraderie, color: 'hsl(155 45% 45%)' },
-    { label: 'Satisfaction', value: gptwScore,                     color: 'hsl(220 70% 55%)' },
-    { label: 'ENPS',         value: enps.score,                    color: 'hsl(155 45% 45%)' },
-    { label: 'Engagement',   value: eesScore,                      color: 'hsl(255 55% 58%)' },
-    { label: 'Innovation',   value: innovationScore,               color: 'hsl(175 45% 45%)' },
-    { label: 'Leadership',   value: leadershipScore,               color: 'hsl(25 75% 55%)'  },
+    { label: leaderboardLabels.completion,   value: responseRate,                  color: 'hsl(220 70% 55%)' },
+    { label: leaderboardLabels.credibility,  value: dimensionScoreMap.credibility, color: 'hsl(220 70% 55%)' },
+    { label: leaderboardLabels.respect,      value: dimensionScoreMap.respect,     color: 'hsl(255 55% 58%)' },
+    { label: leaderboardLabels.fairness,     value: dimensionScoreMap.fairness,    color: 'hsl(175 45% 45%)' },
+    { label: leaderboardLabels.pride,        value: dimensionScoreMap.pride,       color: 'hsl(25 75% 55%)'  },
+    { label: leaderboardLabels.camaraderie,  value: dimensionScoreMap.camaraderie, color: 'hsl(155 45% 45%)' },
+    { label: leaderboardLabels.satisfaction, value: gptwScore,                     color: 'hsl(220 70% 55%)' },
+    { label: leaderboardLabels.enps,         value: enps.score,                    color: 'hsl(155 45% 45%)' },
+    { label: leaderboardLabels.engagement,   value: eesScore,                      color: 'hsl(255 55% 58%)' },
+    { label: leaderboardLabels.innovation,   value: innovationScore,               color: 'hsl(175 45% 45%)' },
+    { label: leaderboardLabels.leadership,   value: leadershipScore,               color: 'hsl(25 75% 55%)'  },
   ];
 
   // Department breakdown — group by DEM-ORG
@@ -870,8 +910,8 @@ export async function computeAnalytics(surveyId: string, org?: string, dept?: st
   };
 
   // Phase 2 computations
-  const relationshipScores = computeRelationshipScores(rows, questionScoreMap);
-  const enpsDetail = computeENPSDetail(rows);
+  const relationshipScores = computeRelationshipScores(rows, questionScoreMap, locale);
+  const enpsDetail = computeENPSDetail(rows, locale);
   const leadershipComparison = computeLeadershipComparison(rows);
   const tenureJourney = computeTenureJourney(rows);
   const tenureInsights = computeTenureInsights(rows);
@@ -881,8 +921,8 @@ export async function computeAnalytics(surveyId: string, org?: string, dept?: st
 
   // Phase 3 computations
   const subPillarScores = computeSubPillarScores(rows);
-  const relationshipStatements = computeRelationshipStatements(rows, questionScoreMap);
-  const leadershipConfidence = computeLeadershipConfidence(rows, questionScoreMap);
+  const relationshipStatements = computeRelationshipStatements(rows, questionScoreMap, locale);
+  const leadershipConfidence = computeLeadershipConfidence(rows, questionScoreMap, locale);
   const industryBenchmark = computeIndustryBenchmark(dimensionScoreMap, eesScore, gptwScore, enps.score);
 
   return {

@@ -3,6 +3,7 @@
 import { Pie, PieChart, Cell, Label } from 'recharts';
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { ENPS_COLORS } from '@/lib/chart-colors';
+import { useTranslations } from 'next-intl';
 import type { ENPSDetailData } from '@/lib/types/analytics';
 
 const chartConfig = {
@@ -16,10 +17,12 @@ interface ENPSDetailChartProps {
 }
 
 export function ENPSDetailChart({ data }: ENPSDetailChartProps) {
+  const t = useTranslations('dashboard');
+
   const pieData = [
-    { name: 'Promoters', value: data.promoters, fill: ENPS_COLORS.promoter },
-    { name: 'Passives', value: data.passives, fill: ENPS_COLORS.passive },
-    { name: 'Detractors', value: data.detractors, fill: ENPS_COLORS.detractor },
+    { name: t('promoters'), value: data.promoters, fill: ENPS_COLORS.promoter },
+    { name: t('passives'), value: data.passives, fill: ENPS_COLORS.passive },
+    { name: t('detractors'), value: data.detractors, fill: ENPS_COLORS.detractor },
   ];
 
   return (
@@ -28,7 +31,7 @@ export function ENPSDetailChart({ data }: ENPSDetailChartProps) {
       aria-label={`eNPS from PRI-31 and PRI-35: score ${data.score}. ${data.promoters}% promoters, ${data.passives}% passives, ${data.detractors}% detractors`}
     >
       <p className="text-[11px] text-muted-foreground mb-2">
-        Computed from endorsement statements (PRI-31 + PRI-35)
+        {t('enpsFromStatements')}
       </p>
       <ChartContainer config={chartConfig} className="h-[180px] w-full">
         <PieChart accessibilityLayer>
@@ -89,7 +92,7 @@ export function ENPSDetailChart({ data }: ENPSDetailChartProps) {
 
       {/* Per-statement breakdown */}
       <div className="mt-4 space-y-2 border-t border-border/40 pt-4">
-        <p className="text-[11px] font-medium text-muted-foreground mb-2">By statement</p>
+        <p className="text-[11px] font-medium text-muted-foreground mb-2">{t('byStatement')}</p>
         {data.statementScores.map(stmt => (
           <div key={stmt.id} className="space-y-1">
             <div className="flex items-center justify-between">
@@ -102,23 +105,23 @@ export function ENPSDetailChart({ data }: ENPSDetailChartProps) {
               <div
                 className="h-full"
                 style={{ width: `${stmt.promoters}%`, backgroundColor: ENPS_COLORS.promoter }}
-                title={`Promoters: ${stmt.promoters}%`}
+                title={`${t('promoters')}: ${stmt.promoters}%`}
               />
               <div
                 className="h-full"
                 style={{ width: `${stmt.passives}%`, backgroundColor: ENPS_COLORS.passive }}
-                title={`Passives: ${stmt.passives}%`}
+                title={`${t('passives')}: ${stmt.passives}%`}
               />
               <div
                 className="h-full"
                 style={{ width: `${stmt.detractors}%`, backgroundColor: ENPS_COLORS.detractor }}
-                title={`Detractors: ${stmt.detractors}%`}
+                title={`${t('detractors')}: ${stmt.detractors}%`}
               />
             </div>
             <div className="flex gap-3 text-[10px] text-muted-foreground">
-              <span>{stmt.promoters}% promoter</span>
-              <span>{stmt.passives}% passive</span>
-              <span>{stmt.detractors}% detractor</span>
+              <span>{stmt.promoters}% {t('promoter')}</span>
+              <span>{stmt.passives}% {t('passive')}</span>
+              <span>{stmt.detractors}% {t('detractor')}</span>
             </div>
           </div>
         ))}
