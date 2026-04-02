@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-01)
 Phase: 1 of 4 (Foundation)
 Plan: 1 of 3 in current phase
 Status: In progress
-Last activity: 2026-04-01 — Plan 01-01 complete; Next.js scaffold, 47 GPTW questions, StorageAdapter, CSV service
+Last activity: 2026-04-02 — Completed quick task 260402-qe7: UI/UX improvements (dashboard filters, default survey, static marquee, sidebar, survey dropdown, emoji scoring)
 
 Progress: [█░░░░░░░░░] 8%
 
@@ -102,6 +102,12 @@ None yet.
 - GPTW question-to-dimension sub-pillar mapping must be confirmed from actual PDF/Excel before lib/constants.ts is finalized (Phase 1 output)
 - Zawgyi/Unicode detection (myanmar-tools) integration needs validation on real Android hardware during Phase 3
 - Vercel Blob ETag retry pattern must be stress-tested before Phase 3 goes live (concurrent submissions risk)
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260402-qe7 | UI/UX improvements: dashboard filters, default survey, static marquee, sidebar changes, survey detail dropdown, emoji scoring | 2026-04-02 | 0b18e91 | [260402-qe7-ui-ux-improvements-dashboard-filters-def](./quick/260402-qe7-ui-ux-improvements-dashboard-filters-def/) |
 
 ## Session Continuity
 
