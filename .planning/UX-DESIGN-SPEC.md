@@ -1,4 +1,4 @@
-# Survey Yoma -- Comprehensive UX Design Specification
+# Culture Survey -- Comprehensive UX Design Specification
 
 > Complete visual and interaction design system for both UI spaces:
 > **Admin Panel** (HR administrators) and **Survey Form** (employees).
@@ -99,7 +99,7 @@ src/components/motion/
 
 ## 1. Design Brief
 
-Survey Yoma serves two distinct user groups through two distinct experiences. The **Admin Panel** is a data-dense operational tool where HR professionals create surveys, distribute them, and interpret results -- it must feel professional, organized, and trustworthy. The **Survey Form** is the employee-facing experience -- it must feel approachable, low-friction, and psychologically safe so that employees answer honestly.
+Culture Survey serves two distinct user groups through two distinct experiences. The **Admin Panel** is a data-dense operational tool where HR professionals create surveys, distribute them, and interpret results -- it must feel professional, organized, and trustworthy. The **Survey Form** is the employee-facing experience -- it must feel approachable, low-friction, and psychologically safe so that employees answer honestly.
 
 The overarching design language is **clean, white, minimal, and warm-professional**. The platform should feel like a well-organized document rather than enterprise software. Myanmar script readability is a first-class constraint that shapes every typographic decision.
 

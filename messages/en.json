@@ -1,6 +1,6 @@
 {
   "login": {
-    "title": "Survey Yoma",
+    "title": "Culture Survey",
     "subtitle": "Admin Portal",
     "heading": "Sign in",
     "description": "Enter your credentials to access the admin panel",
@@ -12,7 +12,7 @@
     "networkError": "Something went wrong. Please try again."
   },
   "nav": {
-    "brand": "Survey Yoma",
+    "brand": "Culture Survey",
     "dashboard": "Dashboard",
     "surveys": "Surveys",
     "settings": "Settings",
@@ -22,7 +22,7 @@
     "toggleMenu": "Toggle menu"
   },
   "dashboard": {
-    "title": "Welcome to Survey Yoma",
+    "title": "Welcome to Culture Survey",
     "subtitle": "Your employee engagement survey platform",
     "gettingStarted": "Getting Started",
     "gettingStartedDescription": "Complete these steps to run your first survey",
@@ -136,7 +136,7 @@
     "fromAddressLabel": "From Address",
     "fromAddressPlaceholder": "surveys@yourcompany.com",
     "fromNameLabel": "From Name",
-    "fromNamePlaceholder": "Survey Yoma",
+    "fromNamePlaceholder": "Culture Survey",
     "saveButton": "Save Settings",
     "testButton": "Send Test Email",
     "testSending": "Sending...",

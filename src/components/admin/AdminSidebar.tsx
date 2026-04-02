@@ -48,7 +48,7 @@ export function AdminSidebar() {
       )}>
         {!collapsed && (
           <span className="text-sm font-light text-gray-900 tracking-tight">
-            Survey<span className="font-semibold">Yoma</span>
+            Culture<span className="font-semibold">Survey</span>
           </span>
         )}
         <button

@@ -60,7 +60,7 @@ Features that distinguish this platform from generic survey tools like Google Fo
 | OAuth/SSO admin login | Seems more secure than static credentials | Out of scope per PROJECT.md; adds dependency on identity provider, token management complexity. Static credentials are sufficient for single-admin MVP. | Static username/password with session management |
 | Mobile native app (iOS/Android) | Employees on mobile want a native experience | Out of scope per PROJECT.md; adds separate codebase, app store approvals, push notification management. Web-responsive is sufficient. | Responsive web design ensures mobile usability without native app overhead |
 | Database backend (PostgreSQL, etc.) | "Proper" data storage seems more reliable | Out of scope per PROJECT.md; Vercel + CSV storage is a deliberate constraint. Database adds infrastructure complexity and cost for a single-org deployment. | CSV storage with Vercel Blob/KV sync; simple, deployable, meets the requirement |
-| Pulse surveys / weekly check-ins | Officevibe's core feature; high frequency micro-surveys | The Survey Yoma use case is annual culture survey cadence, not continuous listening. Weekly pulse surveys require ongoing employee communication infrastructure and different question design. | Annual or bi-annual full survey is the appropriate cadence for GPTW-style culture measurement |
+| Pulse surveys / weekly check-ins | Officevibe's core feature; high frequency micro-surveys | The Culture Survey use case is annual culture survey cadence, not continuous listening. Weekly pulse surveys require ongoing employee communication infrastructure and different question design. | Annual or bi-annual full survey is the appropriate cadence for GPTW-style culture measurement |
 
 ## Feature Dependencies
 
@@ -187,7 +187,7 @@ Defer until product-market fit with Yoma Bank / Wave Money is established.
 
 ## Competitor Feature Analysis
 
-| Feature | Culture Amp | Officevibe | Google Forms / SurveyMonkey | Survey Yoma Approach |
+| Feature | Culture Amp | Officevibe | Google Forms / SurveyMonkey | Culture Survey Approach |
 |---------|-------------|------------|-----------------------------|----------------------|
 | Survey creation | Template library (40+ templates) | Pulse survey focused, pre-built weekly check-ins | Fully custom, no templates | Excel import of bilingual GPTW statement list; opinionated structure |
 | Distribution | Email + Slack + Teams integrations | Automated weekly cadence | Share link or email; no unique-per-recipient tracking | SMTP-based unique link per employee; admin-controlled cadence |
@@ -215,5 +215,5 @@ Defer until product-market fit with Yoma Bank / Wave Money is established.
 - [Officevibe vs Culture Amp 2026](https://www.thrivesparrow.com/blog/officevibe-vs-culture-amp) — comparative analysis
 
 ---
-*Feature research for: Employee Culture Survey Platform (Survey Yoma)*
+*Feature research for: Employee Culture Survey Platform (Culture Survey)*
 *Researched: 2026-04-01*

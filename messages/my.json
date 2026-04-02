@@ -1,6 +1,6 @@
 {
   "login": {
-    "title": "Survey Yoma",
+    "title": "Culture Survey",
     "subtitle": "စီမံခန့်ခွဲသူ ပေါ်တယ်",
     "heading": "ဝင်ရောက်ရန်",
     "description": "စီမံခန့်ခွဲသူ ဧရိယာသို့ ဝင်ရောက်ရန် သင်၏ အထောက်အထားများကို ထည့်သွင်းပါ",
@@ -12,7 +12,7 @@
     "networkError": "တစ်ခုခု မှားယွင်းသွားသည်။ ထပ်မံကြိုးစားပါ။"
   },
   "nav": {
-    "brand": "Survey Yoma",
+    "brand": "Culture Survey",
     "dashboard": "ဒက်ရှ်ဘုတ်",
     "surveys": "စစ်တမ်းများ",
     "settings": "ဆက်တင်များ",
@@ -22,7 +22,7 @@
     "toggleMenu": "မီနူး ဖွင့်/ပိတ်ရန်"
   },
   "dashboard": {
-    "title": "Survey Yoma သို့ ကြိုဆိုပါသည်",
+    "title": "Culture Survey သို့ ကြိုဆိုပါသည်",
     "subtitle": "သင်၏ ဝန်ထမ်းပါဝင်မှု စစ်တမ်း ပလပ်ဖောင်း",
     "gettingStarted": "စတင်ရန်",
     "gettingStartedDescription": "သင်၏ ပထမဆုံး စစ်တမ်းကို လုပ်ဆောင်ရန် ဤအဆင့်များကို ပြီးမြောက်ပါ",
@@ -136,7 +136,7 @@
     "fromAddressLabel": "ပေးပို့သူလိပ်စာ",
     "fromAddressPlaceholder": "surveys@yourcompany.com",
     "fromNameLabel": "ပေးပို့သူအမည်",
-    "fromNamePlaceholder": "Survey Yoma",
+    "fromNamePlaceholder": "Culture Survey",
     "saveButton": "ဆက်တင်သိမ်းရန်",
     "testButton": "စမ်းသပ်အီးမေးလ်ပို့ရန်",
     "testSending": "ပို့နေသည်...",
