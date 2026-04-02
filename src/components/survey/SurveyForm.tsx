@@ -207,6 +207,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations }
         sections={tocSections}
         totalProgress={totalProgress}
         activeSection={activeSection}
+        progressLabel={tl('progressTitle')}
       />
 
       <div className="max-w-screen-xl mx-auto px-4 py-8">
