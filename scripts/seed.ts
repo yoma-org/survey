@@ -61,15 +61,21 @@ function randomLikert(bias: 'high' | 'medium' | 'low' = 'high'): string {
 
 /** Dimension-specific bias per department for interesting analytics patterns. */
 const DEPT_DIMENSION_BIAS: Record<string, Record<string, 'high' | 'medium' | 'low'>> = {
-  Technology: { camaraderie: 'high', credibility: 'high', fairness: 'medium', pride: 'high', respect: 'high' },
-  Operations: { camaraderie: 'medium', credibility: 'medium', fairness: 'medium', pride: 'medium', respect: 'medium' },
+  Business: { camaraderie: 'high', credibility: 'medium', fairness: 'medium', pride: 'high', respect: 'medium' },
   Finance: { camaraderie: 'high', credibility: 'high', fairness: 'high', pride: 'high', respect: 'high' },
-  'Human Resources': { camaraderie: 'high', credibility: 'medium', fairness: 'high', pride: 'high', respect: 'high' },
-  Marketing: { camaraderie: 'high', credibility: 'medium', fairness: 'medium', pride: 'high', respect: 'medium' },
-  'Customer Service': { camaraderie: 'medium', credibility: 'low', fairness: 'low', pride: 'medium', respect: 'low' },
+  Commercial: { camaraderie: 'medium', credibility: 'medium', fairness: 'medium', pride: 'medium', respect: 'medium' },
+  Leadership: { camaraderie: 'high', credibility: 'high', fairness: 'medium', pride: 'high', respect: 'high' },
 };
 
 const DEPARTMENTS = Object.keys(DEPT_DIMENSION_BIAS);
+
+/** Seed department records */
+const DEPARTMENT_SEED_DATA = [
+  { name: 'Business', nameMy: 'စီးပွားရေး', sortOrder: 0 },
+  { name: 'Finance', nameMy: 'ဘဏ္ဍာရေး', sortOrder: 1 },
+  { name: 'Commercial', nameMy: 'ကူးသန်းရောင်းဝယ်ရေး', sortOrder: 2 },
+  { name: 'Leadership', nameMy: 'ခေါင်းဆောင်မှု', sortOrder: 3 },
+];
 
 function getLikertBias(
   dimension: string | undefined,
@@ -211,6 +217,7 @@ function buildAnswers(
   answers['DEM-ORG'] = org;
   answers['DEM-YEAR'] = randomServiceYear();
   answers['DEM-ROLE'] = randomRole();
+  answers['__department__'] = dept;
 
   return answers;
 }
@@ -239,11 +246,22 @@ async function seed() {
   await db.delete(schema.tokens);
   await db.delete(schema.questions);
   await db.delete(schema.smtpSettings);
+  await db.delete(schema.departments);
   await db.delete(schema.surveys);
   console.log('  Done.\n');
 
   // ------------------------------------------------------------------
   // 1. SMTP Settings (singleton)
+  // ------------------------------------------------------------------
+  // ------------------------------------------------------------------
+  // 1a. Departments
+  // ------------------------------------------------------------------
+  console.log('Seeding departments...');
+  await db.insert(schema.departments).values(DEPARTMENT_SEED_DATA);
+  console.log(`  ${DEPARTMENT_SEED_DATA.length} departments seeded.\n`);
+
+  // ------------------------------------------------------------------
+  // 1b. SMTP Settings (singleton)
   // ------------------------------------------------------------------
   console.log('Seeding SMTP settings...');
   await db.insert(schema.smtpSettings).values({
@@ -446,6 +464,7 @@ async function seed() {
 
   console.log('='.repeat(60));
   console.log('Seed complete!');
+  console.log(`  Departments:   ${DEPARTMENT_SEED_DATA.length}`);
   console.log(`  Surveys:       3`);
   console.log(`  Questions:     ${allQuestions.length} per survey (${allQuestions.length * 3} total)`);
   console.log(`  Responses:     ${totalResponses} (2024: ${count2024}, 2025: ${count2025}, 2026: ${count2026})`);

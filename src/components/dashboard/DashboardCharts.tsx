@@ -2,7 +2,7 @@
 
 import { ChartProvider } from '@/components/charts/ChartProvider';
 import { MetricCard } from './MetricCard';
-import { LeaderboardGrid } from './LeaderboardGrid';
+// import { LeaderboardGrid } from './LeaderboardGrid';
 import { ChartSection } from './ChartSection';
 import { DimensionBarChart } from '@/components/charts/DimensionBarChart';
 import { ResponseDonutChart } from '@/components/charts/ResponseDonutChart';
@@ -55,7 +55,7 @@ export function DashboardCharts({ data, multiSurvey }: DashboardChartsProps) {
         </FadeIn>
 
         {/* Leaderboard */}
-        <LeaderboardGrid metrics={data.leaderboard} />
+        {/* <LeaderboardGrid metrics={data.leaderboard} /> */}
 
         {/* Tabbed deep-dive content */}
         <FadeIn delay={0.1}>

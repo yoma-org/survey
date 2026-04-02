@@ -2,7 +2,7 @@
 // Public route — NOT behind admin auth guard
 import { notFound } from 'next/navigation';
 import { findTokenByValue } from '@/lib/services/token.service';
-import { getSurvey, getQuestions } from '@/lib/services/survey.service';
+import { getSurvey, getQuestions, getDepartments } from '@/lib/services/survey.service';
 import { SurveyForm } from '@/components/survey/SurveyForm';
 import { AlertCircle } from 'lucide-react';
 
@@ -48,10 +48,11 @@ export default async function SurveyPage({
     );
   }
 
-  const [survey, questions, surveyTranslations] = await Promise.all([
+  const [survey, questions, surveyTranslations, departments] = await Promise.all([
     getSurvey(tokenRow.surveyId),
     getQuestions(tokenRow.surveyId),
     getSurveyTranslations(),
+    getDepartments(),
   ]);
 
   if (!survey) {
@@ -65,6 +66,7 @@ export default async function SurveyPage({
       tokenRow={tokenRow}
       locale={locale as 'en' | 'my'}
       translations={surveyTranslations}
+      departments={departments}
     />
   );
 }

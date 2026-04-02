@@ -369,7 +369,7 @@
     "departmentLabel": "Department",
     "optionalTag": "Optional",
     "namePlaceholder": "Your name",
-    "departmentPlaceholder": "Your department",
+    "departmentPlaceholder": "Select your department",
     "selectPlaceholder": "Select an option",
     "required": "Required",
     "questionsNeedAnswer": "question(s) need an answer",

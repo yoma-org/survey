@@ -76,6 +76,15 @@ export async function getQuestions(surveyId: string): Promise<Question[]> {
   }));
 }
 
+export async function getDepartments() {
+  const rows = await db.select().from(schema.departments).orderBy(schema.departments.sortOrder);
+  return rows.map(r => ({
+    id: r.id,
+    name: r.name,
+    nameMy: r.nameMy,
+  }));
+}
+
 export async function getResponseCount(surveyId: string): Promise<number> {
   const [result] = await db.select({ count: sql<number>`count(*)::int` })
     .from(schema.responses)

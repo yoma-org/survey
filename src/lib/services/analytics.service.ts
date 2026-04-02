@@ -352,7 +352,7 @@ function computeEarlyWarningAlerts(
 
   const segmentMap = new Map<string, Record<string, string>[]>();
   for (const row of rows) {
-    const dept = row['DEM-ORG'] || 'Unknown';
+    const dept = row['__department__'] || row['DEM-ORG'] || 'Unknown';
     if (!segmentMap.has(dept)) segmentMap.set(dept, []);
     segmentMap.get(dept)!.push(row);
   }
@@ -494,7 +494,7 @@ function computePillarHeatmap(
 
   const segmentMap = new Map<string, Record<string, string>[]>();
   for (const row of rows) {
-    const dept = row['DEM-ORG'] || 'Unknown';
+    const dept = row['__department__'] || row['DEM-ORG'] || 'Unknown';
     if (!segmentMap.has(dept)) segmentMap.set(dept, []);
     segmentMap.get(dept)!.push(row);
   }
@@ -750,18 +750,11 @@ export async function computeMultiSurveyAnalytics(org?: string, locale: string =
   return { surveys: summaries };
 }
 
-export async function getDistinctDepartments(surveyId: string): Promise<string[]> {
-  const dbResponses = await db.select({ answers: schema.responses.answers })
-    .from(schema.responses)
-    .where(eq(schema.responses.surveyId, surveyId));
-
-  const depts = new Set<string>();
-  for (const r of dbResponses) {
-    const answers = r.answers as Record<string, string>;
-    const dept = answers['__department__'];
-    if (dept && dept.trim()) depts.add(dept.trim());
-  }
-  return Array.from(depts).sort();
+export async function getDistinctDepartments(_surveyId: string): Promise<string[]> {
+  const rows = await db.select({ name: schema.departments.name })
+    .from(schema.departments)
+    .orderBy(schema.departments.sortOrder);
+  return rows.map(r => r.name);
 }
 
 export async function computeAnalytics(surveyId: string, org?: string, dept?: string, locale: string = 'en'): Promise<DashboardData | null> {
@@ -892,12 +885,12 @@ export async function computeAnalytics(surveyId: string, org?: string, dept?: st
     { label: leaderboardLabels.leadership,   value: leadershipScore,               color: 'hsl(25 75% 55%)'  },
   ];
 
-  // Department breakdown — group by DEM-ORG
+  // Department breakdown — group by __department__ (fallback to DEM-ORG for legacy data)
   const segmentMap = new Map<string, Record<string, string>[]>();
   for (const row of rows) {
-    const org = row['DEM-ORG'] || 'Unknown';
-    if (!segmentMap.has(org)) segmentMap.set(org, []);
-    segmentMap.get(org)!.push(row);
+    const dept2 = row['__department__'] || row['DEM-ORG'] || 'Unknown';
+    if (!segmentMap.has(dept2)) segmentMap.set(dept2, []);
+    segmentMap.get(dept2)!.push(row);
   }
 
   const departmentBreakdown: DepartmentBreakdownData = {

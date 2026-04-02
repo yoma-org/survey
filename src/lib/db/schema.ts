@@ -38,6 +38,14 @@ export const responses = pgTable('responses', {
   submittedAt: timestamp('submitted_at').notNull().defaultNow(),
 });
 
+export const departments = pgTable('departments', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  nameMy: text('name_my').notNull(),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
 export const smtpSettings = pgTable('smtp_settings', {
   id: integer('id').primaryKey().default(1), // singleton row
   host: text('host').notNull(),

@@ -47,12 +47,19 @@ interface SurveyTranslations {
   validationErrorCount: string;
 }
 
+interface Department {
+  id: string;
+  name: string;
+  nameMy: string;
+}
+
 interface SurveyFormProps {
   survey: Survey;
   questions: Question[];
   tokenRow: Token;
   locale: 'en' | 'my';
   translations: Record<'en' | 'my', SurveyTranslations>;
+  departments: Department[];
 }
 
 const SECTION_ORDER: Array<'camaraderie' | 'credibility' | 'fairness' | 'pride' | 'respect' | 'uncategorized' | 'open_ended' | 'demographic'> = [
@@ -88,7 +95,7 @@ const SECTION_ICONS: Record<string, React.ReactNode> = {
   demographic: <User className="w-5 h-5" />,
 };
 
-export function SurveyForm({ survey, questions, tokenRow, locale, translations }: SurveyFormProps) {
+export function SurveyForm({ survey, questions, tokenRow, locale, translations, departments }: SurveyFormProps) {
   const tl = useTranslations('survey');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Set<string>>(new Set());
@@ -176,20 +183,23 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations }
     return { sectionKey, questions: sectionQuestions };
   }).filter(s => s.questions.length > 0);
 
-  // Compute answered counts per section
+  // Compute answered counts per section (department counts as +1 for demographic section)
   const getSectionAnsweredCount = (sectionKey: string, sqs: Question[]) => {
     if (sectionKey === 'open_ended') return 0; // open_ended not required
-    return sqs.filter(sq => answers[sq.id] && answers[sq.id].trim() !== '').length;
+    let count = sqs.filter(sq => answers[sq.id] && answers[sq.id].trim() !== '').length;
+    if (sectionKey === 'demographic' && answers['__department__']?.trim()) count++;
+    return count;
   };
 
-  // Compute total progress
+  // Compute total progress (includes __department__ as required)
   const requiredQuestions = questions.filter(q => q.type !== 'open_ended');
   const answeredRequired = requiredQuestions.filter(
     q => answers[q.id] && answers[q.id].trim() !== ''
-  ).length;
+  ).length + (answers['__department__']?.trim() ? 1 : 0);
+  const totalRequired = requiredQuestions.length + 1; // +1 for department
   const totalProgress =
-    requiredQuestions.length > 0
-      ? Math.round((answeredRequired / requiredQuestions.length) * 100)
+    totalRequired > 0
+      ? Math.round((answeredRequired / totalRequired) * 100)
       : 0;
 
   // Sections data for TOC and mobile bar
@@ -197,7 +207,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations }
     id: sectionKey,
     title: SECTION_I18N_KEYS[sectionKey] ? tl(SECTION_I18N_KEYS[sectionKey]) : sectionKey,
     answeredCount: getSectionAnsweredCount(sectionKey, sqs),
-    totalCount: sectionKey === 'open_ended' ? 0 : sqs.length,
+    totalCount: sectionKey === 'open_ended' ? 0 : sqs.length + (sectionKey === 'demographic' ? 1 : 0),
   }));
 
   return (
@@ -272,15 +282,29 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations }
                     </div>
                     <div>
                       <label className="text-[13px] text-muted-foreground block mb-1.5">
-                        {t.departmentLabel} <span className="text-muted-foreground/40">({t.optionalTag})</span>
+                        {t.departmentLabel}
+                        {errors.has('__department__') && (
+                          <span className="ml-2 text-xs text-red-500">{t.required}</span>
+                        )}
                       </label>
-                      <input
-                        type="text"
+                      <Select
                         value={answers['__department__'] ?? ''}
-                        onChange={e => handleAnswer('__department__', e.target.value)}
-                        className="block w-full rounded-lg border border-border bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                        placeholder={t.departmentPlaceholder}
-                      />
+                        onValueChange={value => { if (value) handleAnswer('__department__', value); }}
+                      >
+                        <SelectTrigger className="w-full">
+                          <span className="truncate">{answers['__department__'] || t.selectPlaceholder}</span>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departments.map(dept => {
+                            const label = displayLocale === 'my' ? dept.nameMy : dept.name;
+                            return (
+                              <SelectItem key={dept.id} value={label}>
+                                {label}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 )}
