@@ -17,12 +17,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import type { Survey, Token } from '@/lib/types';
 
@@ -36,7 +30,6 @@ interface SendResult {
 
 interface Props {
   survey: Survey;
-  surveys: Survey[];
   priorInvitations: Token[];
 }
 
@@ -109,12 +102,10 @@ function downloadCsvTemplate() {
   URL.revokeObjectURL(url);
 }
 
-export function EmailDistributionForm({ survey, surveys, priorInvitations }: Props) {
+export function EmailDistributionForm({ survey, priorInvitations }: Props) {
   const t = useTranslations('email');
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [selectedSurveyId, setSelectedSurveyId] = useState<string>(survey.id);
   const [emailsRaw, setEmailsRaw] = useState('');
   const [phase, setPhase] = useState<'form' | 'sending' | 'done'>('form');
   const [sent, setSent] = useState(0);
@@ -164,14 +155,14 @@ export function EmailDistributionForm({ survey, surveys, priorInvitations }: Pro
 
   const sendEmails = useCallback(
     async (emails: string[]) => {
-      if (!selectedSurveyId || emails.length === 0) return;
+      if (!survey.id || emails.length === 0) return;
 
       setPhase('sending');
       setTotal(emails.length);
       setSent(0);
 
       try {
-        const response = await fetch(`/api/surveys/${selectedSurveyId}/invite`, {
+        const response = await fetch(`/api/surveys/${survey.id}/invite`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ emails, locale: 'en' }),
@@ -189,7 +180,7 @@ export function EmailDistributionForm({ survey, surveys, priorInvitations }: Pro
         router.refresh();
       }
     },
-    [selectedSurveyId, router],
+    [survey.id, router],
   );
 
   const handleSubmit = useCallback(async () => {
@@ -260,8 +251,7 @@ export function EmailDistributionForm({ survey, surveys, priorInvitations }: Pro
     [],
   );
 
-  const canSend =
-    selectedSurveyId.length > 0 && parsedEmails.length > 0 && invalidEmails.length === 0;
+  const canSend = parsedEmails.length > 0 && invalidEmails.length === 0;
 
   const successCount = results.filter((r) => r.status === 'sent').length;
   const failCount = results.filter((r) => r.status === 'failed').length;
@@ -282,29 +272,10 @@ export function EmailDistributionForm({ survey, surveys, priorInvitations }: Pro
       {/* Send form */}
       {phase === 'form' && (
         <div className="mb-10">
-          {/* Survey select */}
+          {/* Survey title */}
           <div className="space-y-1.5 mb-6">
             <Label className="text-[11px] uppercase tracking-widest text-gray-500">{t('inviteSurveyLabel')}</Label>
-            <Select
-              value={selectedSurveyId}
-              onValueChange={(v) => {
-                if (v) setSelectedSurveyId(v);
-              }}
-            >
-              <SelectTrigger className="w-full max-w-md">
-                <span className="truncate">
-                  {surveys.find((s) => s.id === selectedSurveyId)?.name ||
-                    t('inviteSurveyPlaceholder')}
-                </span>
-              </SelectTrigger>
-              <SelectContent>
-                {surveys.map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <p className="text-lg font-medium text-gray-900">{survey.name}</p>
           </div>
 
           {/* Tabs: Manual / CSV */}

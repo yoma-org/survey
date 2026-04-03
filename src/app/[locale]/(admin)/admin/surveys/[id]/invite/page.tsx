@@ -1,6 +1,6 @@
 // src/app/[locale]/(admin)/admin/surveys/[id]/invite/page.tsx
 import { redirect } from 'next/navigation';
-import { cachedGetSurvey, cachedListSurveys, cachedListTokens } from '@/lib/cache';
+import { cachedGetSurvey, cachedListTokens } from '@/lib/cache';
 import { EmailDistributionForm } from '@/components/admin/EmailDistributionForm';
 
 export default async function InvitePage({
@@ -10,9 +10,8 @@ export default async function InvitePage({
 }) {
   const { id, locale } = await params;
 
-  const [survey, surveys, priorInvitations] = await Promise.all([
+  const [survey, priorInvitations] = await Promise.all([
     cachedGetSurvey(id),
-    cachedListSurveys(),
     cachedListTokens(id),
   ]);
 
@@ -24,7 +23,6 @@ export default async function InvitePage({
     <div className="p-8">
       <EmailDistributionForm
         survey={survey}
-        surveys={surveys}
         priorInvitations={priorInvitations}
       />
     </div>
