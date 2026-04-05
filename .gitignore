@@ -43,3 +43,6 @@ next-env.d.ts
 
 /src/generated/prisma
 .claude/worktrees/
+
+# local dev uploads
+/public/uploads/

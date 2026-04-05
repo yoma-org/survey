@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Eye, Send, Pencil, Check, X, Trash2, Play, Pause, ChevronDown, Plus } from 'lucide-react';
+import { Eye, Send, Pencil, Check, X, Trash2, Play, Pause, ChevronDown, Plus, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -285,7 +285,12 @@ export function SurveyDetailClient({ survey: initialSurvey, questions: initialQu
                 {initialQuestions.map((q, i) => (
                   <tr key={q.id} className={`${i !== initialQuestions.length - 1 ? 'border-b border-gray-50' : ''} hover:bg-gray-50/50 transition-colors`}>
                     <td className="px-4 py-3 font-mono text-[11px] text-gray-500 tabular-nums">{q.id}</td>
-                    <td className="px-4 py-3 max-w-[260px] text-foreground leading-relaxed">{q.en}</td>
+                    <td className="px-4 py-3 max-w-[260px] text-foreground leading-relaxed">
+                      <div className="flex items-start gap-2">
+                        {q.imageUrl && <ImageIcon className="w-4 h-4 text-muted-foreground/50 flex-shrink-0 mt-0.5" />}
+                        <span>{q.en}</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 max-w-[260px] text-foreground font-myanmar leading-relaxed">{q.my}</td>
                     <td className="px-4 py-3"><TypeBadge type={q.type} t={t} /></td>
                     <td className="px-4 py-3 text-gray-500 text-xs capitalize">{q.dimension ?? ''}</td>

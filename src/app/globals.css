@@ -214,9 +214,20 @@
   animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Shimmer effect for auto-translate loading */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bg-dots { animation: none; }
   .animate-in { animation: none; opacity: 1; }
+  .animate-shimmer { animation: none; }
 }
 
 

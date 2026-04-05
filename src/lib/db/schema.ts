@@ -17,6 +17,7 @@ export const questions = pgTable('questions', {
   en: text('en').notNull(),
   my: text('my').notNull(),
   options: jsonb('options'), // for demographic select fields
+  imageUrl: text('image_url'), // optional image displayed with the question
   sortOrder: integer('sort_order').notNull().default(0),
 });
 
@@ -54,4 +55,9 @@ export const smtpSettings = pgTable('smtp_settings', {
   password: text('password').notNull(),
   fromAddress: varchar('from_address', { length: 255 }).notNull(),
   fromName: varchar('from_name', { length: 255 }).notNull(),
+});
+
+export const appSettings = pgTable('app_settings', {
+  id: integer('id').primaryKey().default(1), // singleton row
+  geminiApiKey: text('gemini_api_key'),
 });

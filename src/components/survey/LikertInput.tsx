@@ -18,6 +18,7 @@ interface LikertInputProps {
   onChange: (value: string) => void;
   error?: boolean;
   displayLocale: 'en' | 'my';
+  imageUrl?: string;
 }
 
 export function LikertInput({
@@ -28,11 +29,23 @@ export function LikertInput({
   onChange,
   error,
   displayLocale,
+  imageUrl,
 }: LikertInputProps) {
   return (
     <div
       className={`py-5 ${error ? 'bg-red-50/50 -mx-4 px-4 rounded-lg border-l-2 border-red-400' : ''}`}
     >
+      {imageUrl && (
+        <div className="mb-3">
+          <img
+            src={imageUrl}
+            alt=""
+            className="max-h-48 rounded-lg object-contain"
+            loading="lazy"
+          />
+        </div>
+      )}
+
       <p
         id={`q-${questionId}`}
         style={displayLocale === 'my' ? { lineHeight: '1.75' } : undefined}

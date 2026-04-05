@@ -264,7 +264,18 @@
     "saveSuccess": "SMTP settings saved.",
     "saveError": "Failed to save settings. Please try again.",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "geminiTitle": "Auto-Translation (Gemini AI)",
+    "geminiDescription": "Enable automatic English-to-Burmese translation in the question editor. When you type a question in English, the Burmese translation will be generated automatically after a 2-second pause. Powered by Google Gemini AI.",
+    "geminiApiKeyLabel": "Gemini API Key",
+    "geminiApiKeyPlaceholder": "AIza...",
+    "geminiApiKeyHint": "Get your API key from Google AI Studio (aistudio.google.com). The key is stored securely and never exposed to the browser.",
+    "geminiTestButton": "Test Translation",
+    "geminiTestSending": "Translating...",
+    "geminiTestSuccess": "Translation is working!",
+    "geminiTestFailure": "Translation failed: {error}",
+    "geminiSaveSuccess": "Gemini API key saved.",
+    "geminiSaveError": "Failed to save API key. Please try again."
   },
   "email": {
     "smtpModalTitle": "Set Up Email Delivery",

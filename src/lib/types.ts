@@ -11,6 +11,7 @@ export interface Question {
   en: string;           // English text
   my: string;           // Burmese text (Unicode Myanmar — from PDF)
   options?: { en: string; my: string }[]; // for demographic select fields only
+  imageUrl?: string;    // optional image displayed alongside the question
 }
 
 export interface Survey {

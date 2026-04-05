@@ -55,6 +55,7 @@ export async function saveQuestions(surveyId: string, questions: Question[]) {
       en: q.en,
       my: q.my,
       options: q.options ? JSON.parse(JSON.stringify(q.options)) : null,
+      imageUrl: q.imageUrl || null,
       sortOrder: i,
     }))
   );
@@ -73,6 +74,7 @@ export async function getQuestions(surveyId: string): Promise<Question[]> {
     en: r.en,
     my: r.my,
     options: r.options as Question['options'],
+    imageUrl: r.imageUrl || undefined,
   }));
 }
 

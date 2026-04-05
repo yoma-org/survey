@@ -322,6 +322,7 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations, 
                         onChange={value => handleAnswer(question.id, value)}
                         error={errors.has(question.id)}
                         displayLocale={displayLocale}
+                        imageUrl={question.imageUrl}
                       />
                     );
                   }
@@ -329,6 +330,11 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations, 
                   if (question.type === 'open_ended') {
                     return (
                       <div key={question.id} className="py-5">
+                        {question.imageUrl && (
+                          <div className="mb-3">
+                            <img src={question.imageUrl} alt="" className="max-h-48 rounded-lg object-contain" loading="lazy" />
+                          </div>
+                        )}
                         <p
                           className="text-[15px] text-foreground leading-relaxed mb-2"
                           style={displayLocale === 'my' ? { lineHeight: '1.75' } : undefined}
@@ -366,6 +372,9 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations, 
                     if (isRadio && question.options) {
                       return (
                         <div key={question.id} className="space-y-2">
+                          {question.imageUrl && (
+                            <img src={question.imageUrl} alt="" className="max-h-48 rounded-lg object-contain" loading="lazy" />
+                          )}
                           <label
                             className="text-sm font-medium text-gray-700 block"
                             style={displayLocale === 'my' ? { lineHeight: '1.75' } : undefined}
@@ -408,6 +417,9 @@ export function SurveyForm({ survey, questions, tokenRow, locale, translations, 
                     // Select dropdown for Organization and Service Year
                     return (
                       <div key={question.id} className="py-4 space-y-1.5">
+                        {question.imageUrl && (
+                          <img src={question.imageUrl} alt="" className="max-h-48 rounded-lg object-contain" loading="lazy" />
+                        )}
                         <label
                           className="text-[13px] text-muted-foreground block"
                           style={displayLocale === 'my' ? { lineHeight: '1.75' } : undefined}

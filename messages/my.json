@@ -264,7 +264,18 @@
     "saveSuccess": "SMTP ဆက်တင်များ သိမ်းဆည်းပြီး။",
     "saveError": "ဆက်တင်သိမ်းမရပါ။ နောက်တစ်ကြိမ် ကြိုးစားပါ။",
     "showPassword": "စကားဝှက်ပြရန်",
-    "hidePassword": "စကားဝှက်ဖျောက်ရန်"
+    "hidePassword": "စကားဝှက်ဖျောက်ရန်",
+    "geminiTitle": "အလိုအလျောက်ဘာသာပြန် (Gemini AI)",
+    "geminiDescription": "မေးခွန်းတည်းဖြတ်သူတွင် အင်္ဂလိပ်မှမြန်မာသို့ အလိုအလျောက်ဘာသာပြန်ခြင်းကို ဖွင့်ပါ။ အင်္ဂလိပ်ဘာသာဖြင့် မေးခွန်းတစ်ခုရိုက်ထည့်သောအခါ ၂ စက္ကန့်ရပ်နားပြီးနောက် မြန်မာဘာသာပြန်ကို အလိုအလျောက်ထုတ်ပေးမည်ဖြစ်သည်။ Google Gemini AI ဖြင့် အသုံးပြုသည်။",
+    "geminiApiKeyLabel": "Gemini API Key",
+    "geminiApiKeyPlaceholder": "AIza...",
+    "geminiApiKeyHint": "Google AI Studio (aistudio.google.com) မှ API key ရယူပါ။ Key ကို လုံခြုံစွာ သိမ်းဆည်းထားပြီး browser သို့ ပေးပို့မည်မဟုတ်ပါ။",
+    "geminiTestButton": "ဘာသာပြန်စမ်းသပ်ရန်",
+    "geminiTestSending": "ဘာသာပြန်နေသည်...",
+    "geminiTestSuccess": "ဘာသာပြန်ခြင်း အလုပ်လုပ်နေသည်!",
+    "geminiTestFailure": "ဘာသာပြန်ခြင်း မအောင်မြင်ပါ: {error}",
+    "geminiSaveSuccess": "Gemini API key သိမ်းဆည်းပြီး။",
+    "geminiSaveError": "API key သိမ်းဆည်း၍ မရပါ။ ထပ်မံကြိုးစားပါ။"
   },
   "email": {
     "smtpModalTitle": "အီးမေးလ်ပို့ခြင်းကို တပ်ဆင်ရန်",
