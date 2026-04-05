@@ -40,7 +40,7 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
   }
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="flex flex-col gap-3 w-full" data-test-id="dashboard-filters">
       {/* Survey title */}
       <h2 className="text-xl font-semibold truncate">
         {surveys.find(s => s.id === activeSurveyId)?.name || t('selectSurvey')}
@@ -50,7 +50,7 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
         <div className="flex items-center gap-2 flex-wrap">
       {/* Organization filter */}
       <Select value={activeOrg || '__all__'} onValueChange={(v) => updateParam('org', v)}>
-        <SelectTrigger className="w-48">
+        <SelectTrigger className="w-48" data-test-id="filter-organization">
           <span className="truncate">
             {activeOrg || t('allOrganizations')}
           </span>
@@ -67,7 +67,7 @@ function DashboardFiltersInner({ surveys, activeSurveyId, orgOptions = DEFAULT_O
 
       {/* Department filter */}
       <Select value={activeDept || '__all__'} onValueChange={(v) => updateParam('dept', v)}>
-        <SelectTrigger className="w-48">
+        <SelectTrigger className="w-48" data-test-id="filter-department">
           <span className="truncate">
             {activeDept || t('allDepartments')}
           </span>

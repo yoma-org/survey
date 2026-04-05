@@ -12,15 +12,16 @@ interface MetricCardProps {
   trend?: { value: number; label: string };
   benchmark?: number;
   showZone?: boolean;
+  testId?: string;
 }
 
-export function MetricCard({ label, value, suffix = '%', trend, benchmark, showZone = true }: MetricCardProps) {
+export function MetricCard({ label, value, suffix = '%', trend, benchmark, showZone = true, testId }: MetricCardProps) {
   const t = useTranslations('dashboard');
   const zone = showZone && suffix === '%' ? getPerformanceZone(value) : null;
   const gap = benchmark != null ? value - benchmark : null;
 
   return (
-    <div className="space-y-0.5">
+    <div className="space-y-0.5" {...(testId && { 'data-test-id': testId })}>
       <div className="flex items-baseline gap-2">
         <span className="text-2xl md:text-3xl font-semibold tracking-tight tabular-nums">
           <CountUp value={value} suffix={suffix} />

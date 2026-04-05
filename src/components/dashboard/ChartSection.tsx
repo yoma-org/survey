@@ -7,12 +7,13 @@ interface ChartSectionProps {
   description?: string;
   height?: number;
   children: React.ReactNode;
+  testId?: string;
 }
 
 // Borderless container — avoids rounded-rect-with-shadow anti-pattern
-export function ChartSection({ title, description, height = 280, children }: ChartSectionProps) {
+export function ChartSection({ title, description, height = 280, children, testId }: ChartSectionProps) {
   return (
-    <div>
+    <div {...(testId && { 'data-test-id': testId })}>
       {title && (
         <div className="mb-3">
           <h3 className="text-sm font-medium text-foreground">{title}</h3>
